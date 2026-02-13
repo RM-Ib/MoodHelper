@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Private Diary - MoodHelper</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    
+    <nav class="navbar">
+        <div class="container">
+            <a href="dashboard.html" class="logo">
+                <span class="logo-icon">❤️</span>
+                <span class="logo-text">MoodHelper</span>
+            </a>
+            <div style="display: flex; align-items: center; gap: 2rem;">
+                <span style="color: var(--text-secondary);">
+                    Welcome back, <strong style="color: var(--text-primary);">Anonymous User</strong>
+                </span>
+                <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container" style="padding: 3rem 2rem;">
+      
+        <div style="margin-bottom: 3rem;">
+            <h1 style="font-size: 2.5rem; margin-bottom: 0.5rem;">
+                📖 My Private Diary
+            </h1>
+            <p style="font-size: 1.125rem; color: var(--text-secondary);">
+                Your personal space to journal thoughts and feelings. Completely private and visible only to you.
+            </p>
+        </div>
+
+        <div style="background: rgba(124, 58, 237, 0.05); border-left: 4px solid var(--primary-purple); padding: 1.5rem; border-radius: 0.5rem; margin-bottom: 3rem;">
+            <p style="margin: 0; color: var(--text-primary);">
+                🔒 <strong>Your Privacy Matters:</strong> Everything you write here is completely private. 
+                No one else can see your diary entries - not even us.
+            </p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr; gap: 3rem; max-width: 1000px; margin: 0 auto;">
+       
+            <div class="card">
+                <h2 style="font-size: 1.75rem; margin-bottom: 1.5rem;">
+                    ✍️ New Entry
+                </h2>
+                
+                <div class="form-group">
+                    <label>Title (Optional)</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="entryTitle"
+                        placeholder="Give your entry a title..."
+                    >
+                </div>
+
+                <div class="form-group">
+                    <label>What's on your mind?</label>
+                    <textarea 
+                        class="form-control" 
+                        id="entryContent"
+                        placeholder="Write freely... This is your safe space to express yourself without judgment."
+                        rows="10"
+                    ></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>How are you feeling?</label>
+                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+                        <button class="emotion-btn" style="flex: 0 0 auto; padding: 0.75rem 1.5rem;" data-mood="happy">
+                            <span class="emotion-emoji" style="font-size: 1.5rem;">😊</span>
+                            <span>Happy</span>
+                        </button>
+                        <button class="emotion-btn" style="flex: 0 0 auto; padding: 0.75rem 1.5rem;" data-mood="sad">
+                            <span class="emotion-emoji" style="font-size: 1.5rem;">😢</span>
+                            <span>Sad</span>
+                        </button>
+                        <button class="emotion-btn" style="flex: 0 0 auto; padding: 0.75rem 1.5rem;" data-mood="anxious">
+                            <span class="emotion-emoji" style="font-size: 1.5rem;">😰</span>
+                            <span>Anxious</span>
+                        </button>
+                        <button class="emotion-btn" style="flex: 0 0 auto; padding: 0.75rem 1.5rem;" data-mood="calm">
+                            <span class="emotion-emoji" style="font-size: 1.5rem;">😌</span>
+                            <span>Calm</span>
+                        </button>
+                        <button class="emotion-btn" style="flex: 0 0 auto; padding: 0.75rem 1.5rem;" data-mood="grateful">
+                            <span class="emotion-emoji" style="font-size: 1.5rem;">🙏</span>
+                            <span>Grateful</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div style="display: flex; gap: 1rem;">
+                    <button class="btn btn-primary btn-large" id="saveEntry" style="flex: 1;">
+                        Save Entry
+                    </button>
+                    <button class="btn btn-secondary" id="clearEntry">
+                        Clear
+                    </button>
+                </div>
+
+                
+                <div id="successMsg" style="display: none; margin-top: 1.5rem; padding: 1rem; background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; border-radius: 0.5rem;">
+                    <p style="color: #065f46; font-weight: 500; margin: 0;">
+                        ✓ Entry saved successfully!
+                    </p>
+                </div>
+            </div>
+
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                    <h2 style="font-size: 1.75rem; margin: 0;">
+                        Past Entries
+                    </h2>
+                    <select class="form-control" id="filterEntries" style="width: auto;">
+                        <option value="all">All Entries</option>
+                        <option value="week">This Week</option>
+                        <option value="month">This Month</option>
+                    </select>
+                </div>
+
+                <div id="diaryEntries" class="diary-entries">
+           
+                </div>
+
+              
+                <div id="emptyState" style="text-align: center; padding: 4rem 2rem; color: var(--text-secondary);">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">📝</div>
+                    <h3 style="font-size: 1.5rem; margin-bottom: 0.5rem;">No entries yet</h3>
+                    <p>Start journaling to see your entries here</p>
+                </div>
+            </div>
+        </div>
+
+      
+        <div style="margin-top: 4rem; background: linear-gradient(135deg, #7c3aed, #3b82f6); border-radius: 2rem; padding: 3rem; text-align: center; color: white;">
+            <h3 style="font-size: 1.75rem; margin-bottom: 1.5rem;">
+                Your Journaling Journey
+            </h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 2rem;">
+                <div>
+                    <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 0.5rem;" id="totalEntries">0</div>
+                    <div style="opacity: 0.9;">Total Entries</div>
+                </div>
+                <div>
+                    <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 0.5rem;" id="currentStreak">0</div>
+                    <div style="opacity: 0.9;">Day Streak</div>
+                </div>
+                <div>
+                    <div style="font-size: 2.5rem; font-weight: bold; margin-bottom: 0.5rem;" id="thisMonth">0</div>
+                    <div style="opacity: 0.9;">This Month</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/diary.js"></script>
+</body>
+</html>
