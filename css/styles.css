@@ -107,6 +107,11 @@ body.calm-theme .btn-primary {
     color: var(--primary-purple);
 }
 
+.nav-links a.active {
+    color: var(--primary-purple);
+    font-weight: 600;
+}
+
 .nav-buttons {
     display: flex;
     gap: 1rem;
