@@ -73,24 +73,26 @@
 
 
     <script>
-        function validateForm() {
-            const email = document.getElementById("email").value;
-            const password = document.getElementById("password").value;
+    function validateForm() {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
 
-            if (!email || !password) {
-                alert("Both fields are required.");
-                return false;
-            }
-
-            const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-            if (!emailPattern.test(email)) {
-                alert("Please enter a valid email address.");
-                return false;
-            }
-
-            return false; // prevent submission for now (no backend)
+        if (!email || !password) {
+            alert("Both fields are required.");
+            return false;
         }
-    </script>
+
+        const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+        if (!emailPattern.test(email)) {
+            alert("Please enter a valid email address.");
+            return false;
+        }
+
+        // Redirect to dashboard since no backend yet
+        window.location.href = "dashboard.html";
+        return false; // prevent actual form submission
+    }
+</script>
 
 </body>
 </html>
