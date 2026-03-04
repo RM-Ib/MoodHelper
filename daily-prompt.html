@@ -14,25 +14,34 @@
                 <span class="logo-icon">❤️</span>
                 <span class="logo-text">MoodHelper</span>
             </a>
+
+              <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html" style="color: #7c3aed;">About</a></li>
+                <li><a href="login.html">Login</a></li>
+            </ul>
             <div style="display: flex; align-items: center; gap: 2rem;">
-                <span style="color: var(--text-secondary);">
-                    Welcome back, <strong style="color: var(--text-primary);">Anonymous User</strong>
-                </span>
+                
                 <a href="dashboard.html" class="btn btn-secondary">Back to Dashboard</a>
+               
+                
+             
             </div>
         </div>
     </nav>
+
+   
 
     <div class="container" style="padding: 3rem 2rem; max-width: 800px;">
     
         <div class="card fade-in">
             <div style="text-align: center; margin-bottom: 2rem;">
-                <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(124, 58, 237, 0.1); color: #7c3aed; padding: 0.5rem 1rem; border-radius: 2rem; font-size: 0.875rem; font-weight: 500; margin-bottom: 1.5rem;">
+                <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(139, 92, 246, 0.08); color: #8b5cf6; padding: 0.5rem 1rem; border-radius: 10px; font-size: 0.875rem; font-weight: 500; margin-bottom: 1.5rem;">
                     <span>✨</span>
-                    <span>Today's Reflection</span>
+                    <span>Daily Check-In</span>
                 </div>
-                <h1 style="font-size: 2rem; margin-bottom: 1rem;">
-                    Daily Prompt
+                <h1 style="font-size: 2rem; margin-bottom: 1rem; font-weight: 600;">
+                    Today's Question
                 </h1>
                 <p style="color: var(--text-secondary); font-size: 1.125rem;" id="currentDate">
                     
@@ -49,48 +58,48 @@
             </div>
 
             <div class="form-group">
-                <label style="font-size: 1.125rem;">Your Reflection</label>
+                <label style="font-size: 1.05rem;">Your Answer</label>
                 <textarea 
                     class="form-control" 
                     id="promptAnswer"
-                    placeholder="Share your thoughts here..."
+                    placeholder="Write your thoughts here..."
                     rows="8"
                 ></textarea>
             </div>
 
             <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
                 <button class="btn btn-primary" id="submitPrompt" style="flex: 1;">
-                    Save Reflection
+                    Save Answer
                 </button>
                 <button class="btn btn-secondary" id="skipPrompt" style="flex: 1;">
-                    Skip for Today
+                    Skip Today
                 </button>
             </div>
 
           
-            <div id="successMessage" style="display: none; margin-top: 2rem; padding: 1.5rem; background: rgba(16, 185, 129, 0.1); border-left: 4px solid #10b981; border-radius: 0.5rem;">
+            <div id="successMessage" style="display: none; margin-top: 2rem; padding: 1.5rem; background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: 8px;">
                 <p style="color: #065f46; font-weight: 500; margin: 0;">
-                    ✓ Your reflection has been saved! You can view it in your weekly summary.
+                    ✓ Your answer has been saved! Check it out in your weekly summary below.
                 </p>
             </div>
         </div>
 
         <div style="margin-top: 3rem;">
-            <h2 style="font-size: 1.75rem; margin-bottom: 1.5rem;">
-                This Week's Reflections
+            <h2 style="font-size: 1.65rem; margin-bottom: 1.5rem; font-weight: 600;">
+                This Week's Answers
             </h2>
             <div id="weeklyReflections" class="diary-entries">
           
             </div>
         </div>
 
-        <div style="margin-top: 3rem; text-align: center; padding: 2rem; background: linear-gradient(135deg, #7c3aed, #3b82f6); border-radius: 1.5rem; color: white;">
-            <h3 style="font-size: 1.5rem; margin-bottom: 1rem;">
+        <div style="margin-top: 3rem; text-align: center; padding: 2rem; background: linear-gradient(to right, #8b5cf6, #6366f1); border-radius: 14px; color: white;">
+            <h3 style="font-size: 1.4rem; margin-bottom: 1rem; font-weight: 600;">
                 Keep Going! 🌟
             </h3>
-            <p style="font-size: 1.125rem; opacity: 0.95;">
-                You've completed <strong id="completedCount">0</strong> reflections this week. 
-                Every moment of self-reflection is a step toward growth.
+            <p style="font-size: 1.05rem; opacity: 0.92;">
+                You've answered <strong id="completedCount">0</strong> prompts this week. 
+                Each answer is a step toward better self-awareness.
             </p>
         </div>
     </div>
