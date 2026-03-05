@@ -196,7 +196,7 @@ setTimeout(() => {
         if (!document.body.classList.contains('calm-theme')) {
             if (confirm('Would you like to switch to our calming theme? It uses softer colors and can help reduce stress.')) {
                 document.body.classList.add('calm-theme');
-                localStorage.setItem('calmTheme', 'true');
+                //localStorage.setItem('calmTheme', 'true');
                 addMessage("I've switched to the calming theme for you. I hope it helps you feel more at ease.");
             }
         }
