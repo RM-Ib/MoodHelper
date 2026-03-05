@@ -4,93 +4,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Reflection Board - MoodHelper</title>
-
 <link rel="stylesheet" href="css/styles.css">
-
-<style>
-
-.board-header{
-display:flex;
-justify-content:space-between;
-align-items:center;
-margin-bottom:2rem;
-}
-
-.post-card{
-margin-bottom:1.5rem;
-}
-
-.post-meta{
-font-size:0.9rem;
-color:var(--text-secondary);
-margin-bottom:0.75rem;
-}
-
-.post-actions{
-margin-top:1rem;
-display:flex;
-gap:1rem;
-}
-
-.comment{
-background:var(--background-secondary);
-padding:0.75rem;
-border-radius:0.5rem;
-margin-top:0.5rem;
-font-size:0.9rem;
-}
-
-.modal{
-position:fixed;
-top:0;
-left:0;
-width:100%;
-height:100%;
-background:rgba(0,0,0,0.5);
-display:flex;
-justify-content:center;
-align-items:center;
-visibility:hidden;
-opacity:0;
-transition:0.3s;
-}
-
-.modal.active{
-visibility:visible;
-opacity:1;
-}
-
-.modal-content{
-background:white;
-padding:2rem;
-border-radius:1rem;
-width:90%;
-max-width:500px;
-}
-
-.modal-actions{
-margin-top:1rem;
-display:flex;
-justify-content:flex-end;
-gap:1rem;
-}
-
-.char-count{
-font-size:0.8rem;
-color:var(--text-secondary);
-text-align:right;
-margin-top:0.25rem;
-}
-
-</style>
-
 </head>
 
 <body>
 
+<!-- Navigation -->
 <nav class="navbar">
 <div class="container">
-
 <a href="dashboard.html" class="logo">
 <span class="logo-icon">❤️</span>
 <span class="logo-text">MoodHelper</span>
@@ -101,7 +22,7 @@ margin-top:0.25rem;
 <li><a href="diary.html">Diary</a></li>
 <li><a href="daily-prompt.html">Prompts</a></li>
 <li><a href="groups.html">Groups</a></li>
-<li><a href="mood-support.html">Support</a></li>
+<li><a href="reflection-board.html" class="active">Reflection Board</a></li>
 <li><a href="settings.html">Settings</a></li>
 </ul>
 
@@ -109,256 +30,161 @@ margin-top:0.25rem;
 <a href="account.html" class="btn btn-secondary">Account</a>
 <a href="index.html" class="btn btn-primary">Logout</a>
 </div>
-
 </div>
 </nav>
 
+<div class="container" style="padding:3rem 2rem; max-width:900px;">
 
-<div class="container" style="padding:3rem 2rem;">
-
-<div class="board-header">
-<div>
-<h1 style="font-size:2.5rem;">Reflection Board</h1>
-<p style="color:var(--text-secondary);">
-Share thoughts anonymously and support others
+<!-- Page Header -->
+<div class="card" style="margin-bottom:2rem; text-align:center;">
+<div style="font-size:2.5rem; margin-bottom:1rem;">🪞</div>
+<h1 style="font-size:2rem;">Reflection Board</h1>
+<p style="color:var(--text-secondary); max-width:600px; margin:0 auto;">
+A place to share thoughts, reflections, or small moments from your day.
+Posts are anonymous and meant to support a positive environment.
 </p>
 </div>
 
-<button class="btn btn-primary" id="openPostModal">
-Create Post
+
+<!-- Create Post -->
+<div class="card" style="margin-bottom:2rem;">
+<h3 style="margin-bottom:1rem;">Share a Reflection</h3>
+
+<div class="form-group">
+<label>Your Reflection</label>
+<textarea
+class="form-control"
+id="reflectionContent"
+rows="4"
+maxlength="300"
+placeholder="Write something you'd like to share... (max 300 characters)"
+></textarea>
+<div style="font-size:0.85rem; color:var(--text-secondary);" id="charCount">
+0 / 300
+</div>
+</div>
+
+<button class="btn btn-primary" id="postReflection">
+Post Reflection
 </button>
 </div>
 
+
+<!-- Posts Section -->
+<h2 style="margin-bottom:1.5rem;">Community Reflections</h2>
 
 <div id="postsContainer">
 
-<!-- Placeholder post -->
 
-<div class="card post-card">
+<!-- Placeholder Post -->
+<div class="card" style="margin-bottom:1.5rem;">
+<div style="display:flex; gap:1rem;">
 
-<div class="post-meta">
-Anonymous • Just now
+<!-- Avatar -->
+<div style="flex-shrink:0;">
+<div style="width:40px;height:40px;border-radius:50%;
+background:linear-gradient(135deg,#6366f1,#3b82f6);
+display:flex;align-items:center;justify-content:center;
+color:white;font-weight:600;">
+R
+</div>
 </div>
 
-<p>
-Sometimes I feel overwhelmed with school and life. Just wanted to say it somewhere.
+<div style="flex:1;">
+
+<div style="display:flex; gap:0.5rem; align-items:center; margin-bottom:0.5rem;">
+<span style="font-weight:500;">Anonymous User</span>
+<span style="color:var(--text-secondary); font-size:0.85rem;">Just now</span>
+</div>
+
+<p style="color:var(--text-secondary); line-height:1.7; margin-bottom:1rem;">
+Today I finally finished something I've been procrastinating for weeks.
+It's small but it feels good to make progress.
 </p>
 
-<div class="post-actions">
-<button class="btn btn-secondary comment-btn">
-Comment
+<!-- Actions -->
+<div style="display:flex; gap:1.5rem; align-items:center;
+border-top:1px solid var(--border-light); padding-top:0.75rem;">
+
+<button onclick="heartPost(this)"
+style="background:none;border:none;cursor:pointer;color:var(--text-secondary);">
+💜 <span class="heartCount">3</span>
 </button>
+
+<button onclick="toggleReplies('replies1')"
+style="background:none;border:none;cursor:pointer;color:var(--text-secondary);">
+💬 1 Reply
+</button>
+
+<button
+style="background:none;border:none;cursor:pointer;color:var(--text-secondary);">
+🫂 Send Support
+</button>
+
 </div>
 
-<div class="comments"></div>
 
+<!-- Replies -->
+<div id="replies1" style="display:none;margin-top:1rem;border-top:1px solid var(--border-light);padding-top:1rem;">
+
+<!-- Existing reply -->
+<div style="margin-bottom:1rem;padding-left:1rem;border-left:2px solid var(--border-light);">
+<div style="font-size:0.85rem; font-weight:500;">Anonymous User</div>
+<p style="font-size:0.9rem;color:var(--text-secondary);">
+That's awesome. Small progress is still progress 💜
+</p>
 </div>
 
-</div>
 
-</div>
-
-
-
-<div class="modal" id="postModal">
-
-<div class="modal-content">
-
-<h2 style="margin-bottom:1rem;">Create a Post</h2>
-
+<!-- Reply Input -->
 <textarea
-id="postText"
 class="form-control"
-rows="4"
-maxlength="300"
-placeholder="Share your thoughts anonymously..."
-></textarea>
-
-<div class="char-count">
-<span id="postCount">0</span>/300
-</div>
-
-<div class="modal-actions">
-
-<button class="btn btn-secondary" id="closePostModal">
-Cancel
-</button>
-
-<button class="btn btn-primary" id="submitPost">
-Post
-</button>
-
-</div>
-
-</div>
-
-</div>
-
-
-
-<div class="modal" id="commentModal">
-
-<div class="modal-content">
-
-<h2 style="margin-bottom:1rem;">Write a Comment</h2>
-
-<textarea
-id="commentText"
-class="form-control"
-rows="3"
+rows="2"
 maxlength="200"
-placeholder="Write something supportive..."
+placeholder="Write a reply..."
+style="margin-bottom:0.5rem;"
 ></textarea>
 
-<div class="char-count">
-<span id="commentCount">0</span>/200
-</div>
-
-<div class="modal-actions">
-
-<button class="btn btn-secondary" id="closeCommentModal">
-Cancel
-</button>
-
-<button class="btn btn-primary" id="submitComment">
-Comment
+<button class="btn btn-secondary btn-small">
+Reply
 </button>
 
 </div>
 
 </div>
-
+</div>
 </div>
 
+
+</div>
+</div>
 
 
 <script>
 
-const postModal = document.getElementById("postModal")
-const commentModal = document.getElementById("commentModal")
+const textarea = document.getElementById("reflectionContent");
+const charCount = document.getElementById("charCount");
 
-const openPostModal = document.getElementById("openPostModal")
-const closePostModal = document.getElementById("closePostModal")
-
-const postText = document.getElementById("postText")
-const postCount = document.getElementById("postCount")
-
-const submitPost = document.getElementById("submitPost")
-const postsContainer = document.getElementById("postsContainer")
-
-const commentText = document.getElementById("commentText")
-const commentCount = document.getElementById("commentCount")
-
-const closeCommentModal = document.getElementById("closeCommentModal")
-const submitComment = document.getElementById("submitComment")
-
-let activePost = null
+textarea.addEventListener("input", () => {
+charCount.textContent = textarea.value.length + " / 300";
+});
 
 
-openPostModal.onclick = () => {
-postModal.classList.add("active")
-}
-
-closePostModal.onclick = () => {
-postModal.classList.remove("active")
-postText.value=""
-postCount.innerText=0
-}
-
-postText.oninput = () =>{
-postCount.innerText = postText.value.length
+function heartPost(button){
+let countSpan = button.querySelector(".heartCount");
+let count = parseInt(countSpan.innerText);
+countSpan.innerText = count + 1;
 }
 
 
-submitPost.onclick = () =>{
+function toggleReplies(id){
+const section = document.getElementById(id);
 
-const text = postText.value.trim()
-
-if(text === ""){
-alert("Post cannot be empty")
-return
+if(section.style.display === "none"){
+section.style.display = "block";
+}else{
+section.style.display = "none";
 }
-
-const post = document.createElement("div")
-post.className="card post-card"
-
-post.innerHTML = `
-<div class="post-meta">
-Anonymous • Just now
-</div>
-
-<p>${text}</p>
-
-<div class="post-actions">
-<button class="btn btn-secondary comment-btn">
-Comment
-</button>
-</div>
-
-<div class="comments"></div>
-`
-
-postsContainer.prepend(post)
-
-attachCommentButton(post)
-
-postModal.classList.remove("active")
-postText.value=""
-postCount.innerText=0
-
-}
-
-
-function attachCommentButton(post){
-
-const btn = post.querySelector(".comment-btn")
-
-btn.onclick = () =>{
-activePost = post
-commentModal.classList.add("active")
-}
-
-}
-
-document.querySelectorAll(".comment-btn").forEach(btn=>{
-btn.onclick = (e)=>{
-activePost = e.target.closest(".post-card")
-commentModal.classList.add("active")
-}
-})
-
-
-closeCommentModal.onclick = () =>{
-commentModal.classList.remove("active")
-commentText.value=""
-commentCount.innerText=0
-}
-
-commentText.oninput = ()=>{
-commentCount.innerText = commentText.value.length
-}
-
-
-submitComment.onclick = ()=>{
-
-const text = commentText.value.trim()
-
-if(text===""){
-alert("Comment cannot be empty")
-return
-}
-
-const comment = document.createElement("div")
-comment.className="comment"
-comment.innerText = "Anonymous: " + text
-
-activePost.querySelector(".comments").appendChild(comment)
-
-commentModal.classList.remove("active")
-
-commentText.value=""
-commentCount.innerText=0
-
 }
 
 </script>
