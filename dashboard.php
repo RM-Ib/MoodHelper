@@ -32,7 +32,7 @@ if (!isset($_SESSION['user_id'])) {
             <li><a href="settings.html" class="">Settings</a></li>
         </ul>
         <div class="nav-buttons">
-            <a href="account.html" class="btn btn-secondary">Account</a>
+            <a href="account.php" class="btn btn-secondary">Account</a>
             <a href="index.html" class="btn btn-primary">Logout</a>
         </div>
     </div>
