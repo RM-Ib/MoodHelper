@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: Login.html");
+    header("Location: login.php");
     exit();
 }
 ?>
@@ -26,7 +26,7 @@ if (!isset($_SESSION['user_id'])) {
             <li><a href="dashboard.html" class="active">Dashboard</a></li>
             <li><a href="diary.html" class="">Diary</a></li>
             <li><a href="daily-prompt.html" class="">Prompts</a></li>
-            <li><a href="reflection-board.html" >Reflection Board</a></li>
+            <li><a href="reflection-board.php" >Reflection Board</a></li>
             <li><a href="groups.html" class="">Groups</a></li>
             <li><a href="mood-support.html" class="">Support</a></li>
             <li><a href="settings.html" class="">Settings</a></li>
@@ -133,7 +133,7 @@ if (!isset($_SESSION['user_id'])) {
                     <p>Write your thoughts</p>
                 </a>
 
-                <a href="reflection-board.html" class="feature-card" style="text-decoration: none; color: inherit;">
+                <a href="reflection-board.php" class="feature-card" style="text-decoration: none; color: inherit;">
                     <div class="feature-icon" style="background: linear-gradient(135deg, #6366f1, #818cf8); color: white;">
                         💬
                     </div>

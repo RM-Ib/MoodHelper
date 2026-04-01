@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Mar 19, 2026 at 06:56 PM
+-- Generation Time: Apr 01, 2026 at 09:10 PM
 -- Server version: 8.4.7
 -- PHP Version: 8.3.28
 
@@ -132,7 +132,7 @@ CREATE TABLE IF NOT EXISTS `group_replies` (
   `hearts_count` int DEFAULT '0',
   PRIMARY KEY (`reply_id`),
   KEY `post_id` (`post_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -168,7 +168,19 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `is_anonymous` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`post_id`),
   UNIQUE KEY `post_id` (`post_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `posts`
+--
+
+INSERT INTO `posts` (`post_id`, `user_id`, `page`, `content`, `created_at`, `is_anonymous`) VALUES
+(1, 2, 'reflection_board', 'sksksk', '2026-04-01 20:09:00', 1),
+(2, 2, 'reflection_board', 'sksksk', '2026-04-01 20:09:08', 1),
+(3, 2, 'reflection_board', 'sksksk', '2026-04-01 20:10:40', 1),
+(4, 2, 'reflection_board', '123', '2026-04-01 20:10:45', 1),
+(5, 2, 'reflection_board', '123', '2026-04-01 20:11:54', 1),
+(8, 2, 'reflection-board', 'heyyy', '2026-04-01 20:30:11', 1);
 
 -- --------------------------------------------------------
 
@@ -179,11 +191,54 @@ CREATE TABLE IF NOT EXISTS `posts` (
 DROP TABLE IF EXISTS `post_hearts`;
 CREATE TABLE IF NOT EXISTS `post_hearts` (
   `heart_id` int NOT NULL AUTO_INCREMENT,
-  `post_id` int NOT NULL,
+  `post_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`heart_id`),
+  UNIQUE KEY `unique_heart` (`post_id`,`user_id`),
   KEY `post_id` (`post_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `post_hearts`
+--
+
+INSERT INTO `post_hearts` (`heart_id`, `post_id`, `user_id`, `created_at`) VALUES
+(13, 8, 2, '2026-04-02 00:08:13'),
+(4, 7, 2, '2026-04-01 23:45:48');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `post_replies`
+--
+
+DROP TABLE IF EXISTS `post_replies`;
+CREATE TABLE IF NOT EXISTS `post_replies` (
+  `reply_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `post_id` bigint UNSIGNED NOT NULL,
+  `user_id` bigint UNSIGNED NOT NULL,
+  `content` text NOT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`reply_id`),
+  KEY `post_id` (`post_id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `post_replies`
+--
+
+INSERT INTO `post_replies` (`reply_id`, `post_id`, `user_id`, `content`, `created_at`) VALUES
+(1, 8, 2, 'heyy', '2026-04-01 20:50:53'),
+(2, 8, 2, 'sdsd', '2026-04-01 20:50:56'),
+(3, 8, 2, 'sd', '2026-04-01 20:51:50'),
+(4, 8, 2, 'hello', '2026-04-01 21:01:39'),
+(5, 8, 2, 'heyyy', '2026-04-01 21:01:52'),
+(6, 8, 2, 'waahhhhhh', '2026-04-01 21:02:54'),
+(7, 8, 2, 'wahh', '2026-04-01 21:05:11'),
+(8, 8, 2, 'sd', '2026-04-01 21:05:18'),
+(9, 8, 2, 'sdsd', '2026-04-01 21:07:58');
 
 -- --------------------------------------------------------
 
@@ -235,7 +290,14 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `user_id` (`user_id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `users`
+--
+
+INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `username`, `email`, `password_hash`, `created_at`, `last_login`, `login_streak`) VALUES
+(2, '1234', '1234', '1234', '123@gmail.com', '$2y$10$t73nr4KhZ2dh9oJn5SBwmOg5bNPAbX8N/xgEtf0.Sd4o9mbY31w7m', '2026-04-01 19:22:47', '2026-04-01 20:00:47', 0);
 
 -- --------------------------------------------------------
 
