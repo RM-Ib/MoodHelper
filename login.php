@@ -8,43 +8,62 @@ $pass = "";
 $db = "moodhelperdb";
 
 $conn = new mysqli($host, $user, $pass, $db);
-
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Handle login
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $email = trim($_POST['email']);
-    $password = $_POST['password'];
+    $password = trim($_POST['password']);
 
     if (empty($email) || empty($password)) {
         die("All fields are required.");
     }
 
     // Find user
-    $stmt = $conn->prepare("SELECT user_id, username, password_hash FROM users WHERE email = ?");
+    $stmt = $conn->prepare("SELECT user_id, username, password_hash, login_streak, last_login FROM users WHERE email = ?");
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $stmt->store_result();
 
     if ($stmt->num_rows === 1) {
-
-        $stmt->bind_result($user_id, $username, $password_hash);
+        $stmt->bind_result($user_id, $username, $password_hash, $login_streak, $last_login);
         $stmt->fetch();
 
-        // Verify password
         if (password_verify($password, $password_hash)) {
+
+            // --------------------------
+            // LOGIN STREAK CALCULATION
+            // --------------------------
+            $today = new DateTime("today");
+
+            if (empty($last_login) || $last_login == '0000-00-00 00:00:00') {
+                // First login ever
+                $login_streak = 1;
+            } else {
+                $lastLoginDate = new DateTime($last_login);
+                $diff = $today->diff($lastLoginDate)->days;
+
+                if ($diff === 1) {
+                    // Consecutive day
+                    $login_streak += 1;
+                } elseif ($diff > 1) {
+                    // Missed days, reset streak
+                    $login_streak = 1;
+                }
+                // if $diff === 0, same day login, do nothing
+            }
+
+            // Update last_login and login_streak in DB
+            $update = $conn->prepare("UPDATE users SET last_login = NOW(), login_streak = ? WHERE user_id = ?");
+            $update->bind_param("ii", $login_streak, $user_id);
+            $update->execute();
+            $update->close();
 
             // Store session
             $_SESSION['user_id'] = $user_id;
             $_SESSION['username'] = $username;
-
-            // Optional: update last login
-            $update = $conn->prepare("UPDATE users SET last_login = NOW() WHERE user_id = ?");
-            $update->bind_param("i", $user_id);
-            $update->execute();
 
             // Redirect to dashboard
             header("Location: dashboard.php");
@@ -53,7 +72,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             $error = "Incorrect password.";
         }
-
     } else {
         $error = "No account found with that email.";
     }
