@@ -1,3 +1,68 @@
+<?php
+session_start();
+
+// Database connection
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db = "moodhelperdb";
+
+$conn = new mysqli($host, $user, $pass, $db);
+
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Handle login
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+
+    if (empty($email) || empty($password)) {
+        die("All fields are required.");
+    }
+
+    // Find user
+    $stmt = $conn->prepare("SELECT user_id, username, password_hash FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows === 1) {
+
+        $stmt->bind_result($user_id, $username, $password_hash);
+        $stmt->fetch();
+
+        // Verify password
+        if (password_verify($password, $password_hash)) {
+
+            // Store session
+            $_SESSION['user_id'] = $user_id;
+            $_SESSION['username'] = $username;
+
+            // Optional: update last login
+            $update = $conn->prepare("UPDATE users SET last_login = NOW() WHERE user_id = ?");
+            $update->bind_param("i", $user_id);
+            $update->execute();
+
+            // Redirect to dashboard
+            header("Location: dashboard.php");
+            exit();
+
+        } else {
+            $error = "Incorrect password.";
+        }
+
+    } else {
+        $error = "No account found with that email.";
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,8 +91,10 @@
                 </p>
             </div>
 
-            <!-- Form (no backend for now) -->
-            <form onsubmit="return validateForm()">
+            <?php if (!empty($error)) : ?>
+            <p style="color:red; text-align:center;"><?php echo $error; ?></p>
+            <?php endif; ?>
+            <form method="POST" action="login.php" onsubmit="return validateForm()">
                 
                 <div class="form-group">
                     <label for="email">Email</label>
@@ -62,7 +129,7 @@
 
             <div class="text-center mt-4">
                 <p class="mb-1">Don't have an account?</p>
-                <a href="signup.html" 
+                <a href="signup.php" 
                    style="color: var(--primary-purple); font-weight: 600;">
                     Sign Up
                 </a>
@@ -88,9 +155,7 @@
             return false;
         }
 
-        // Redirect to dashboard since no backend yet
-        window.location.href = "dashboard.html";
-        return false; // prevent actual form submission
+        return true;
     }
 </script>
 

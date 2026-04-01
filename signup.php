@@ -1,3 +1,62 @@
+<?php
+// Database connection
+$host = "localhost";
+$user = "root";
+$pass = "";
+$db = "moodhelperdb";
+
+$conn = new mysqli($host, $user, $pass, $db);
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Handle form submission
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    // Get and sanitize input
+    $fname = trim($_POST['Fname']);
+    $lname = trim($_POST['Lname']);
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+
+    // Validate (basic)
+    if (empty($fname) || empty($lname) || empty($username) || empty($email) || empty($password)) {
+        die("All fields are required.");
+    }
+
+    // Hash password
+    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+
+    // Check if username or email already exists
+    $check = $conn->prepare("SELECT user_id FROM users WHERE username = ? OR email = ?");
+    $check->bind_param("ss", $username, $email);
+    $check->execute();
+    $check->store_result();
+
+    if ($check->num_rows > 0) {
+        die("Username or email already taken.");
+    }
+    $check->close();
+
+    // Insert user
+    $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, username, email, password_hash) VALUES (?, ?, ?, ?, ?)");
+    $stmt->bind_param("sssss", $fname, $lname, $username, $email, $passwordHash);
+
+    if ($stmt->execute()) {
+    header("Location: login.php");
+    exit();
+    } else {
+        echo "Error: " . $stmt->error;
+    }
+
+    $stmt->close();
+}
+
+$conn->close();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -22,7 +81,7 @@
             </div>
 
             <!-- No backend for now -->
-            <form onsubmit="return validateForm()">
+            <form method="POST" action="signup.php" onsubmit="return validateForm()">
 
                 <div class="form-group">
                     <label for="Fname">First Name</label>
@@ -73,10 +132,10 @@
             const fname = document.getElementById("Fname").value.trim();
             const lname = document.getElementById("Lname").value.trim();
             const email = document.getElementById("email").value.trim();
-            const phone = document.getElementById("Pnumber").value.trim();
+            const username = document.getElementById("username").value.trim();
             const password = document.getElementById("password").value;
 
-            if (!fname || !lname || !email || !phone || !password) {
+            if (!fname || !lname || !username || !email || !password) {
                 alert("All required fields must be filled.");
                 return false;
             }
@@ -87,12 +146,19 @@
                 return false;
             }
 
+            const usernamePattern = /^[a-zA-Z0-9_]{3,20}$/;
+
+            if (!usernamePattern.test(username)) {
+                alert("Username must be 3-20 characters and contain only letters, numbers, or underscores.");
+                return false;
+            }
+
             if (password.length < 6) {
                 alert("Password must be at least 6 characters.");
                 return false;
             }
 
-            return false; // prevent submission (no backend yet)
+            return true; 
         }
     </script>
 
