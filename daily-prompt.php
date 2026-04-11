@@ -10,12 +10,12 @@
     
     <nav class="navbar">
     <div class="container">
-        <a href="dashboard.html" class="logo">
+        <a href="dashboard.php" class="logo">
             <span class="logo-icon">❤️</span>
             <span class="logo-text">MoodHelper</span>
         </a>
         <ul class="nav-links">
-            <li><a href="dashboard.html" class="">Dashboard</a></li>
+            <li><a href="dashboard.php" class="">Dashboard</a></li>
             <li><a href="diary.html" class="">Diary</a></li>
             <li><a href="daily-prompt.html" class="active">Prompts</a></li>
             <li><a href="reflection-board.html" >Reflection Board</a></li>
@@ -24,8 +24,8 @@
             <li><a href="settings.html" class="">Settings</a></li>
         </ul>
         <div class="nav-buttons">
-            <a href="account.html" class="btn btn-secondary">Account</a>
-            <a href="index.html" class="btn btn-primary">Logout</a>
+            <a href="account.php" class="btn btn-secondary">Account</a>
+            <a href="Backend/logout.php" class="btn btn-primary">Logout</a>
         </div>
     </div>
 </nav>

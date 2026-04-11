@@ -3,101 +3,159 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MoodHelper - Your Safe Space for Emotional Wellness</title>
+    <title>MoodHelper</title>
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-   
-    <nav class="navbar">
-    <div class="container">
-        <a href="index.html" class="logo">
-            <span class="logo-icon">❤️</span>
-            <span class="logo-text">MoodHelper</span>
-        </a>
-        <ul class="nav-links">
-            <li><a href="index.html" class="active">Home</a></li>
-            <li><a href="about.html" class="">About</a></li>
-        </ul>
-        <div class="nav-buttons">
-            <a href="login.php" class="btn btn-secondary">Login</a>
-            <a href="signup.php" class="btn btn-primary">Sign Up</a>
-        </div>
-    </div>
-</nav>
 
-    
-    <section class="hero">
+    <nav class="navbar">
         <div class="container">
+            <a href="index.html" class="logo">
+                <span class="logo-icon">❤️</span>
+                <span class="logo-text">MoodHelper</span>
+            </a>
+
+            <ul class="nav-links">
+                <li><a href="index.html" class="active">Home</a></li>
+                <li><a href="about.html">About</a></li>
+            </ul>
+
+            <div class="nav-buttons">
+                <a href="login.php" class="btn btn-secondary">Log In</a>
+                <a href="signup.php" class="btn btn-primary">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <div class="container" style="max-width: 900px;">
             <div class="hero-badge">
                 <span>✨</span>
-                <span>Your safe space for emotional wellness</span>
+                <span>A simple space to check in with yourself</span>
             </div>
-            
+
             <h1>
-                You're not alone in<br>
-                <span class="gradient-text">how you feel</span>
+                Track your mood.<br>
+                Write when you need to.<br>
+                <span class="gradient-text">Feel less alone.</span>
             </h1>
-            
-            <p>
-                MoodHelper is your anonymous companion for emotional support and mood lifting. 
-                Express yourself freely, track your feelings, and find comfort in a judgment-free space.
+
+            <p style="max-width: 700px; margin: 0 auto 2rem;">
+                MoodHelper is a simple place to track how you feel, write privately, and exchange anonymous support.
             </p>
-            
+
             <div class="hero-buttons">
-                <a href="login.html" class="btn btn-secondary">Start Your Journey</a>
-                <a href="about.html" class="btn btn-secondary btn-large">Learn More</a>
-
+                <a href="signup.php" class="btn btn-primary btn-large">Create Account</a>
+                <a href="login.php" class="btn btn-secondary btn-large">Log In</a>
             </div>
         </div>
     </section>
 
-    <section class="container">
-        <div class="features">
-            <div class="feature-card">
-                <div class="feature-icon" style="background: rgba(124, 58, 237, 0.1); color: #7c3aed;">
-                    🛡️
-                </div>
-                <h3>100% Anonymous</h3>
-                <p>
-                    Your privacy matters. Express yourself without revealing your identity. 
-                    No real names, no pressure, just genuine support.
+    <section class="container" style="margin-top: 2rem;">
+        <div class="card" style="max-width: 1100px; margin: 0 auto 3rem auto;">
+            <div style="margin-bottom: 1.5rem;">
+                <h2 style="font-size: 1.75rem; margin-bottom: 0.5rem;">What you can do here</h2>
+                <p style="color: var(--text-secondary); margin: 0;">
+                    Three main parts of the app.
                 </p>
             </div>
 
-            <div class="feature-card">
-                <div class="feature-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
-                    🤖
+            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;">
+                <div class="feature-card" style="text-align: left; margin: 0;">
+                    <div class="feature-icon" style="background: rgba(124, 58, 237, 0.1); color: #7c3aed;">
+                        😊
+                    </div>
+                    <h3>Check in</h3>
+                    <p>
+                        Pick how you feel and keep track of your mood over time.
+                    </p>
                 </div>
-                <h3>AI-Powered Support</h3>
-                <p>
-                    Get personalized mood-lifting suggestions, calming resources, and 
-                    comforting responses tailored to how you're feeling.
-                </p>
-            </div>
 
-            <div class="feature-card">
-                <div class="feature-icon" style="background: rgba(99, 102, 241, 0.1); color: #6366f1;">
-                    👥
+                <div class="feature-card" style="text-align: left; margin: 0;">
+                    <div class="feature-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
+                        ✍️
+                    </div>
+                    <h3>Reflect</h3>
+                    <p>
+                        Use the diary and daily prompts to write privately when you need to.
+                    </p>
                 </div>
-                <h3>Human Connection</h3>
-                <p>
-                    Connect anonymously with others who understand. Share messages, 
-                    join support groups, and feel less alone.
-                </p>
+
+                <div class="feature-card" style="text-align: left; margin: 0;">
+                    <div class="feature-icon" style="background: rgba(99, 102, 241, 0.1); color: #6366f1;">
+                        💌
+                    </div>
+                    <h3>Support</h3>
+                    <p>
+                        Send and receive anonymous messages from people feeling something similar.
+                    </p>
+                </div>
             </div>
         </div>
     </section>
 
-    <section class="container">
-        <div class="cta-section">
-            <h2>A safe haven for your emotions</h2>
-            <p>
-                Whether you're feeling overwhelmed, anxious, or just need someone to listen, 
-                MoodHelper is here for you. No judgment, no pressure, just support.
+    <section class="container" style="margin-bottom: 3rem;">
+        <div class="card" style="max-width: 1100px; margin: 0 auto;">
+            <div style="margin-bottom: 1.25rem;">
+                <h2 style="font-size: 1.75rem; margin-bottom: 0.5rem;">Try it</h2>
+                <p style="color: var(--text-secondary); margin: 0;">
+                    A small preview of how the app starts.
+                </p>
+            </div>
+
+            <div style="margin-bottom: 1rem;">
+                <label style="font-size: 1.05rem; display: block; margin-bottom: 1rem;">
+                    How are you feeling right now?
+                </label>
+
+                <div class="emotion-grid" id="previewMoodButtons" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 0.75rem;">
+                    <button class="emotion-btn" type="button" data-message="Good. Hold onto that.">
+                        <span class="emotion-emoji">😊</span>
+                        <span>Happy</span>
+                    </button>
+                    <button class="emotion-btn" type="button" data-message="It helps to name it. That already counts.">
+                        <span class="emotion-emoji">😢</span>
+                        <span>Sad</span>
+                    </button>
+                    <button class="emotion-btn" type="button" data-message="Try to focus on one thing, not everything at once.">
+                        <span class="emotion-emoji">😰</span>
+                        <span>Anxious</span>
+                    </button>
+                    <button class="emotion-btn" type="button" data-message="Take a pause before reacting.">
+                        <span class="emotion-emoji">😠</span>
+                        <span>Angry</span>
+                    </button>
+                    <button class="emotion-btn" type="button" data-message="A quiet day still says something.">
+                        <span class="emotion-emoji">😐</span>
+                        <span>Neutral</span>
+                    </button>
+                    <button class="emotion-btn" type="button" data-message="You do not have to fix everything today.">
+                        <span class="emotion-emoji">😞</span>
+                        <span>Disappointed</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="previewResponse" style="display: none; margin-top: 1.5rem; padding: 1.25rem; background: rgba(124, 58, 237, 0.05); border-radius: 12px;">
+                <p id="previewResponseText" style="margin: 0 0 1rem 0; font-weight: 500;"></p>
+                <p style="margin: 0; color: var(--text-secondary);">
+                    Inside MoodHelper, you can save your mood, write about it, and receive anonymous support.
+                </p>
+            </div>
+
+            <div style="margin-top: 2rem;">
+                <a href="signup.php" class="btn btn-primary">Start Using MoodHelper</a>
+            </div>
+        </div>
+    </section>
+
+    <section class="container" style="margin-bottom: 3rem;">
+        <div class="card" style="max-width: 900px; margin: 0 auto; text-align: center;">
+            <h2 style="font-size: 1.6rem; margin-bottom: 0.75rem;">A place to check in, write, and move on</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem;">
+                Nothing complicated. Just a simple way to keep up with how you feel.
             </p>
-           
-            <a href="login.html" class="btn btn-large">Get Started Today</a>
-            
+            <a href="signup.php" class="btn btn-primary">Sign Up</a>
         </div>
     </section>
 
@@ -108,11 +166,32 @@
                     <span class="logo-icon">❤️</span>
                     <span class="logo-text">MoodHelper</span>
                 </div>
-                <p>© 2025 MoodHelper. Your emotional wellness companion.</p>
+                <p>© 2025 MoodHelper</p>
             </div>
         </div>
     </footer>
 
-    <script src="js/main.js"></script>
+    <script>
+        const previewButtons = document.querySelectorAll('#previewMoodButtons .emotion-btn');
+        const previewResponse = document.getElementById('previewResponse');
+        const previewResponseText = document.getElementById('previewResponseText');
+
+        previewButtons.forEach(button => {
+            button.addEventListener('click', function () {
+                previewButtons.forEach(btn => btn.classList.remove('selected'));
+                this.classList.add('selected');
+
+                previewResponseText.textContent = this.getAttribute('data-message');
+                previewResponse.style.display = 'block';
+
+                setTimeout(() => {
+                    previewResponse.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'nearest'
+                    });
+                }, 100);
+            });
+        });
+    </script>
 </body>
 </html>
