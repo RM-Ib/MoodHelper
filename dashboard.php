@@ -24,7 +24,7 @@ if (!isset($_SESSION['user_id'])) {
             </a>
             <ul class="nav-links">
                 <li><a href="dashboard.php" class="active">Dashboard</a></li>
-                <li><a href="diary.html">Diary</a></li>
+                <li><a href="diary.php">Diary</a></li>
                 <li><a href="daily-prompt.php">Prompts</a></li>
                 <li><a href="reflection-board.php">Reflection Board</a></li>
                 <li><a href="groups.html">Groups</a></li>
@@ -159,7 +159,7 @@ if (!isset($_SESSION['user_id'])) {
                     <p>View your emotional journey</p>
                 </a>
 
-                <a href="diary.html" class="feature-card" style="text-decoration: none; color: inherit;">
+                <a href="diary.php" class="feature-card" style="text-decoration: none; color: inherit;">
                     <div class="feature-icon" style="background: linear-gradient(135deg, #3b82f6, #60a5fa); color: white;">
                         📖
                     </div>
