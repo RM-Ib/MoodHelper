@@ -1,3 +1,45 @@
+
+<?php
+session_start();
+
+// DB connection
+$conn = new mysqli("localhost", "root", "", "moodhelperdb");
+
+// Check connection
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Make sure user is logged in
+if (!isset($_SESSION['user_id'])) {
+    die("User not logged in.");
+}
+
+$user_id = $_SESSION['user_id'];
+
+// Fetch mood entries (latest first, limit 10)
+$sql = "SELECT * FROM moodentries WHERE user_id = ? ORDER BY mood_date DESC LIMIT 10";
+$stmt = $conn->prepare($sql);
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
+$result = $stmt->get_result();
+
+// Counters
+$happy = 0;
+$neutral = 0;
+$sad = 0;
+
+$moods = [];
+
+while ($row = $result->fetch_assoc()) {
+    $moods[] = $row;
+
+    if ($row['mood'] == 'happy') $happy++;
+    elseif ($row['mood'] == 'neutral') $neutral++;
+    else $sad++;
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +48,6 @@
 <title>Mood Tracking - MoodHelper</title>
 
 <link rel="stylesheet" href="css/styles.css">
-
 </head>
 
 <body>
@@ -49,6 +90,7 @@ Track your emotions over time and understand your patterns
 </div>
 
 
+<!-- Mood Overview -->
 <div class="card" style="margin-bottom:2rem;">
 
 <h2 style="margin-bottom:1rem;">Mood Overview</h2>
@@ -60,7 +102,7 @@ Track your emotions over time and understand your patterns
 😊
 </div>
 <h3>Happy Days</h3>
-<p>12 days this month</p>
+<p><?php echo $happy; ?> days</p>
 </div>
 
 <div class="feature-card">
@@ -68,7 +110,7 @@ Track your emotions over time and understand your patterns
 😐
 </div>
 <h3>Neutral Days</h3>
-<p>8 days this month</p>
+<p><?php echo $neutral; ?> days</p>
 </div>
 
 <div class="feature-card">
@@ -76,14 +118,14 @@ Track your emotions over time and understand your patterns
 😢
 </div>
 <h3>Low Mood Days</h3>
-<p>5 days this month</p>
+<p><?php echo $sad; ?> days</p>
 </div>
 
 </div>
-
 </div>
 
 
+<!-- Mood History -->
 <div class="card" style="margin-bottom:2rem;">
 
 <h2 style="margin-bottom:1.5rem;">Mood History</h2>
@@ -100,29 +142,35 @@ Track your emotions over time and understand your patterns
 
 <tbody>
 
-<tr style="border-bottom:1px solid #f1f5f9;">
-<td style="padding:0.75rem;">Today</td>
-<td style="padding:0.75rem;">😊 Happy</td>
-<td style="padding:0.75rem;">Had a productive day</td>
-</tr>
+<?php if (count($moods) > 0): ?>
+    <?php foreach ($moods as $row): ?>
+    <tr style="border-bottom:1px solid #f1f5f9;">
+        <td style="padding:0.75rem;">
+            <?php echo date("M d, Y", strtotime($row['mood_date'])); ?>
+        </td>
 
-<tr style="border-bottom:1px solid #f1f5f9;">
-<td style="padding:0.75rem;">Yesterday</td>
-<td style="padding:0.75rem;">😐 Neutral</td>
-<td style="padding:0.75rem;">Normal day</td>
-</tr>
+        <td style="padding:0.75rem;">
+            <?php
+            $emoji = "😐";
+            if ($row['mood'] == 'happy') $emoji = "😊";
+            elseif ($row['mood'] == 'sad') $emoji = "😢";
+            elseif ($row['mood'] == 'anxious') $emoji = "😰";
+            ?>
+            <?php echo $emoji . " " . ucfirst($row['mood']); ?>
+        </td>
 
-<tr style="border-bottom:1px solid #f1f5f9;">
-<td style="padding:0.75rem;">2 Days Ago</td>
-<td style="padding:0.75rem;">😢 Sad</td>
-<td style="padding:0.75rem;">Felt tired and stressed</td>
-</tr>
-
-<tr>
-<td style="padding:0.75rem;">3 Days Ago</td>
-<td style="padding:0.75rem;">😊 Happy</td>
-<td style="padding:0.75rem;">Spent time with friends</td>
-</tr>
+        <td style="padding:0.75rem;">
+            <?php echo !empty($row['notes']) ? $row['notes'] : '-'; ?>
+        </td>
+    </tr>
+    <?php endforeach; ?>
+<?php else: ?>
+    <tr>
+        <td colspan="3" style="padding:1rem; text-align:center; color:gray;">
+            No mood entries yet.
+        </td>
+    </tr>
+<?php endif; ?>
 
 </tbody>
 
@@ -131,28 +179,33 @@ Track your emotions over time and understand your patterns
 </div>
 
 
+<!-- Insights -->
 <div class="card">
 
 <h2 style="margin-bottom:1.5rem;">Insights</h2>
 
 <p style="margin-bottom:1rem;">
-• Your most common mood this month is <strong>Happy</strong>.
+• Your most common mood is <strong>
+<?php
+if ($happy >= $neutral && $happy >= $sad) echo "Happy";
+elseif ($neutral >= $happy && $neutral >= $sad) echo "Neutral";
+else echo "Low Mood";
+?>
+</strong>.
 </p>
 
 <p style="margin-bottom:1rem;">
-• You tend to feel better after writing in your <strong>Diary</strong>.
+• Keep tracking daily to understand your emotional patterns.
 </p>
 
 <p>
-• Consider joining a <strong>Support Group</strong> when you're feeling low.
+• Writing notes helps identify triggers and improvements.
 </p>
 
 <div style="margin-top:2rem;">
-
-<a href="dashboard.html" class="btn btn-primary btn-large" style="width:100%;">
+<a href="dashboard.php" class="btn btn-primary btn-large" style="width:100%;">
 Log Today's Mood
 </a>
-
 </div>
 
 </div>

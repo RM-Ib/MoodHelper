@@ -9,7 +9,7 @@ if (!isset($_SESSION['user_id'])) {
 header("Content-Type: application/json");
 
 // 🔐 OPENROUTER KEY
-$apiKey = "sk-or-v1-secret";
+$apiKey = "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";
 
 // 🗄️ DB CONNECTION
 $conn = new mysqli("localhost", "root", "", "moodhelperdb");

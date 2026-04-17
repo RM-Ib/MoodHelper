@@ -70,10 +70,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
 
         } else {
-            $error = "Incorrect password.";
+            $error = "Either Email or password is wrong.";
         }
     } else {
-        $error = "No account found with that email.";
+        $error = "Either Email or password is wrong.";
     }
 
     $stmt->close();

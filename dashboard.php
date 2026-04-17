@@ -151,7 +151,7 @@ if (!isset($_SESSION['user_id'])) {
         <div>
             <h2 style="font-size: 1.75rem; margin-bottom: 1.5rem;">Quick Access</h2>
             <div class="features">
-                <a href="mood-tracking.html" class="feature-card" style="text-decoration: none; color: inherit;">
+                <a href="mood-tracking.php" class="feature-card" style="text-decoration: none; color: inherit;">
                     <div class="feature-icon" style="background: linear-gradient(135deg, #7c3aed, #a78bfa); color: white;">
                         📊
                     </div>
@@ -175,7 +175,7 @@ if (!isset($_SESSION['user_id'])) {
                     <p>Share anonymously</p>
                 </a>
 
-                <a href="groups.html" class="feature-card" style="text-decoration: none; color: inherit;">
+                <a href="groups.php" class="feature-card" style="text-decoration: none; color: inherit;">
                     <div class="feature-icon" style="background: linear-gradient(135deg, #ec4899, #f472b6); color: white;">
                         👥
                     </div>
