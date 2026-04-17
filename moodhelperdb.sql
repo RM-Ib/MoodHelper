@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 17, 2026 at 09:19 AM
+-- Generation Time: Apr 17, 2026 at 06:06 PM
 -- Server version: 8.4.7
 -- PHP Version: 8.3.28
 
@@ -32,8 +32,8 @@ CREATE TABLE IF NOT EXISTS `anonymous_messages` (
   `message_id` int NOT NULL AUTO_INCREMENT,
   `sender_id` int NOT NULL,
   `receiver_id` int NOT NULL,
-  `mood` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `message_text` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `mood` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `message_text` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `is_read` tinyint(1) DEFAULT '0',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`message_id`)
@@ -82,11 +82,11 @@ DROP TABLE IF EXISTS `chat_messages`;
 CREATE TABLE IF NOT EXISTS `chat_messages` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
-  `role` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `message` text COLLATE utf8mb4_unicode_ci,
+  `role` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `chat_messages`
@@ -110,7 +110,17 @@ INSERT INTO `chat_messages` (`id`, `user_id`, `role`, `message`, `created_at`) V
 (15, 1, 'user', 'uHxXoa+F6WnSGmAmb9Hw8Vh+h+lCIPUvE1yn3wmrGEckT+oNPPAp1M8bIEEm6bCb', '2026-04-17 08:08:45'),
 (16, 1, 'assistant', 'ZvxvLQ0zgYIiUKI049OjYEZeFseHSghwQi05L71n3VUP9lfbWEDwKuryB6ZYPhOL1bdk6+NR7SagMSjybUAB9DpQ5WlLnJbOnugBNgpEA2yZ4smLC7DmaNJW6Vh3gXCU5tHH0ZvDoSDmHY1PqpyE1tWuiaTGvVvXM5p2vbojUDpIcdhzkdOrDlYZ6zyXECygrS3f4+JX6AZITUdNlbpb1VBK91ii2dl1M3X3E2GLil8I3Z5l4rZ4Wylv0XF2EUQqC3Jyzf0WBpcm5r2x/YsR/27GB7ge/ifc6yfufw9xKOE2/Oi98hoaT2ipv+SWYpJm288sNME6h1vea5ORc9w7Iwgmf4QYcUzzJsSBDjnyX2zvgendEOSkEuo8zHn51EmB+QTq+FFPie9TonXyTVSYsw==', '2026-04-17 08:08:45'),
 (17, 1, 'user', 'F3pCizFuTyPVY3Qk4lO1cA==', '2026-04-17 08:30:58'),
-(18, 1, 'assistant', 'V+7TuFv8ifFee2HFgxG3wWW32mq/mUyAdcQfa8VumZKxL6eKl4W4UGZOjT7PJwUmzU9WR/XOYOvTaQ3ctINg0kTPB41O1o4Kt3soQbn+aKCHT/qNSs1fc+oWfj1deI3QELbs22HWge8HeAOkgXvVFQ==', '2026-04-17 08:30:58');
+(18, 1, 'assistant', 'V+7TuFv8ifFee2HFgxG3wWW32mq/mUyAdcQfa8VumZKxL6eKl4W4UGZOjT7PJwUmzU9WR/XOYOvTaQ3ctINg0kTPB41O1o4Kt3soQbn+aKCHT/qNSs1fc+oWfj1deI3QELbs22HWge8HeAOkgXvVFQ==', '2026-04-17 08:30:58'),
+(19, 1, 'user', 'ak0y7eST95ivw7r5lm84GqPoLjKb62fZr4bef03d2O8=', '2026-04-17 16:18:57'),
+(20, 1, 'assistant', '8SiQPQFmUDguQyjNi1oYJl+KfqGlLexrAUZk46WeG+XG/Jcn/XFyON/kEySn47rW6Dg+qRpNKYM8/BW/oxBkAK6v/u66QNwQZeOUJQACETnbUafpU7viGw6DAwmOmzRDIr3gzyLqXp9oX1Oja7GaKf8tnOTMpG2m3/NjywnCrGpZ+vBpIHyMFGc9uyDUxrrww9u1C0e8XmQUiGLvqit2m6ad1TrlBUxsR9dhgMGuQuftT9TFPIwYVdpfVEBtvetLz02KPc7Xxb2ZH7eJ/917hg==', '2026-04-17 16:18:57'),
+(21, 1, 'user', 'aZsa1+KNNgmjn0BZMvE4vacTQFTrb8fK/5KwuB2Nkpd/Ekk9hExaI7p5tg9M0JuY', '2026-04-17 16:19:09'),
+(22, 1, 'assistant', 'GVs05551jYc0SfuqL+PYN0VvLuDNAZkgIDas3RH2J0JuiIJzvgAJemLSXUSPMExS6nx9JhIkDMd8+cyIT+wGY7OigSQgZ5SRfIBbvV3otfoCNctmayFlnFEn7m0PEcUdb5SGdBuWW3F1omH1Ut/AnNjXvl6M91gya/oMLOPVdrlAB8Q7yIv8qgtdxRVhI9H1d87bphDVoL3Z7r/ZKid5fao7RRyWPdiogF0aG7RkCy/5k5vQdPM9ZIuwsYc8V4N3DLD2VeuO/uU0QSvZqAeAo/94fnkzNIuBuFWecOwvemS1368w5/cAcp0vi7gkQao4zPGK2z5Q5flRPMXFpkkqsIRvz/qVVfyKixDNenaqFmlSsl7ltPWDsc54DFxYk0qHs3SZgvyOEg8RZ2Kr9xA4yQ==', '2026-04-17 16:19:09'),
+(23, 1, 'user', 'pudUAlt67XFTypZBBzt0Qf7BiE4zT4WzlGB8pUWHeOw=', '2026-04-17 16:19:27'),
+(24, 1, 'assistant', '+NGGP5a9x2jjY+OQhA27zmz1UTqc4+g/PpwryMNs0hVuD2NX4WlCRmIycz6e+gsm7Ki3ybPmIzYACb/qgahvV5kZJ0/E5+zOj034SVKh5nNKgh+5cPp4KXm9fr4z7wLLY9lvx5afRtSNg1DVtcvkmiLK7Ix5OvSK1FHXuDLYWsDhO/K66nHJ8QJxGmnQj04X+VvkEysRgWPLOLiq/NPJL6/V18BIas3kfetyhJGr2Ha3VzCEZDH+gkkiAmxqU6SG0dG05V/A6tHINsOu8gtYB+uUgRS2nxZFnQMtUMH/D/c=', '2026-04-17 16:19:27'),
+(25, 1, 'user', 'biER+uCjGSzJFLPCZGTd2DWxgBIICL3v3zxVHST4HLLyrOckXQ/4G2++zRN66fG/eBldv46H0XQyc+5QukRfrjCWSPzIq+ltv4vqKdiB3C3XQ/sIeF7FxQbD+bhFV1Az', '2026-04-17 16:20:27'),
+(26, 1, 'assistant', 'Be+jttUUWv8P82xKsRv0PXVH5+nBaffUzznpHExW/M4+RSbgcQQgNnOfC+kbrn7a/Nhf5QAfRacMDNVW3IMGla32vgBnQ8ZBhUUq9AZcva0jKeKgejHWgCPWWdlq/jxhHU2rJjJJOd5fJx0UfdjAoNZNJ1RiW55X0ODtCcbSWPw1g2JdVS97oI626VzHhdbPgPZdZodVWCo5mNLC+ISTCMiQoiyf91zyp6qbbIPgbn5jOYuo2KD7U0tIYRQUs4USWt68WBiUCV9LHJM5dTx/itSRyINdrlZmO0V44l3vuSVEEQhA8HgSk+qtGx2ks9lSlJxWWAdXG+3qX8WwQdDbQVF+zW8chrhYsOhMsNP73lwELAjAToh9myqEi06qlXMkeywyMdENmdvWBRqh0J3bFg==', '2026-04-17 16:20:27'),
+(27, 1, 'user', 'F3pCizFuTyPVY3Qk4lO1cA==', '2026-04-17 16:22:24'),
+(28, 1, 'assistant', 'V+7TuFv8ifFee2HFgxG3wR6eA1OUBgWh5f7JE04aPrzy+wRnmqwQXomtr+PqbpXbCqZPAoSIOx34/mnL6gio6+4QwrPYabUFkwWs3xjO1X/e9aHuWwsQn1wtINgSpLm5h7ODj1QfT58Z67/shlhdiTvQhBdJXVOygAi2XEew4azqxcB+SiVlrzZZd8Pvm3ET', '2026-04-17 16:22:24');
 
 -- --------------------------------------------------------
 
@@ -128,7 +138,7 @@ CREATE TABLE IF NOT EXISTS `dailypromptanswers` (
   PRIMARY KEY (`answer_id`),
   KEY `user_id` (`user_id`),
   KEY `prompt_id` (`prompt_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `dailypromptanswers`
@@ -136,7 +146,8 @@ CREATE TABLE IF NOT EXISTS `dailypromptanswers` (
 
 INSERT INTO `dailypromptanswers` (`answer_id`, `user_id`, `prompt_id`, `answer`, `answered_at`) VALUES
 (8, 5, 5, 'i took a long shower to relax my nerves', '2026-04-11 22:42:16'),
-(5, 5, 4, 'my health', '2026-04-10 16:39:39');
+(5, 5, 4, 'my health', '2026-04-10 16:39:39'),
+(9, 7, 11, 's', '2026-04-17 19:06:49');
 
 -- --------------------------------------------------------
 
@@ -213,6 +224,7 @@ DROP TABLE IF EXISTS `group_posts`;
 CREATE TABLE IF NOT EXISTS `group_posts` (
   `post_id` int NOT NULL AUTO_INCREMENT,
   `group_id` int NOT NULL,
+  `user_id` int NOT NULL,
   `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
@@ -220,7 +232,23 @@ CREATE TABLE IF NOT EXISTS `group_posts` (
   `replies_count` int DEFAULT '0',
   PRIMARY KEY (`post_id`),
   KEY `group_id` (`group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `group_post_hearts`
+--
+
+DROP TABLE IF EXISTS `group_post_hearts`;
+CREATE TABLE IF NOT EXISTS `group_post_hearts` (
+  `heart_id` int NOT NULL AUTO_INCREMENT,
+  `post_id` int NOT NULL,
+  `user_id` int NOT NULL,
+  `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`heart_id`),
+  UNIQUE KEY `unique_heart` (`post_id`,`user_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -232,12 +260,29 @@ DROP TABLE IF EXISTS `group_replies`;
 CREATE TABLE IF NOT EXISTS `group_replies` (
   `reply_id` int NOT NULL AUTO_INCREMENT,
   `post_id` int NOT NULL,
+  `user_id` int NOT NULL,
   `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `hearts_count` int DEFAULT '0',
   PRIMARY KEY (`reply_id`),
   KEY `post_id` (`post_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `group_replies`
+--
+
+INSERT INTO `group_replies` (`reply_id`, `post_id`, `user_id`, `content`, `created_at`, `hearts_count`) VALUES
+(2, 4, 7, 'how are you', '2026-04-17 20:27:37', 0),
+(3, 4, 7, 'sdsd', '2026-04-17 20:31:18', 0),
+(4, 4, 7, 'sd', '2026-04-17 20:40:09', 0),
+(5, 5, 7, 'sc', '2026-04-17 20:41:55', 0),
+(6, 5, 7, 'sd', '2026-04-17 20:44:24', 0),
+(7, 4, 7, 'dssd', '2026-04-17 20:49:07', 0),
+(8, 4, 7, 's', '2026-04-17 20:49:11', 0),
+(9, 5, 7, 'ds', '2026-04-17 20:57:08', 0),
+(10, 7, 7, 'hey girl', '2026-04-17 21:04:24', 0),
+(11, 7, 7, 'no', '2026-04-17 21:04:30', 0);
 
 -- --------------------------------------------------------
 
@@ -255,7 +300,7 @@ CREATE TABLE IF NOT EXISTS `moodentries` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`mood_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `moodentries`
@@ -271,7 +316,12 @@ INSERT INTO `moodentries` (`mood_id`, `user_id`, `mood`, `notes`, `mood_date`, `
 (7, 6, 'anxious', 'you are doing okayy', '2026-04-11 00:00:00', '2026-04-11 20:23:48'),
 (8, 5, 'sad', '', '2026-04-11 00:00:00', '2026-04-11 20:35:25'),
 (9, 5, 'happy', 'hii', '2026-04-11 00:00:00', '2026-04-11 20:35:35'),
-(10, 5, 'happy', 'Diary entry mood', '2026-04-12 00:00:00', '2026-04-12 13:56:47');
+(10, 5, 'happy', 'Diary entry mood', '2026-04-12 00:00:00', '2026-04-12 13:56:47'),
+(11, 7, 'sad', 'I hope you feel better', '2026-04-17 00:00:00', '2026-04-17 16:06:26'),
+(12, 7, 'anxious', '', '2026-04-17 00:00:00', '2026-04-17 16:06:34'),
+(13, 7, 'anxious', '', '2026-04-17 00:00:00', '2026-04-17 16:18:31'),
+(14, 7, 'anxious', '', '2026-04-17 00:00:00', '2026-04-17 16:28:23'),
+(15, 7, 'happy', '', '2026-04-17 00:00:00', '2026-04-17 16:38:03');
 
 -- --------------------------------------------------------
 
@@ -289,7 +339,14 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `is_anonymous` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`post_id`),
   UNIQUE KEY `post_id` (`post_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `posts`
+--
+
+INSERT INTO `posts` (`post_id`, `user_id`, `page`, `content`, `created_at`, `is_anonymous`) VALUES
+(13, 7, 'reflection-board', 'dcdc', '2026-04-17 17:04:06', 1);
 
 -- --------------------------------------------------------
 
@@ -306,7 +363,14 @@ CREATE TABLE IF NOT EXISTS `post_hearts` (
   PRIMARY KEY (`heart_id`),
   UNIQUE KEY `unique_heart` (`post_id`,`user_id`),
   KEY `post_id` (`post_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `post_hearts`
+--
+
+INSERT INTO `post_hearts` (`heart_id`, `post_id`, `user_id`, `created_at`) VALUES
+(22, 13, 7, '2026-04-17 20:04:10');
 
 -- --------------------------------------------------------
 
@@ -376,7 +440,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `user_id` (`user_id`),
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `users`
@@ -385,7 +449,8 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `username`, `email`, `password_hash`, `created_at`, `last_login`, `login_streak`) VALUES
 (2, '1234', '1234', '1234', '123@gmail.com', '$2y$10$t73nr4KhZ2dh9oJn5SBwmOg5bNPAbX8N/xgEtf0.Sd4o9mbY31w7m', '2026-04-01 19:22:47', '2026-04-01 20:00:47', 0),
 (6, 'Ranimmmm', 'ib', 'testerrr', 'ranimibrahim145@gmail.com', '$2y$10$O7G..cyW7yRB9AHQwde5VuLK7AlB8lkhm3B38nw.We8e05JUf/C/e', '2026-04-11 20:23:07', '2026-04-11 20:23:25', 1),
-(5, 'Ranim', 'Ibrahim', 'rm_ib', 'ranimibrahiim145@gmail.com', '$2y$10$ZUpS3TBd04cSSfrV.wbgje8uwJSwNKxZc.uQPyibn2o093bY9hIf6', '2026-04-10 13:16:07', '2026-04-17 07:40:22', 3);
+(5, 'Ranim', 'Ibrahim', 'rm_ib', 'ranimibrahiim145@gmail.com', '$2y$10$ZUpS3TBd04cSSfrV.wbgje8uwJSwNKxZc.uQPyibn2o093bY9hIf6', '2026-04-10 13:16:07', '2026-04-17 07:40:22', 3),
+(7, 'Antonio', 'Karam', 'antoniokaram06', 'antoniokaram06@gmail.com', '$2y$10$n/KWI.hCvtFM7F1v/oog9OfDRBjlvygOhsgUvhRAt3LgjIquM261u', '2026-04-17 16:05:51', '2026-04-17 17:41:05', 1);
 
 -- --------------------------------------------------------
 
@@ -400,7 +465,23 @@ CREATE TABLE IF NOT EXISTS `user_groups` (
   `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `icon` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   PRIMARY KEY (`group_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `user_groups`
+--
+
+INSERT INTO `user_groups` (`group_id`, `name`, `description`, `icon`) VALUES
+(1, 'Sexual Assault Survivors', 'A safe space for survivors to share and heal', '🫂'),
+(2, 'Grief & Loss', 'Support for loss and grieving', '🕊️'),
+(3, 'Bullying & Harassment', 'Support for bullying victims', '🛡️'),
+(4, 'Addiction & Recovery', 'Recovery support', '🌱'),
+(5, 'Caregivers Support', 'Support for caregivers', '💙'),
+(6, 'Eating Disorders', 'Recovery community', '🦋'),
+(7, 'Pregnancy Loss', 'Support for miscarriage', '🤍'),
+(8, 'Chronic Illness', 'Support for chronic illness', '💪'),
+(9, 'New Parents', 'Support for new parents', '👶'),
+(10, 'Lebanese War PTSD', 'Support space for people affected by war trauma and PTSD in Lebanon', '🇱🇧');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
