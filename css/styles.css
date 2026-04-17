@@ -701,3 +701,28 @@ textarea.form-control {
     opacity:0.4;
 }
 
+
+/* Typing indicator dots */
+.typing-dots {
+    display: flex;
+    gap: 5px;
+    align-items: center;
+    padding: 4px 0;
+}
+
+.typing-dots span {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--primary-purple);
+    opacity: 0.4;
+    animation: typingBounce 1.2s ease-in-out infinite;
+}
+
+.typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+.typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes typingBounce {
+    0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
+    30%            { transform: translateY(-6px); opacity: 1; }
+}

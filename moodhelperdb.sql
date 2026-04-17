@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 12, 2026 at 02:37 PM
+-- Generation Time: Apr 17, 2026 at 09:19 AM
 -- Server version: 8.4.7
 -- PHP Version: 8.3.28
 
@@ -71,6 +71,46 @@ INSERT INTO `badges` (`badge_id`, `name`, `description`, `required_streak`) VALU
 (2, '1-month streak', 'Logged in 30 consecutive days', 30),
 (3, '6-month streak', 'Logged in 180 consecutive days', 180),
 (4, '1-year streak', 'Logged in 365 consecutive days', 365);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `chat_messages`
+--
+
+DROP TABLE IF EXISTS `chat_messages`;
+CREATE TABLE IF NOT EXISTS `chat_messages` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `role` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `message` text COLLATE utf8mb4_unicode_ci,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `chat_messages`
+--
+
+INSERT INTO `chat_messages` (`id`, `user_id`, `role`, `message`, `created_at`) VALUES
+(1, 1, 'user', 'F3pCizFuTyPVY3Qk4lO1cA==', '2026-04-17 07:35:14'),
+(2, 1, 'assistant', 'kEMxL92k2qy7fErpUc+XEXg+GePfoZ7OAEoDytEgqZ+dNPYnBfGnfhfrmKAbfrAozoUF6fO10SSw1s9zo275Qw==', '2026-04-17 07:35:14'),
+(3, 1, 'user', 'UGLrjLGUXPtWizK2NTLt4XhXB6sMtRpoBKyua1ogTVrqcdMfnIXBoSD9PXbUD5QQ', '2026-04-17 07:35:26'),
+(4, 1, 'assistant', 'AkakaDyYmii0ECWc4JQHZQVysXy++Oe8l+Y2XhcF1caJroo5uJfFCPM+YdXhgZCoGrzLuYuM+0wHanrNcNHCkeUIJpUZKsMBq9KE6AxdSzWrTihWebScOGX4kXnSEjx3yiUXvUo8hpV6yzQQngdCJVSIhadPKhG5Cf6RQLfxIus=', '2026-04-17 07:35:26'),
+(5, 1, 'user', 'BJoAXqw4cq/EH5RemsQlEA==', '2026-04-17 07:40:15'),
+(6, 1, 'assistant', 'vIXx9XHh5ryhgPeyidnicPlWAu2Jr+0rzaEe0f5aNc3Woc/kvAU0ZeNLgjs0FX/A/Zs6nYffRUDN77bXghQlP0+A2VbRa/U1yKkL7ECmQ3o=', '2026-04-17 07:40:15'),
+(7, 1, 'user', 'f0i2q0pNn/43n3S73d2fZg==', '2026-04-17 08:07:48'),
+(8, 1, 'assistant', 'igwCeHQq+WO74jQ4LkvLkp3iKzUYP4zVqcvrNI6G/mCn7mzsjSO+Gib1RZ73/5RGBO25OEjhHmJjOQLXXc9zI6KHP7ZBNwZxr8fxMsN9DjWjdVB0IsbV2gDA6IYfm7U9', '2026-04-17 08:07:48'),
+(9, 1, 'user', '8g0G875HEJkjjLm30ub6+vSaMrKSWRFw3V1zKHjB8QE=', '2026-04-17 08:08:02'),
+(10, 1, 'assistant', 'xA4yS8fdezzEvj9fxkwxbFG4EXuckDKCo2f3Z44fGVW9XACR3zN63BAe1JFuz1lFye8aSQyhWD1lc63pd9f9OjvDhgbJGIVtk4LLOOKeUugkzBJlGE11T00IKWtP9exEtzYVyQFIp/IMagRnKhMAQQLYvRuYV/w3QE+6mI6iQms=', '2026-04-17 08:08:02'),
+(11, 1, 'user', 'Zd0NzYhb+1qlyJZPPF1Hyg==', '2026-04-17 08:08:09'),
+(12, 1, 'assistant', 'mLgI9yjanSiV24o7OFyqdj3Jn3IalPhsOaa3KjyTnBmV/HoRHDpB2kbyjjix5k5Btej51HbMmRUM/kXM7II+YRg41wulkf+C3REmWZlPBIfxN2jyhbhOn2jMSpkAtQUWcf5icogjkDZgEhZLN/Q7baQV96DW0xzQu3T6uo6AW8+4S0cNteOtwQaWtsOqhRwW+jbT199bKg3nYxv1zgfmXRNNNm11vWjzUz2pgExuZTPuZkXa73fE2md8LH18uFCz6CnE/bqZMxhaTd77pHpUog==', '2026-04-17 08:08:09'),
+(13, 1, 'user', 'F5qeGJkQtBGTsX9bj46g9YaZ4BadeMmtbKfsPzv8+yk=', '2026-04-17 08:08:24'),
+(14, 1, 'assistant', 'wx03LUv8KFm7ARH85nOisyO4C7oKr7ztZYM0zS+C2O75U/oYgDu8PdKTpr7RubOsK6AsPt4LIoPYa86muSLyUrQrLzH+6dii5lBphahQqXuqNSn6n3duSHY3BEH07AyILo0r3YUO2ydWmp7c/HDGLpK6PBbYFYgAq905Z4Ii71HDMVQmLD5y0o9rQJZBQVEXrdM7p48TLeMBDh2aslKXNiE8H1uLt7LQ8oCd7Ot0IQbdP8JG8AbHRyT+DJPcmYMQD7VYrInemLCm0i0bX5nL/X5mtCdXkWlq0GMsQMPyQXg=', '2026-04-17 08:08:24'),
+(15, 1, 'user', 'uHxXoa+F6WnSGmAmb9Hw8Vh+h+lCIPUvE1yn3wmrGEckT+oNPPAp1M8bIEEm6bCb', '2026-04-17 08:08:45'),
+(16, 1, 'assistant', 'ZvxvLQ0zgYIiUKI049OjYEZeFseHSghwQi05L71n3VUP9lfbWEDwKuryB6ZYPhOL1bdk6+NR7SagMSjybUAB9DpQ5WlLnJbOnugBNgpEA2yZ4smLC7DmaNJW6Vh3gXCU5tHH0ZvDoSDmHY1PqpyE1tWuiaTGvVvXM5p2vbojUDpIcdhzkdOrDlYZ6zyXECygrS3f4+JX6AZITUdNlbpb1VBK91ii2dl1M3X3E2GLil8I3Z5l4rZ4Wylv0XF2EUQqC3Jyzf0WBpcm5r2x/YsR/27GB7ge/ifc6yfufw9xKOE2/Oi98hoaT2ipv+SWYpJm288sNME6h1vea5ORc9w7Iwgmf4QYcUzzJsSBDjnyX2zvgendEOSkEuo8zHn51EmB+QTq+FFPie9TonXyTVSYsw==', '2026-04-17 08:08:45'),
+(17, 1, 'user', 'F3pCizFuTyPVY3Qk4lO1cA==', '2026-04-17 08:30:58'),
+(18, 1, 'assistant', 'V+7TuFv8ifFee2HFgxG3wWW32mq/mUyAdcQfa8VumZKxL6eKl4W4UGZOjT7PJwUmzU9WR/XOYOvTaQ3ctINg0kTPB41O1o4Kt3soQbn+aKCHT/qNSs1fc+oWfj1deI3QELbs22HWge8HeAOkgXvVFQ==', '2026-04-17 08:30:58');
 
 -- --------------------------------------------------------
 
@@ -345,7 +385,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `username`, `email`, `password_hash`, `created_at`, `last_login`, `login_streak`) VALUES
 (2, '1234', '1234', '1234', '123@gmail.com', '$2y$10$t73nr4KhZ2dh9oJn5SBwmOg5bNPAbX8N/xgEtf0.Sd4o9mbY31w7m', '2026-04-01 19:22:47', '2026-04-01 20:00:47', 0),
 (6, 'Ranimmmm', 'ib', 'testerrr', 'ranimibrahim145@gmail.com', '$2y$10$O7G..cyW7yRB9AHQwde5VuLK7AlB8lkhm3B38nw.We8e05JUf/C/e', '2026-04-11 20:23:07', '2026-04-11 20:23:25', 1),
-(5, 'Ranim', 'Ibrahim', 'rm_ib', 'ranimibrahiim145@gmail.com', '$2y$10$ZUpS3TBd04cSSfrV.wbgje8uwJSwNKxZc.uQPyibn2o093bY9hIf6', '2026-04-10 13:16:07', '2026-04-12 13:35:04', 1);
+(5, 'Ranim', 'Ibrahim', 'rm_ib', 'ranimibrahiim145@gmail.com', '$2y$10$ZUpS3TBd04cSSfrV.wbgje8uwJSwNKxZc.uQPyibn2o093bY9hIf6', '2026-04-10 13:16:07', '2026-04-17 07:40:22', 3);
 
 -- --------------------------------------------------------
 

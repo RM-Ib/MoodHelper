@@ -27,9 +27,9 @@ if (!isset($_SESSION['user_id'])) {
                 <li><a href="diary.php">Diary</a></li>
                 <li><a href="daily-prompt.php">Prompts</a></li>
                 <li><a href="reflection-board.php">Reflection Board</a></li>
-                <li><a href="groups.html">Groups</a></li>
-                <li><a href="mood-support.html">Support</a></li>
-                <li><a href="settings.html">Settings</a></li>
+                <li><a href="groups.php">Groups</a></li>
+                <li><a href="mood-support.php">Support</a></li>
+                <li><a href="settings.php">Settings</a></li>
             </ul>
             <div class="nav-buttons">
                 <a href="account.php" class="btn btn-secondary">Account</a>
