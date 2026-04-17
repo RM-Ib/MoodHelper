@@ -81,10 +81,10 @@ $conn->close();
         </a>
         <ul class="nav-links">
             <li><a href="dashboard.php" class="active">Dashboard</a></li>
-            <li><a href="diary.html" class="">Diary</a></li>
-            <li><a href="daily-prompt.html" class="">Prompts</a></li>
-            <li><a href="groups.html" class="">Groups</a></li>
-            <li><a href="mood-support.html" class="">Support</a></li>
+            <li><a href="diary.php" class="">Diary</a></li>
+            <li><a href="daily-prompt.php" class="">Prompts</a></li>
+            <li><a href="groups.php" class="">Groups</a></li>
+            <li><a href="mood-support.php" class="">Support</a></li>
             <li><a href="settings.html" class="">Settings</a></li>
         </ul>
         <div class="nav-buttons">

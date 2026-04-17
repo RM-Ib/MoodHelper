@@ -10,20 +10,20 @@
     <!-- Navigation -->
     <nav class="navbar">
     <div class="container">
-        <a href="dashboard.html" class="logo">
+        <a href="dashboard.php" class="logo">
             <span class="logo-icon">❤️</span>
             <span class="logo-text">MoodHelper</span>
         </a>
         <ul class="nav-links">
-            <li><a href="dashboard.html" class="">Dashboard</a></li>
-            <li><a href="diary.html" class="">Diary</a></li>
-            <li><a href="daily-prompt.html" class="">Prompts</a></li>
-            <li><a href="groups.html" class="">Groups</a></li>
-            <li><a href="mood-support.html" class="">Support</a></li>
-            <li><a href="settings.html" class="">Settings</a></li>
+            <li><a href="dashboard.php" class="">Dashboard</a></li>
+            <li><a href="diary.php" class="">Diary</a></li>
+            <li><a href="daily-prompt.php" class="">Prompts</a></li>
+            <li><a href="groups.php" class="">Groups</a></li>
+            <li><a href="mood-support.php" class="">Support</a></li>
+            <li><a href="settings.php" class="">Settings</a></li>
         </ul>
         <div class="nav-buttons">
-            <a href="account.html" class="btn btn-secondary">Account</a>
+            <a href="account.php" class="btn btn-secondary">Account</a>
             <a href="index.html" class="btn btn-primary">Logout</a>
         </div>
     </div>
