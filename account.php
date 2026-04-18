@@ -80,12 +80,11 @@ $conn->close();
             <span class="logo-text">MoodHelper</span>
         </a>
         <ul class="nav-links">
-            <li><a href="dashboard.php" class="active">Dashboard</a></li>
+            <li><a href="dashboard.php">Dashboard</a></li>
             <li><a href="diary.php" class="">Diary</a></li>
             <li><a href="daily-prompt.php" class="">Prompts</a></li>
             <li><a href="groups.php" class="">Groups</a></li>
             <li><a href="mood-support.php" class="">Support</a></li>
-            <li><a href="settings.html" class="">Settings</a></li>
         </ul>
         <div class="nav-buttons">
             <a href="Backend/logout.php" class="btn btn-primary">Logout</a>
@@ -127,11 +126,6 @@ $conn->close();
                 <input type="email" name="email" id="email" value="<?php echo $email; ?>" readonly>
             </div>
 
-            <button type="button" class="btn btn-secondary"
-                onclick="location.href='ChangePass.php'">
-                Change Password
-            </button>
-
             <button type="submit" class="btn btn-primary">
                 Save Changes
             </button>
@@ -141,37 +135,7 @@ $conn->close();
             </button>
 
         </form>
-        <div class="badge-section">
-    <h2>Your Streak Badges</h2>
-
-    <div class="badges-container">
-
-        <div class="badge-card locked">
-            <i class="bi bi-fire"></i>
-            <p>7 Day Streak</p>
-            <span>Locked</span>
-        </div>
-
-        <div class="badge-card locked">
-            <i class="bi bi-calendar-check"></i>
-            <p>1 Month Streak</p>
-            <span>Locked</span>
-        </div>
-
-        <div class="badge-card locked">
-            <i class="bi bi-award"></i>
-            <p>6 Month Streak</p>
-            <span>Locked</span>
-        </div>
-
-        <div class="badge-card locked">
-            <i class="bi bi-trophy"></i>
-            <p>1 Year Streak</p>
-            <span>Locked</span>
-        </div>
-
-    </div>
-</div>
+        <!-- The "Your Streak Badges" section has been removed as requested -->
     </div>
 </main>
 

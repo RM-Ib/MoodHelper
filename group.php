@@ -147,7 +147,6 @@ foreach ($posts as $post) {
 <li><a href="reflection-board.php">Reflection Board</a></li>
 <li><a href="groups.php" class="active">Groups</a></li>
 <li><a href="mood-support.php">Support</a></li>
-<li><a href="settings.php">Settings</a></li>
 </ul>
 
 <div class="nav-buttons">

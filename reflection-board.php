@@ -99,7 +99,6 @@ $conn->close();
             <li><a href="reflection-board.php" class="active">Reflection Board</a></li>
             <li><a href="groups.php">Groups</a></li>
             <li><a href="mood-support.php">Support</a></li>
-            <li><a href="settings.php">Settings</a></li>
         </ul>
 
         <div class="nav-buttons">

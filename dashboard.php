@@ -35,7 +35,6 @@ if (!empty($_SESSION['show_daily_prompt'])) {
                 <li><a href="reflection-board.php">Reflection Board</a></li>
                 <li><a href="groups.php">Groups</a></li>
                 <li><a href="mood-support.php">Support</a></li>
-                <li><a href="settings.php">Settings</a></li>
             </ul>
 
             <div class="nav-buttons">
@@ -226,13 +225,6 @@ if (!empty($_SESSION['show_daily_prompt'])) {
                     <p>Find your community</p>
                 </a>
 
-                <a href="articles.html" class="feature-card" style="text-decoration: none; color: inherit;">
-                    <div class="feature-icon" style="background: linear-gradient(135deg, #14b8a6, #5eead4); color: white;">
-                        📄
-                    </div>
-                    <h3>Articles</h3>
-                    <p>Learn and grow</p>
-                </a>
             </div>
         </div>
     </div>
