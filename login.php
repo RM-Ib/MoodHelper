@@ -64,6 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             // Store session
             $_SESSION['user_id'] = $user_id;
             $_SESSION['username'] = $username;
+            $_SESSION['show_daily_prompt'] = true;
 
             // Redirect to dashboard
             header("Location: dashboard.php");

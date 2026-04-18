@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reflection'])) {
     }
 }
 
-// Fetch posts with total hearts
+// Fetch posts with heart and reply counts
 $posts = [];
 $sql = "SELECT p.post_id, p.user_id, p.content, p.created_at,
                (SELECT COUNT(*) FROM post_hearts ph WHERE ph.post_id = p.post_id) AS hearts_count,
@@ -30,9 +30,50 @@ $sql = "SELECT p.post_id, p.user_id, p.content, p.created_at,
         WHERE page = 'reflection-board'
         ORDER BY created_at DESC";
 $result = $conn->query($sql);
+$post_ids = [];
 while ($row = $result->fetch_assoc()) {
     $posts[] = $row;
+    $post_ids[] = $row['post_id'];
 }
+
+// Fetch all replies for the displayed posts in a single query
+$all_replies = [];
+if (!empty($post_ids)) {
+    $placeholders = implode(',', array_fill(0, count($post_ids), '?'));
+    $stmt = $conn->prepare("SELECT reply_id, post_id, user_id, content, created_at 
+                            FROM post_replies 
+                            WHERE post_id IN ($placeholders) 
+                            ORDER BY post_id, created_at ASC");
+    $types = str_repeat('i', count($post_ids));
+    $stmt->bind_param($types, ...$post_ids);
+    $stmt->execute();
+    $replies_result = $stmt->get_result();
+    while ($reply = $replies_result->fetch_assoc()) {
+        $all_replies[$reply['post_id']][] = $reply;
+    }
+}
+
+// For each post, build anonymous numbering map
+$anon_maps = []; // post_id => [user_id => number]
+foreach ($posts as $post) {
+    $post_id = $post['post_id'];
+    $map = [];
+    $counter = 1;
+    
+    // Post author
+    $map[$post['user_id']] = $counter++;
+    
+    // Replies in order
+    if (isset($all_replies[$post_id])) {
+        foreach ($all_replies[$post_id] as $reply) {
+            if (!isset($map[$reply['user_id']])) {
+                $map[$reply['user_id']] = $counter++;
+            }
+        }
+    }
+    $anon_maps[$post_id] = $map;
+}
+
 $conn->close();
 ?>
 <!DOCTYPE html>
@@ -40,28 +81,32 @@ $conn->close();
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Reflection Board</title>
+<title>Reflection Board - MoodHelper</title>
 <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
-<nav class="navbar">
-<div class="container">
-<a href="dashboard.php" class="logo"><span>❤️</span> MoodHelper</a>
 
- <ul class="nav-links">
-<li><a href="dashboard.php" class="active">Dashboard</a></li>
-<li><a href="diary.php">Diary</a></li>
-<li><a href="about.html">About</a></li>
-<li><a href="reflection-board.php">Reflection Board</a></li>
-<li><a href="groups.php">Groups</a></li>
-<li><a href="mood-support.php">Support</a></li>
-<li><a href="settings.php">Settings</a></li>
-</ul>
-<div class="nav-buttons">
-<a href="account.php" class="btn btn-secondary">Account</a>
-<a href="index.html" class="btn btn-primary">Logout</a>
-</div>
-</div>
+<nav class="navbar">
+    <div class="container">
+        <a href="dashboard.php" class="logo">
+            <span class="logo-icon">❤️</span>
+            <span class="logo-text">MoodHelper</span>
+        </a>
+
+        <ul class="nav-links">
+            <li><a href="dashboard.php">Dashboard</a></li>
+            <li><a href="diary.php">Diary</a></li>
+            <li><a href="reflection-board.php" class="active">Reflection Board</a></li>
+            <li><a href="groups.php">Groups</a></li>
+            <li><a href="mood-support.php">Support</a></li>
+            <li><a href="settings.php">Settings</a></li>
+        </ul>
+
+        <div class="nav-buttons">
+            <a href="account.php" class="btn btn-secondary">Account</a>
+            <a href="Backend/logout.php" class="btn btn-primary">Logout</a>
+        </div>
+    </div>
 </nav>
 
 <div class="container" style="padding:3rem 2rem; max-width:900px;">
@@ -88,16 +133,21 @@ $conn->close();
 <div id="postsContainer">
 <?php if (!empty($posts)): ?>
 <?php foreach ($posts as $post): ?>
-<div class="card" data-postid="<?= $post['post_id'] ?>" style="margin-bottom:1.5rem; position:relative;">
+    <?php 
+        $post_id = $post['post_id'];
+        $map = $anon_maps[$post_id];
+        $author_number = $map[$post['user_id']];
+    ?>
+<div class="card" data-postid="<?= $post_id ?>" style="margin-bottom:1.5rem; position:relative;">
     <div style="display:flex; gap:1rem;">
         <div style="flex-shrink:0;">
             <div style="width:40px; height:40px; background: linear-gradient(135deg, #ec4899, #be185d); border-radius:50%; display:flex; align-items:center; justify-content:center; color:white; font-weight:600;">
-                A
+                <?= $author_number ?>
             </div>
         </div>
         <div style="flex:1;">
             <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.5rem;">
-                <span style="font-weight:500; color:var(--text-primary);">Anonymous</span>
+                <span style="font-weight:500; color:var(--text-primary);">Anonymous #<?= $author_number ?></span>
                 <span style="color:var(--text-secondary); font-size:0.875rem;"><?= date("M d, Y H:i", strtotime($post['created_at'])) ?></span>
                 <?php if ($post['user_id'] == $user_id): ?>
                 <button class="deleteBtn" style="margin-left:auto; background:none;border:none;color:red;cursor:pointer;">Delete</button>
@@ -123,7 +173,7 @@ $conn->close();
                 </button>
             </div>
 
-            <!-- Replies -->
+            <!-- Replies Container -->
             <div class="repliesContainer" style="display:none; margin-top:1rem;"></div>
             <div class="replyFormContainer" style="display:none; margin-top:0.5rem;">
                 <textarea class="replyInput" rows="2" placeholder="Write a reply..." style="width:100%; padding:0.5rem; font-size:0.9rem; border-radius:0.5rem; border:1px solid var(--border-light); margin-bottom:0.5rem;"></textarea>
@@ -144,8 +194,9 @@ $conn->close();
 </div>
 
 <script>
-// Store current user ID for JS checks
+// Store current user ID and anon maps for JS
 const currentUserId = <?= json_encode($user_id) ?>;
+const anonMaps = <?= json_encode($anon_maps) ?>;
 
 // Character count
 const textarea = document.getElementById("reflectionContent");
@@ -191,8 +242,10 @@ document.querySelectorAll(".deleteBtn").forEach(btn=>{
     });
 });
 
-// Function to render replies with delete buttons
+// Function to render replies with anonymous numbers
 function renderReplies(card, replies){
+    const postId = card.dataset.postid;
+    const map = anonMaps[postId] || {};
     const repliesContainer = card.querySelector(".repliesContainer");
     const toggleBtn = card.querySelector(".replyToggleBtn");
     repliesContainer.innerHTML = "";
@@ -203,6 +256,7 @@ function renderReplies(card, replies){
     else toggleBtn.querySelector("span:last-child").innerText = replies.length + " replies";
 
     replies.forEach(reply => {
+        const replyNumber = map[reply.user_id] || '?';
         const div = document.createElement("div");
         div.style.background = "#f9f9f9";
         div.style.border = "1px solid var(--border-light)";
@@ -214,7 +268,7 @@ function renderReplies(card, replies){
         div.style.alignItems = "center";
 
         const contentDiv = document.createElement("div");
-        contentDiv.innerHTML = `<span style="color:var(--text-primary); font-weight:500;">Anonymous</span>: ${reply.content} <br> <span style="color:var(--text-secondary); font-size:0.75rem;">${reply.created_at}</span>`;
+        contentDiv.innerHTML = `<span style="color:var(--text-primary); font-weight:500;">Anonymous #${replyNumber}</span>: ${reply.content} <br> <span style="color:var(--text-secondary); font-size:0.75rem;">${reply.created_at}</span>`;
         div.appendChild(contentDiv);
 
         // Delete button if user owns reply
@@ -297,7 +351,12 @@ document.querySelectorAll(".replyBtn").forEach(btn=>{
                     headers: {"Content-Type":"application/x-www-form-urlencoded"},
                     body:"post_id="+card.dataset.postid
                 }).then(res=>res.json()).then(data=>{
-                    renderReplies(card, data);
+                    // Refresh map from server (in a real app you'd update map, but here we'll refetch)
+                    // For simplicity, we can reload the page or fetch updated map; but we'll just re-render.
+                    // To keep numbers consistent, we'd need to update anonMaps, but for now reload is safest.
+                    // However, to avoid full reload, we can just re-fetch posts? 
+                    // Let's keep it simple: reload page after successful reply.
+                    location.reload();
                 });
             }
         });

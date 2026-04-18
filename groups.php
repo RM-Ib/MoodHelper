@@ -31,11 +31,10 @@ $result = $conn->query("SELECT * FROM user_groups");
 
 
  <ul class="nav-links">
-<li><a href="dashboard.php" class="active">Dashboard</a></li>
+<li><a href="dashboard.php">Dashboard</a></li>
 <li><a href="diary.php">Diary</a></li>
-<li><a href="about.html">About</a></li>
 <li><a href="reflection-board.php">Reflection Board</a></li>
-<li><a href="groups.php">Groups</a></li>
+<li><a href="groups.php" class="active">Groups</a></li>
 <li><a href="mood-support.php">Support</a></li>
 <li><a href="settings.php">Settings</a></li>
 </ul>

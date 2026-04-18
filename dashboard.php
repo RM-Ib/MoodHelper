@@ -32,7 +32,6 @@ if (!empty($_SESSION['show_daily_prompt'])) {
             <ul class="nav-links">
                 <li><a href="dashboard.php" class="active">Dashboard</a></li>
                 <li><a href="diary.php">Diary</a></li>
-                <li><a href="about.html">About</a></li>
                 <li><a href="reflection-board.php">Reflection Board</a></li>
                 <li><a href="groups.php">Groups</a></li>
                 <li><a href="mood-support.php">Support</a></li>

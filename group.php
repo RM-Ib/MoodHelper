@@ -83,6 +83,44 @@ if (!empty($post_ids)) {
         $liked_posts[$row['post_id']] = true;
     }
 }
+
+// Fetch all replies for displayed posts
+$all_replies = [];
+if (!empty($post_ids)) {
+    $placeholders = implode(',', array_fill(0, count($post_ids), '?'));
+    $stmt = $conn->prepare("SELECT reply_id, post_id, user_id, content, created_at 
+                            FROM group_replies 
+                            WHERE post_id IN ($placeholders) 
+                            ORDER BY post_id, created_at ASC");
+    $types = str_repeat('i', count($post_ids));
+    $stmt->bind_param($types, ...$post_ids);
+    $stmt->execute();
+    $replies_result = $stmt->get_result();
+    while ($reply = $replies_result->fetch_assoc()) {
+        $all_replies[$reply['post_id']][] = $reply;
+    }
+}
+
+// Build anonymous numbering per post
+$anon_maps = [];
+foreach ($posts as $post) {
+    $post_id = $post['post_id'];
+    $map = [];
+    $counter = 1;
+    
+    // Post author
+    $map[$post['user_id']] = $counter++;
+    
+    // Replies
+    if (isset($all_replies[$post_id])) {
+        foreach ($all_replies[$post_id] as $reply) {
+            if (!isset($map[$reply['user_id']])) {
+                $map[$reply['user_id']] = $counter++;
+            }
+        }
+    }
+    $anon_maps[$post_id] = $map;
+}
 ?>
 
 <!DOCTYPE html>
@@ -103,20 +141,18 @@ if (!empty($post_ids)) {
 <span class="logo-text">MoodHelper</span>
 </a>
 
- <ul class="nav-links">
-<li><a href="dashboard.php" class="active">Dashboard</a></li>
+<ul class="nav-links">
+<li><a href="dashboard.php">Dashboard</a></li>
 <li><a href="diary.php">Diary</a></li>
-<li><a href="about.html">About</a></li>
 <li><a href="reflection-board.php">Reflection Board</a></li>
-<li><a href="groups.php">Groups</a></li>
+<li><a href="groups.php" class="active">Groups</a></li>
 <li><a href="mood-support.php">Support</a></li>
 <li><a href="settings.php">Settings</a></li>
 </ul>
 
-
 <div class="nav-buttons">
 <a href="account.php" class="btn btn-secondary">Account</a>
-<a href="index.html" class="btn btn-primary">Logout</a>
+<a href="Backend/logout.php" class="btn btn-primary">Logout</a>
 </div>
 </div>
 </nav>
@@ -160,15 +196,20 @@ if (!empty($post_ids)) {
 <h2>Recent Posts</h2>
 
 <?php foreach ($posts as $post): ?>
-    <?php $is_liked = isset($liked_posts[$post['post_id']]); ?>
+    <?php 
+        $post_id = $post['post_id'];
+        $is_liked = isset($liked_posts[$post_id]);
+        $map = $anon_maps[$post_id];
+        $author_number = $map[$post['user_id']];
+    ?>
     <div class="card" style="margin-bottom:1.5rem;">
         <div style="display:flex;gap:1rem;">
-            <div style="width:40px;height:40px;background:linear-gradient(135deg,#ec4899,#be185d);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;">
-                A
+            <div style="width:40px;height:40px;background:linear-gradient(135deg,#ec4899,#be185d);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;">
+                <?= $author_number ?>
             </div>
             <div style="flex:1;">
                 <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:0.5rem;">
-                    <span>Anonymous User</span>
+                    <span>Anonymous #<?= $author_number ?></span>
                     <span style="color:var(--text-secondary);font-size:0.875rem;">
                         <?php echo htmlspecialchars($post['created_at']); ?>
                     </span>
@@ -184,58 +225,56 @@ if (!empty($post_ids)) {
 
                 <!-- ACTIONS -->
                 <div style="display:flex;gap:1.5rem;align-items:center;padding-top:0.75rem;border-top:1px solid var(--border-light);">
-                    <!-- HEART BUTTON -->
                     <button
                         type="button"
                         class="heart-btn"
-                        data-post-id="<?php echo $post['post_id']; ?>"
+                        data-post-id="<?php echo $post_id; ?>"
                         style="background:none;border:none;color:var(--text-secondary);cursor:pointer;"
                     >
-                        <span id="heart-icon-<?php echo $post['post_id']; ?>">
+                        <span id="heart-icon-<?php echo $post_id; ?>">
                             <?php echo $is_liked ? '❤️' : '🤍'; ?>
                         </span>
-                        <span id="heart-count-<?php echo $post['post_id']; ?>">
+                        <span id="heart-count-<?php echo $post_id; ?>">
                             <?php echo $post['hearts_count']; ?>
                         </span> Hearts
                     </button>
 
-                    <!-- REPLIES TOGGLE -->
                     <button type="button"
-                        onclick="toggleReplies(<?php echo $post['post_id']; ?>)"
+                        onclick="toggleReplies(<?php echo $post_id; ?>)"
                         style="background:none;border:none;color:var(--text-secondary);cursor:pointer;">
                         💬 <?php echo $post['replies_count']; ?> Replies
                     </button>
                 </div>
 
                 <!-- REPLIES SECTION -->
-                <div id="replies-<?php echo $post['post_id']; ?>" style="display:none;margin-top:1rem;">
+                <div id="replies-<?php echo $post_id; ?>" style="display:none;margin-top:1rem;">
                     <?php
-                    $pid = $post['post_id'];
-                    $replies = $conn->query("
-                        SELECT * FROM group_replies
-                        WHERE post_id=$pid
-                        ORDER BY created_at ASC
-                    ");
+                    if (isset($all_replies[$post_id])) {
+                        foreach ($all_replies[$post_id] as $r):
+                            $reply_number = $map[$r['user_id']];
                     ?>
-                    <?php while ($r = $replies->fetch_assoc()): ?>
-                        <div style="margin-bottom:1rem;">
-                            <strong>Anonymous</strong>
-                            <p style="color:var(--text-secondary);">
+                        <div style="margin-bottom:1rem; background:#f9f9f9; padding:0.5rem; border-radius:0.5rem;">
+                            <strong>Anonymous #<?= $reply_number ?></strong>
+                            <p style="color:var(--text-secondary); margin-top:0.25rem;">
                                 <?php echo htmlspecialchars($r['content']); ?>
                             </p>
+                            <small style="color:var(--text-secondary);"><?= $r['created_at'] ?></small>
                         </div>
-                    <?php endwhile; ?>
+                    <?php 
+                        endforeach;
+                    }
+                    ?>
 
                     <form method="POST">
                         <input type="hidden" name="reply_post" value="1">
-                        <input type="hidden" name="post_id" value="<?php echo $post['post_id']; ?>">
+                        <input type="hidden" name="post_id" value="<?php echo $post_id; ?>">
                         <textarea name="reply" class="form-control" rows="2" required></textarea>
                         <button class="btn btn-secondary" style="margin-top:0.5rem;">Reply</button>
                     </form>
                 </div>
             </div>
         </div>
-    </div> <!-- End of post card -->
+    </div>
 <?php endforeach; ?>
 
 </div>
@@ -261,7 +300,6 @@ document.addEventListener('DOMContentLoaded', function() {
             formData.append("post_id", postId);
 
             try {
-                // CORRECTED PATH: Backend folder
                 const response = await fetch("Backend/heart_group_post.php", {
                     method: "POST",
                     body: formData
