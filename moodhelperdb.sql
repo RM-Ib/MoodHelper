@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 18, 2026 at 04:29 PM
+-- Generation Time: Apr 18, 2026 at 05:07 PM
 -- Server version: 8.4.7
 -- PHP Version: 8.3.28
 
@@ -46,32 +46,6 @@ CREATE TABLE IF NOT EXISTS `anonymous_messages` (
 INSERT INTO `anonymous_messages` (`message_id`, `sender_id`, `receiver_id`, `mood`, `message_text`, `is_read`, `created_at`) VALUES
 (1, 6, 5, 'anxious', 'you are doing okayy', 1, '2026-04-11 23:23:48'),
 (2, 8, 7, 'angry', 'i hope you feel better', 1, '2026-04-18 14:51:12');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `badges`
---
-
-DROP TABLE IF EXISTS `badges`;
-CREATE TABLE IF NOT EXISTS `badges` (
-  `badge_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `required_streak` int NOT NULL,
-  PRIMARY KEY (`badge_id`),
-  UNIQUE KEY `badge_id` (`badge_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `badges`
---
-
-INSERT INTO `badges` (`badge_id`, `name`, `description`, `required_streak`) VALUES
-(1, '7-day streak', 'Logged in 7 consecutive days', 7),
-(2, '1-month streak', 'Logged in 30 consecutive days', 30),
-(3, '6-month streak', 'Logged in 180 consecutive days', 180),
-(4, '1-year streak', 'Logged in 365 consecutive days', 365);
 
 -- --------------------------------------------------------
 
@@ -291,7 +265,7 @@ CREATE TABLE IF NOT EXISTS `moodentries` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`mood_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `moodentries`
@@ -319,7 +293,26 @@ INSERT INTO `moodentries` (`mood_id`, `user_id`, `mood`, `notes`, `mood_date`, `
 (19, 8, 'angry', 'im just feeling angry', '2026-04-18 00:00:00', '2026-04-18 11:51:12'),
 (20, 7, 'angry', '', '2026-04-18 00:00:00', '2026-04-18 11:53:01'),
 (21, 7, 'grateful', 'loving life', '2026-04-18 00:00:00', '2026-04-18 16:17:11'),
-(22, 7, 'grateful', '', '2026-04-18 00:00:00', '2026-04-18 16:21:30');
+(22, 7, 'grateful', '', '2026-04-18 00:00:00', '2026-04-18 16:21:30'),
+(23, 7, 'anxious', '', '2026-04-18 00:00:00', '2026-04-18 16:43:25'),
+(24, 7, 'anxious', '', '2026-04-18 00:00:00', '2026-04-18 16:43:30'),
+(25, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:44:42'),
+(26, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:44:44'),
+(27, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:44:45'),
+(28, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:44:47'),
+(29, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:44:49'),
+(30, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:44:50'),
+(31, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:44:52'),
+(32, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:44:53'),
+(33, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:44:54'),
+(34, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:44:56'),
+(35, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:44:58'),
+(36, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:44:59'),
+(37, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:45:01'),
+(38, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:45:02'),
+(39, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:45:03'),
+(40, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:45:05'),
+(41, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:45:07');
 
 -- --------------------------------------------------------
 
@@ -392,20 +385,6 @@ CREATE TABLE IF NOT EXISTS `reply_hearts` (
 -- --------------------------------------------------------
 
 --
--- Table structure for table `userbadges`
---
-
-DROP TABLE IF EXISTS `userbadges`;
-CREATE TABLE IF NOT EXISTS `userbadges` (
-  `user_id` int NOT NULL,
-  `badge_id` int NOT NULL,
-  `unlocked_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`user_id`,`badge_id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `users`
 --
 
@@ -434,7 +413,7 @@ INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `username`, `email`, 
 (2, '1234', '1234', '1234', '123@gmail.com', '$2y$10$t73nr4KhZ2dh9oJn5SBwmOg5bNPAbX8N/xgEtf0.Sd4o9mbY31w7m', '2026-04-01 19:22:47', '2026-04-01 20:00:47', 0),
 (6, 'Ranimmmm', 'ib', 'testerrr', 'ranimibrahim145@gmail.com', '$2y$10$O7G..cyW7yRB9AHQwde5VuLK7AlB8lkhm3B38nw.We8e05JUf/C/e', '2026-04-11 20:23:07', '2026-04-11 20:23:25', 1),
 (5, 'Ranim', 'Ibrahim', 'rm_ib', 'ranimibrahiim145@gmail.com', '$2y$10$ZUpS3TBd04cSSfrV.wbgje8uwJSwNKxZc.uQPyibn2o093bY9hIf6', '2026-04-10 13:16:07', '2026-04-17 07:40:22', 3),
-(7, 'Antonio', 'Karam', 'antoniokaram06', 'antoniokaram06@gmail.com', '$2y$10$n/KWI.hCvtFM7F1v/oog9OfDRBjlvygOhsgUvhRAt3LgjIquM261u', '2026-04-17 16:05:51', '2026-04-18 16:14:23', 1),
+(7, 'Antonio', 'Karam', 'antoniokaram06', 'antoniokaram06@gmail.com', '$2y$10$n/KWI.hCvtFM7F1v/oog9OfDRBjlvygOhsgUvhRAt3LgjIquM261u', '2026-04-17 16:05:51', '2026-04-18 17:01:25', 1),
 (8, 'Antonio', 'Karam', 'antoniokaram07', 'antoniokaram07@gmail.com', '$2y$10$RZokDMEymAxc8JGpXFPsd.M9bKVFoPmfBKV0JixU3yh/KkChcz4CS', '2026-04-18 11:49:11', '2026-04-18 11:49:23', 1);
 
 -- --------------------------------------------------------
