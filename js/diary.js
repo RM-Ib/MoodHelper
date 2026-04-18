@@ -1,5 +1,6 @@
 let selectedMood = '';
 let editingEntryId = null;
+let todayEntry = null;
 
 const titleInput = document.getElementById('entryTitle');
 const contentInput = document.getElementById('entryContent');
@@ -15,6 +16,17 @@ const thisMonthElement = document.getElementById('thisMonth');
 const entryFormHeading = document.getElementById('entryFormHeading');
 
 const moodButtons = document.querySelectorAll('.emotion-btn');
+
+const moodMeta = {
+    happy: { label: 'Happy', emoji: '😊' },
+    sad: { label: 'Sad', emoji: '😢' },
+    anxious: { label: 'Anxious', emoji: '😰' },
+    calm: { label: 'Calm', emoji: '😌' },
+    grateful: { label: 'Grateful', emoji: '🙏' },
+    angry: { label: 'Angry', emoji: '😠' },
+    neutral: { label: 'Neutral', emoji: '😐' },
+    disappointed: { label: 'Disappointed', emoji: '😞' }
+};
 
 moodButtons.forEach(button => {
     button.addEventListener('click', function () {
@@ -33,9 +45,16 @@ saveEntryButton.addEventListener('click', async function () {
         return;
     }
 
-    saveEntryButton.disabled = true;
+    if (!selectedMood) {
+        showToast('Please choose a mood before saving.', 'error');
+        return;
+    }
+
+    const isEditingOldEntry = editingEntryId !== null;
     const originalText = saveEntryButton.textContent;
-    saveEntryButton.textContent = editingEntryId ? 'Updating...' : 'Saving...';
+
+    saveEntryButton.disabled = true;
+    saveEntryButton.textContent = isEditingOldEntry ? 'Updating...' : (todayEntry ? 'Updating...' : 'Saving...');
 
     try {
         const formData = new FormData();
@@ -45,7 +64,7 @@ saveEntryButton.addEventListener('click', async function () {
 
         let endpoint = 'Backend/save_diary_entry.php';
 
-        if (editingEntryId) {
+        if (isEditingOldEntry) {
             formData.append('entry_id', editingEntryId);
             endpoint = 'Backend/update_diary_entry.php';
         }
@@ -72,8 +91,8 @@ saveEntryButton.addEventListener('click', async function () {
         successMsg.style.display = 'block';
         showToast(data.message || 'Diary entry saved successfully.');
 
-        resetForm();
-        await loadDiaryEntries(filterEntries.value);
+        editingEntryId = null;
+        await loadDiaryEntries('all');
 
         setTimeout(() => {
             successMsg.style.display = 'none';
@@ -83,12 +102,25 @@ saveEntryButton.addEventListener('click', async function () {
         showToast(error.message || 'Failed to save entry.', 'error');
     } finally {
         saveEntryButton.disabled = false;
-        saveEntryButton.textContent = editingEntryId ? 'Update Entry' : originalText;
+        updateFormMode();
     }
 });
 
 clearEntryButton.addEventListener('click', function () {
-    resetForm();
+    if (editingEntryId !== null) {
+        editingEntryId = null;
+        loadTodayEntryIntoForm();
+        showToast('Returned to today’s entry.');
+        return;
+    }
+
+    if (todayEntry) {
+        loadTodayEntryIntoForm();
+        showToast('Today’s saved entry restored.');
+        return;
+    }
+
+    resetFormCompletely();
     successMsg.style.display = 'none';
 });
 
@@ -120,6 +152,16 @@ async function loadDiaryEntries(filter = 'all') {
         currentStreakElement.textContent = stats.current_streak ?? 0;
         thisMonthElement.textContent = stats.this_month ?? 0;
 
+        detectTodayEntry(entries);
+
+        if (editingEntryId === null) {
+            if (todayEntry) {
+                loadTodayEntryIntoForm();
+            } else {
+                resetFormCompletely();
+            }
+        }
+
         if (entries.length === 0) {
             diaryEntriesContainer.innerHTML = '';
             emptyState.style.display = 'block';
@@ -128,39 +170,137 @@ async function loadDiaryEntries(filter = 'all') {
 
         emptyState.style.display = 'none';
 
-        diaryEntriesContainer.innerHTML = entries.map(entry => `
-            <div class="card" style="margin-bottom: 1.5rem;">
-                <div style="display: flex; justify-content: space-between; align-items: start; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap;">
-                    <div>
-                        <h3 style="margin: 0 0 0.35rem 0; font-size: 1.25rem;">
-                            ${escapeHtml(entry.title || 'Untitled Entry')}
-                        </h3>
-                        <div style="color: var(--text-secondary); font-size: 0.95rem;">
-                            ${escapeHtml(entry.entry_date)}
-                        </div>
-                    </div>
+        diaryEntriesContainer.innerHTML = entries.map(entry => {
+            const moodInfo = moodMeta[entry.mood] || null;
+            const isToday = isTodayEntry(entry);
 
-                    ${entry.mood ? `
-                        <span style="background: rgba(124, 58, 237, 0.08); color: var(--primary-purple); padding: 0.35rem 0.8rem; border-radius: 999px; font-size: 0.85rem; font-weight: 500; text-transform: capitalize;">
-                            ${escapeHtml(entry.mood)}
-                        </span>
-                    ` : ''}
-                </div>
+          return `
+<div style="
+    background: white;
+    border-radius: 1.5rem;
+    padding: 1.4rem 1.5rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 8px 20px rgba(15, 23, 42, 0.05);
+    border-left: 4px solid #7c3aed;
+">
 
-                <div style="line-height: 1.8; color: var(--text-primary); white-space: pre-wrap; margin-bottom: 1rem;">
-                    ${escapeHtml(entry.content)}
-                </div>
+    <div style="
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        gap: 0.75rem;
+        margin-bottom: 0.8rem;
+        flex-wrap: wrap;
+    ">
+        <div>
+            <div style="
+                display: flex;
+                align-items: center;
+                gap: 0.6rem;
+                flex-wrap: wrap;
+                margin-bottom: 0.15rem;
+            ">
+                <h3 style="
+                    margin: 0;
+                    font-size: 1.35rem;
+                    font-weight: 700;
+                    color: #0f172a;
+                ">
+                    ${escapeHtml(entry.title || 'Untitled Entry')}
+                </h3>
 
-                <div style="display: flex; gap: 0.75rem;">
-                    <button type="button" class="btn btn-secondary diary-edit-btn" data-entry-id="${entry.entry_id}">
-                        Edit
-                    </button>
-                    <button type="button" class="btn btn-secondary diary-delete-btn" data-entry-id="${entry.entry_id}">
-                        Delete
-                    </button>
-                </div>
+                ${isToday ? `
+                    <span style="
+                        background: rgba(59, 130, 246, 0.1);
+                        color: #2563eb;
+                        padding: 0.25rem 0.6rem;
+                        border-radius: 999px;
+                        font-size: 0.75rem;
+                        font-weight: 600;
+                    ">
+                        Today
+                    </span>
+                ` : ''}
             </div>
-        `).join('');
+
+            <div style="
+                color: #64748b;
+                font-size: 0.9rem;
+            ">
+                ${escapeHtml(entry.entry_date)}
+            </div>
+        </div>
+
+        ${moodInfo ? `
+            <span style="
+                display: inline-flex;
+                align-items: center;
+                gap: 0.35rem;
+                background: rgba(124, 58, 237, 0.08);
+                color: #7c3aed;
+                padding: 0.45rem 0.8rem;
+                border-radius: 999px;
+                font-size: 0.85rem;
+                font-weight: 600;
+            ">
+                <span>${moodInfo.emoji}</span>
+                <span>${escapeHtml(moodInfo.label)}</span>
+            </span>
+        ` : ''}
+    </div>
+
+    <div style="
+        color: #1e293b;
+        line-height: 1.6;
+        font-size: 0.95rem;
+        white-space: pre-wrap;
+        margin-bottom: 1rem;
+    ">
+        ${escapeHtml(entry.content)}
+    </div>
+
+    <div style="
+        display: flex;
+        gap: 0.6rem;
+    ">
+        <button
+            type="button"
+            class="diary-edit-btn"
+            data-entry-id="${entry.entry_id}"
+            style="
+                border: 1.5px solid #d1d5db;
+                background: white;
+                color: #7c3aed;
+                border-radius: 999px;
+                padding: 0.6rem 1rem;
+                font-weight: 600;
+                font-size: 0.9rem;
+                cursor: pointer;
+            "
+        >
+            Edit
+        </button>
+
+        <button
+            type="button"
+            class="diary-delete-btn"
+            data-entry-id="${entry.entry_id}"
+            style="
+                border: 1.5px solid #d1d5db;
+                background: white;
+                color: #7c3aed;
+                border-radius: 999px;
+                padding: 0.6rem 1rem;
+                font-weight: 600;
+                font-size: 0.9rem;
+                cursor: pointer;
+            "
+        >
+            Delete
+        </button>
+    </div>
+</div>
+`;}).join('');
 
         attachEntryActionListeners(entries);
     } catch (error) {
@@ -172,6 +312,64 @@ async function loadDiaryEntries(filter = 'all') {
         `;
         emptyState.style.display = 'none';
     }
+}
+
+function detectTodayEntry(entries) {
+    const todayLabel = getTodayLabel();
+    todayEntry = entries.find(entry => entry.entry_date === todayLabel) || null;
+}
+
+function getTodayLabel() {
+    return new Date().toLocaleDateString('en-US', {
+        month: 'long',
+        day: 'numeric',
+        year: 'numeric'
+    });
+}
+
+function isTodayEntry(entry) {
+    return entry.entry_date === getTodayLabel();
+}
+
+function loadTodayEntryIntoForm() {
+    if (!todayEntry) {
+        resetFormCompletely();
+        return;
+    }
+
+    titleInput.value = todayEntry.title || '';
+    contentInput.value = todayEntry.content || '';
+    selectedMood = todayEntry.mood || '';
+    editingEntryId = null;
+
+    moodButtons.forEach(btn => {
+        btn.classList.remove('selected');
+        if (btn.getAttribute('data-mood') === selectedMood) {
+            btn.classList.add('selected');
+        }
+    });
+
+    updateFormMode();
+}
+
+function updateFormMode() {
+    if (editingEntryId !== null) {
+        entryFormHeading.textContent = '✍️ Edit Entry';
+        saveEntryButton.textContent = 'Update Entry';
+        clearEntryButton.textContent = 'Cancel Edit';
+        return;
+    }
+
+    if (todayEntry) {
+        entryFormHeading.textContent = '✍️ Today’s Entry';
+        saveEntryButton.textContent = 'Update Entry';
+        clearEntryButton.textContent = 'Reset';
+        return;
+    }
+
+    entryFormHeading.textContent = '✍️ New Entry';
+    saveEntryButton.textContent = 'Save Entry';
+    clearEntryButton.textContent = 'Clear';
 }
 
 function attachEntryActionListeners(entries) {
@@ -194,8 +392,7 @@ function attachEntryActionListeners(entries) {
                 }
             });
 
-            saveEntryButton.textContent = 'Update Entry';
-            entryFormHeading.textContent = '✍️ Edit Entry';
+            updateFormMode();
 
             window.scrollTo({
                 top: 0,
@@ -238,7 +435,11 @@ function attachEntryActionListeners(entries) {
                 }
 
                 if (editingEntryId === entryId) {
-                    resetForm();
+                    editingEntryId = null;
+                }
+
+                if (todayEntry && Number(todayEntry.entry_id) === entryId) {
+                    todayEntry = null;
                 }
 
                 showToast(data.message || 'Entry deleted successfully.');
@@ -251,14 +452,13 @@ function attachEntryActionListeners(entries) {
     });
 }
 
-function resetForm() {
+function resetFormCompletely() {
     editingEntryId = null;
     selectedMood = '';
     titleInput.value = '';
     contentInput.value = '';
     moodButtons.forEach(btn => btn.classList.remove('selected'));
-    saveEntryButton.textContent = 'Save Entry';
-    entryFormHeading.textContent = '✍️ New Entry';
+    updateFormMode();
 }
 
 function escapeHtml(value) {
@@ -276,10 +476,10 @@ function showToast(message, type = 'success') {
         padding: 1rem 1.5rem;
         background: ${type === 'success' ? '#10b981' : '#ef4444'};
         color: white;
-        border-radius: 0.5rem;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        border-radius: 0.75rem;
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
         z-index: 10000;
-        font-weight: 500;
+        font-weight: 600;
     `;
     toast.textContent = message;
 

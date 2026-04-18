@@ -1,10 +1,13 @@
 <?php
 session_start();
-$user_id = $_SESSION['user_id'];
+
 if (!isset($_SESSION['user_id'])) {
+    header("Content-Type: application/json");
     echo json_encode(["error" => "Not logged in"]);
     exit;
 }
+
+$user_id = (int) $_SESSION['user_id'];
 
 header("Content-Type: application/json");
 
@@ -28,7 +31,11 @@ $history = $data["history"] ?? [];
 $mood = $data["mood"] ?? "normal";
 
 // 🧠 LAST USER MESSAGE
-$lastUserMessage = end($history)["content"] ?? "";
+$lastUserMessage = "";
+if (!empty($history)) {
+    $lastMessage = end($history);
+    $lastUserMessage = $lastMessage["content"] ?? "";
+}
 
 // 🚨 SAFETY CHECK
 $risk = detectRiskLevel($lastUserMessage);
@@ -99,10 +106,10 @@ $options = [
     ]
 ];
 
-$context  = stream_context_create($options);
+$context = stream_context_create($options);
 $response = file_get_contents($url, false, $context);
 
-if ($response === FALSE) {
+if ($response === false) {
     echo json_encode(["reply" => "AI connection failed"]);
     exit;
 }
@@ -111,8 +118,6 @@ $result = json_decode($response, true);
 $reply = $result["choices"][0]["message"]["content"] ?? "Error getting response.";
 
 // 🔐 ENCRYPT
-$user_id = 1; // replace later with session user
-
 $encUser = encryptMessage($lastUserMessage);
 $encAI = encryptMessage($reply);
 
@@ -120,11 +125,15 @@ $encAI = encryptMessage($reply);
 $stmt = $conn->prepare("INSERT INTO chat_messages (user_id, role, message) VALUES (?, 'user', ?)");
 $stmt->bind_param("is", $user_id, $encUser);
 $stmt->execute();
+$stmt->close();
 
 // 💾 SAVE AI MESSAGE
 $stmt = $conn->prepare("INSERT INTO chat_messages (user_id, role, message) VALUES (?, 'assistant', ?)");
 $stmt->bind_param("is", $user_id, $encAI);
 $stmt->execute();
+$stmt->close();
+
+$conn->close();
 
 // 📤 OUTPUT
 echo json_encode(["reply" => trim($reply)]);

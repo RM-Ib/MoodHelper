@@ -1,17 +1,29 @@
 <?php
 session_start();
-$user_id = $_SESSION['user_id'];
+
 if (!isset($_SESSION['user_id'])) {
+    header("Content-Type: application/json");
     echo json_encode(["error" => "Not logged in"]);
     exit;
 }
 
+$user_id = (int) $_SESSION['user_id'];
+
+header("Content-Type: application/json");
+
 $conn = new mysqli("localhost", "root", "", "moodhelperdb");
+if ($conn->connect_error) {
+    echo json_encode(["error" => "Database connection failed"]);
+    exit;
+}
+
 require_once "ai-crypto.php";
 
-$user_id = 1;
+$stmt = $conn->prepare("SELECT role, message FROM chat_messages WHERE user_id = ? ORDER BY created_at ASC");
+$stmt->bind_param("i", $user_id);
+$stmt->execute();
 
-$result = $conn->query("SELECT role, message FROM chat_messages WHERE user_id = $user_id ORDER BY created_at ASC");
+$result = $stmt->get_result();
 
 $messages = [];
 
@@ -21,5 +33,8 @@ while ($row = $result->fetch_assoc()) {
         "content" => decryptMessage($row["message"])
     ];
 }
+
+$stmt->close();
+$conn->close();
 
 echo json_encode($messages);

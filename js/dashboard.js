@@ -74,8 +74,18 @@ submitFeelingButton.addEventListener('click', async function () {
             throw new Error(data.message || 'Something went wrong');
         }
 
-        successMessage.style.display = 'block';
-        showToast(data.message || 'Mood check-in saved successfully.');
+successMessage.style.display = 'block';
+showToast(data.message || 'Mood check-in saved successfully.');
+
+// 🔥 redirect if negative mood
+const negativeMoods = ['sad', 'anxious', 'angry', 'disappointed'];
+
+if (negativeMoods.includes(selectedEmotion)) {
+    showToast('We’re here to support you. Redirecting you to chat 💜');
+    setTimeout(() => {
+        window.location.href = 'mood-support.php';
+    }, 1200); // small delay so user sees success first
+}
 
         feelingText.value = '';
         sendAnonymousMsg.checked = false;

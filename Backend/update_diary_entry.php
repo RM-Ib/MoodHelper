@@ -26,8 +26,7 @@ $title = trim($_POST['title'] ?? '');
 $content = trim($_POST['content'] ?? '');
 $mood = trim($_POST['mood'] ?? '');
 
-$allowed_moods = ['happy', 'sad', 'anxious', 'calm', 'grateful'];
-
+$allowed_moods = ['happy', 'sad', 'anxious', 'calm', 'grateful', 'angry', 'neutral', 'disappointed'];
 if ($entry_id <= 0) {
     echo json_encode([
         'status' => 'error',
@@ -44,7 +43,23 @@ if ($content === '') {
     exit;
 }
 
-if ($mood !== '' && !in_array($mood, $allowed_moods, true)) {
+// if ($mood !== '' && !in_array($mood, $allowed_moods, true)) {
+//     echo json_encode([
+//         'status' => 'error',
+//         'message' => 'Invalid mood selected'
+//     ]);
+//     exit;
+// }
+
+if ($mood === '') {
+    echo json_encode([
+        'status' => 'error',
+        'message' => 'Mood is required'
+    ]);
+    exit;
+}
+
+if (!in_array($mood, $allowed_moods, true)) {
     echo json_encode([
         'status' => 'error',
         'message' => 'Invalid mood selected'
@@ -124,19 +139,19 @@ if (!$stmt->execute()) {
 $stmt->close();
 
 /* Mirror changed mood into moodentries */
-if ($mood !== '' && $mood !== $oldMood) {
-    $moodNotes = 'Diary entry mood update';
-    $moodStmt = $conn->prepare("
-        INSERT INTO moodentries (user_id, mood, notes, mood_date, created_at)
-        VALUES (?, ?, ?, CURDATE(), NOW())
-    ");
+// if ($mood !== '' && $mood !== $oldMood) {
+//     $moodNotes = 'Diary entry mood update';
+//     $moodStmt = $conn->prepare("
+//         INSERT INTO moodentries (user_id, mood, notes, mood_date, created_at)
+//         VALUES (?, ?, ?, CURDATE(), NOW())
+//     ");
 
-    if ($moodStmt) {
-        $moodStmt->bind_param("iss", $user_id, $mood, $moodNotes);
-        $moodStmt->execute();
-        $moodStmt->close();
-    }
-}
+//     if ($moodStmt) {
+//         $moodStmt->bind_param("iss", $user_id, $mood, $moodNotes);
+//         $moodStmt->execute();
+//         $moodStmt->close();
+//     }
+// }
 
 echo json_encode([
     'status' => 'success',

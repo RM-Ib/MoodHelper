@@ -24,8 +24,7 @@ $mood = trim($_POST['mood'] ?? '');
 $notes = trim($_POST['notes'] ?? '');
 $send_message = isset($_POST['send_message']) ? (int) $_POST['send_message'] : 0;
 
-$allowed_moods = ['happy', 'sad', 'anxious', 'angry', 'neutral', 'disappointed'];
-
+$allowed_moods = ['happy', 'sad', 'anxious', 'calm', 'grateful', 'angry', 'neutral', 'disappointed'];
 if (!in_array($mood, $allowed_moods, true)) {
     echo json_encode([
         'status' => 'error',

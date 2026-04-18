@@ -84,28 +84,42 @@ if (!isset($_SESSION['user_id'])) {
 
                 <div class="form-group">
                     <label>How are you feeling?</label>
-                    <div style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
-                        <button type="button" class="emotion-btn" style="flex: 0 0 auto; padding: 0.75rem 1.5rem;" data-mood="happy">
-                            <span class="emotion-emoji" style="font-size: 1.5rem;">😊</span>
-                            <span>Happy</span>
-                        </button>
-                        <button type="button" class="emotion-btn" style="flex: 0 0 auto; padding: 0.75rem 1.5rem;" data-mood="sad">
-                            <span class="emotion-emoji" style="font-size: 1.5rem;">😢</span>
-                            <span>Sad</span>
-                        </button>
-                        <button type="button" class="emotion-btn" style="flex: 0 0 auto; padding: 0.75rem 1.5rem;" data-mood="anxious">
-                            <span class="emotion-emoji" style="font-size: 1.5rem;">😰</span>
-                            <span>Anxious</span>
-                        </button>
-                        <button type="button" class="emotion-btn" style="flex: 0 0 auto; padding: 0.75rem 1.5rem;" data-mood="calm">
-                            <span class="emotion-emoji" style="font-size: 1.5rem;">😌</span>
-                            <span>Calm</span>
-                        </button>
-                        <button type="button" class="emotion-btn" style="flex: 0 0 auto; padding: 0.75rem 1.5rem;" data-mood="grateful">
-                            <span class="emotion-emoji" style="font-size: 1.5rem;">🙏</span>
-                            <span>Grateful</span>
-                        </button>
-                    </div>
+                   <div class="emotion-grid">
+               <button class="emotion-btn" data-mood="happy" type="button">
+                        <span class="emotion-emoji">😊</span>
+                        <span>Happy</span>
+                    </button>
+                    <button class="emotion-btn" ddata-mood="sad" type="button">
+                        <span class="emotion-emoji">😢</span>
+                        <span>Sad</span>
+                    </button>
+                    <button class="emotion-btn" data-mood="anxious" type="button">
+                        <span class="emotion-emoji">😰</span>
+                        <span>Anxious</span>
+                    </button>
+                    <button class="emotion-btn" data-mood="angry" type="button">
+                        <span class="emotion-emoji">😠</span>
+                        <span>Angry</span>
+                    </button>
+                    <button class="emotion-btn" data-mood="neutral" type="button">
+                        <span class="emotion-emoji">😐</span>
+                        <span>Neutral</span>
+                    </button>
+                    <button class="emotion-btn" data-mood="disappointed" type="button">
+                        <span class="emotion-emoji">😞</span>
+                        <span>Disappointed</span>
+                    </button>
+
+                    <button class="emotion-btn" data-mood="calm" type="button">
+                        <span class="emotion-emoji">😌</span>
+                        <span>Calm</span>
+                    </button>
+
+                    <button class="emotion-btn" ddata-mood="grateful" type="button">
+                        <span class="emotion-emoji">🙏</span>
+                        <span>Grateful</span>
+                    </button>
+</div>
                 </div>
 
                 <div style="display: flex; gap: 1rem;">
@@ -167,6 +181,6 @@ if (!isset($_SESSION['user_id'])) {
         </div>
     </div>
 
-    <script src="js/diary.js?v=4"></script>
+    <script src="js/diary.js?v=5"></script>
 </body>
 </html>

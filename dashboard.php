@@ -92,6 +92,16 @@ if (!isset($_SESSION['user_id'])) {
                         <span class="emotion-emoji">😞</span>
                         <span>Disappointed</span>
                     </button>
+
+                    <button class="emotion-btn" data-emotion="calm" type="button">
+                        <span class="emotion-emoji">😌</span>
+                        <span>Calm</span>
+                    </button>
+
+                    <button class="emotion-btn" data-emotion="grateful" type="button">
+                        <span class="emotion-emoji">🙏</span>
+                        <span>Grateful</span>
+                    </button>
                 </div>
             </div>
 
