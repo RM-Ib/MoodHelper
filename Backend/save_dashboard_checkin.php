@@ -22,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 $user_id = (int) $_SESSION['user_id'];
 $mood = trim($_POST['mood'] ?? '');
 $notes = trim($_POST['notes'] ?? '');
+$peer_message = trim($_POST['peer_message'] ?? '');
 $send_message = isset($_POST['send_message']) ? (int) $_POST['send_message'] : 0;
 
 $allowed_moods = ['happy', 'sad', 'anxious', 'calm', 'grateful', 'angry', 'neutral', 'disappointed'];
@@ -33,14 +34,15 @@ if (!in_array($mood, $allowed_moods, true)) {
     exit;
 }
 
-if ($send_message === 1 && $notes === '') {
+if ($send_message === 1 && $peer_message === '') {
     echo json_encode([
         'status' => 'error',
-        'message' => 'Please write a message before sending it anonymously'
+        'message' => 'Please write a message before sending it'
     ]);
     exit;
 }
 
+/* Save mood entry with optional personal note */
 $stmt = $conn->prepare("
     INSERT INTO moodentries (user_id, mood, notes, mood_date, created_at)
     VALUES (?, ?, ?, CURDATE(), NOW())
@@ -68,7 +70,8 @@ $stmt->close();
 
 $message_delivery_status = 'not_requested';
 
-if ($send_message === 1 && $notes !== '') {
+/* Send supportive message only if checkbox checked */
+if ($send_message === 1 && $peer_message !== '') {
     $receiver_query = $conn->prepare("
         SELECT me.user_id
         FROM moodentries me
@@ -100,7 +103,7 @@ if ($send_message === 1 && $notes !== '') {
             ");
 
             if ($insert_message) {
-                $insert_message->bind_param("iiss", $user_id, $receiver_id, $mood, $notes);
+                $insert_message->bind_param("iiss", $user_id, $receiver_id, $mood, $peer_message);
 
                 if ($insert_message->execute()) {
                     $message_delivery_status = 'delivered';
@@ -125,11 +128,11 @@ if ($send_message === 1 && $notes !== '') {
 $response_message = 'Mood check-in saved successfully.';
 
 if ($message_delivery_status === 'delivered') {
-    $response_message = 'Mood check-in saved and anonymous message delivered.';
+    $response_message = 'Mood check-in saved and your supportive message was delivered.';
 } elseif ($message_delivery_status === 'no_match') {
     $response_message = 'Mood check-in saved. No matching user is available right now.';
 } elseif ($message_delivery_status === 'failed') {
-    $response_message = 'Mood check-in saved, but the anonymous message could not be delivered.';
+    $response_message = 'Mood check-in saved, but the message could not be delivered.';
 }
 
 echo json_encode([

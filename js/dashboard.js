@@ -1,178 +1,55 @@
-
+/* =========================
+   GLOBAL STATE
+========================= */
 
 let selectedEmotion = null;
+let currentPromptId = null;
+let alreadyAnsweredToday = false;
+
+/* =========================
+   ELEMENTS
+========================= */
 
 const emotionButtons = document.querySelectorAll('.emotion-btn');
+
 const messageOption = document.getElementById('messageOption');
-const feelingText = document.getElementById('feelingText');
+const messageTextWrapper = document.getElementById('messageTextWrapper');
+
+const moodNote = document.getElementById('moodNote');
+const peerMessage = document.getElementById('peerMessage');
+
 const sendAnonymousMsg = document.getElementById('sendAnonymousMsg');
+
 const submitFeelingButton = document.getElementById('submitFeeling');
 const successMessage = document.getElementById('successMessage');
+
 const receivedMessagesContainer = document.getElementById('receivedMessages');
 
-// Emotion button handling
-emotionButtons.forEach(button => {
-    button.addEventListener('click', function () {
-        emotionButtons.forEach(btn => btn.classList.remove('selected'));
+/* Daily Prompt */
+const dailyPromptModal = document.getElementById('dailyPromptModal');
+const closeDailyPromptModal = document.getElementById('closeDailyPromptModal');
 
-        this.classList.add('selected');
-        selectedEmotion = this.getAttribute('data-emotion');
+const currentDateElement = document.getElementById('currentDate');
+const promptQuestionElement = document.getElementById('promptQuestion');
+const promptAnswerElement = document.getElementById('promptAnswer');
 
-        messageOption.style.display = 'block';
+const submitPromptButton = document.getElementById('submitPrompt');
+const skipPromptButton = document.getElementById('skipPrompt');
 
-        setTimeout(() => {
-            messageOption.scrollIntoView({
-                behavior: 'smooth',
-                block: 'nearest'
-            });
-        }, 100);
-    });
-});
+const promptSuccessMessageElement = document.getElementById('promptSuccessMessage');
+const weeklyReflectionsElement = document.getElementById('weeklyReflections');
+const completedCountElement = document.getElementById('completedCount');
 
-// Submit feeling
-submitFeelingButton.addEventListener('click', async function () {
-    const messageText = feelingText.value.trim();
-    const wantsToSendMessage = sendAnonymousMsg.checked;
+/* =========================
+   HELPERS
+========================= */
 
-    if (!selectedEmotion) {
-        showToast('Please select how you are feeling.', 'error');
-        return;
-    }
-
-    if (wantsToSendMessage && !messageText) {
-        showToast('Please write a message if you want to send one anonymously.', 'error');
-        successMessage.style.display = 'none';
-        return;
-    }
-
-    submitFeelingButton.disabled = true;
-    const originalText = submitFeelingButton.textContent;
-    submitFeelingButton.textContent = 'Submitting...';
-
-    try {
-        const formData = new FormData();
-        formData.append('mood', selectedEmotion);
-        formData.append('notes', messageText);
-        formData.append('send_message', wantsToSendMessage ? '1' : '0');
-
-        const response = await fetch('Backend/save_dashboard_checkin.php', {
-            method: 'POST',
-            body: formData
-        });
-
-        const rawText = await response.text();
-        console.log('save_dashboard_checkin raw response:', rawText);
-
-        let data;
-        try {
-            data = JSON.parse(rawText);
-        } catch (e) {
-            throw new Error('Invalid server response: ' + rawText);
-        }
-
-        if (data.status !== 'success') {
-            throw new Error(data.message || 'Something went wrong');
-        }
-
-successMessage.style.display = 'block';
-showToast(data.message || 'Mood check-in saved successfully.');
-
-// 🔥 redirect if negative mood
-const negativeMoods = ['sad', 'anxious', 'angry', 'disappointed'];
-
-if (negativeMoods.includes(selectedEmotion)) {
-    showToast('We’re here to support you. Redirecting you to chat 💜');
-    setTimeout(() => {
-        window.location.href = 'mood-support.php';
-    }, 1200); // small delay so user sees success first
-}
-
-        feelingText.value = '';
-        sendAnonymousMsg.checked = false;
-        emotionButtons.forEach(btn => btn.classList.remove('selected'));
-        messageOption.style.display = 'none';
-        selectedEmotion = null;
-
-        setTimeout(() => {
-            successMessage.style.display = 'none';
-        }, 3000);
-
-        await loadReceivedMessages();
-    } catch (error) {
-        console.error(error);
-        showToast(error.message || 'Failed to save check-in.', 'error');
-        successMessage.style.display = 'none';
-    } finally {
-        submitFeelingButton.disabled = false;
-        submitFeelingButton.textContent = originalText;
-    }
-});
-async function loadReceivedMessages() {
-    if (!receivedMessagesContainer) return;
-
-    try {
-        const response = await fetch('Backend/get_received_messages.php');
-        const data = await response.json();
-
-        if (data.status !== 'success') {
-            throw new Error(data.message || 'Could not load messages');
-        }
-
-        const messages = data.messages || [];
-        const unreadCount = data.unread_count || 0;
-
-        if (unreadCount > 0) {
-            showToast(
-                unreadCount === 1
-                    ? "You received a new anonymous message 💌"
-                    : `You received ${unreadCount} new anonymous messages 💌`
-            );
-        }
-
-        if (messages.length === 0) {
-            receivedMessagesContainer.innerHTML = `
-                <div style="text-align: center; padding: 2.5rem 1rem; color: var(--text-secondary);">
-                    <div style="font-size: 2.5rem; margin-bottom: 0.75rem;">💌</div>
-                    <p style="margin: 0; font-size: 1rem;">No messages yet.</p>
-                    <p style="margin-top: 0.5rem; font-size: 0.9rem;">
-                        When someone sends you anonymous support, it will appear here.
-                    </p>
-                </div>
-            `;
-            return;
-        }
-
-        receivedMessagesContainer.innerHTML = messages.map(message => `
-            <div class="card" style="margin-bottom: 1rem; padding: 1.25rem; border: 1px solid rgba(124, 58, 237, 0.12);">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem; flex-wrap: wrap; gap: 0.5rem;">
-                    <span style="background: rgba(124, 58, 237, 0.08); color: var(--primary-purple); padding: 0.35rem 0.7rem; border-radius: 999px; font-size: 0.85rem; font-weight: 500; text-transform: capitalize;">
-                        ${escapeHtml(message.mood)}
-                    </span>
-                    <span style="font-size: 0.85rem; color: var(--text-secondary);">
-                        ${escapeHtml(message.created_at)}
-                    </span>
-                </div>
-                <p style="margin: 0; line-height: 1.7; color: var(--text-primary);">
-                    ${escapeHtml(message.message_text).replace(/\n/g, '<br>')}
-                </p>
-            </div>
-        `).join('');
-    } catch (error) {
-        console.error(error);
-        receivedMessagesContainer.innerHTML = `
-            <div style="text-align: center; padding: 2rem; color: #b91c1c;">
-                Failed to load messages.
-            </div>
-        `;
-    }
-}
 function escapeHtml(value) {
     const div = document.createElement('div');
     div.textContent = value ?? '';
     return div.innerHTML;
 }
 
-// Toast notification helper
 function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.style.cssText = `
@@ -183,8 +60,7 @@ function showToast(message, type = 'success') {
         background: ${type === 'success' ? '#10b981' : '#ef4444'};
         color: white;
         border-radius: 0.5rem;
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-        z-index: 10000;
+        z-index: 9999;
         font-weight: 500;
     `;
     toast.textContent = message;
@@ -193,21 +69,294 @@ function showToast(message, type = 'success') {
 
     setTimeout(() => {
         toast.style.opacity = '0';
-        toast.style.transition = 'opacity 0.3s ease-out';
+        toast.style.transition = '0.3s';
         setTimeout(() => toast.remove(), 300);
     }, 3000);
 }
 
-function setGreeting() {
-    const hour = new Date().getHours();
-    let greeting = 'Good day';
+async function fetchJson(url, options = {}) {
+    const res = await fetch(url, options);
+    const text = await res.text();
 
-    if (hour < 12) greeting = 'Good morning';
-    else if (hour < 18) greeting = 'Good afternoon';
-    else greeting = 'Good evening';
+    let data;
+    try {
+        data = JSON.parse(text);
+    } catch {
+        throw new Error("Invalid server response");
+    }
 
-    console.log(greeting);
+    if (!res.ok || data.status !== 'success') {
+        throw new Error(data.message || 'Request failed');
+    }
+
+    return data;
 }
 
-setGreeting();
-loadReceivedMessages();
+/* =========================
+   MOOD SELECTION
+========================= */
+
+emotionButtons.forEach(btn => {
+    btn.addEventListener('click', function () {
+        emotionButtons.forEach(b => b.classList.remove('selected'));
+        this.classList.add('selected');
+
+        selectedEmotion = this.dataset.emotion;
+
+        messageOption.style.display = 'block';
+    });
+});
+
+/* =========================
+   CHECKBOX → SHOW MESSAGE
+========================= */
+
+sendAnonymousMsg.addEventListener('change', function () {
+    if (this.checked) {
+        messageTextWrapper.style.display = 'block';
+    } else {
+        messageTextWrapper.style.display = 'none';
+        peerMessage.value = '';
+    }
+});
+
+/* =========================
+   SUBMIT CHECK-IN
+========================= */
+
+submitFeelingButton.addEventListener('click', async function () {
+
+    const note = moodNote.value.trim();
+    const message = peerMessage.value.trim();
+    const sendMessage = sendAnonymousMsg.checked;
+
+    if (!selectedEmotion) {
+        showToast('Please choose a mood first.', 'error');
+        return;
+    }
+
+    if (sendMessage && message === '') {
+        showToast('Write your message before sending it.', 'error');
+        return;
+    }
+
+    submitFeelingButton.disabled = true;
+    submitFeelingButton.textContent = 'Submitting...';
+
+    try {
+        const formData = new FormData();
+        formData.append('mood', selectedEmotion);
+        formData.append('notes', note);
+        formData.append('peer_message', message);
+        formData.append('send_message', sendMessage ? '1' : '0');
+
+        const data = await fetchJson('Backend/save_dashboard_checkin.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        showToast(data.message);
+
+        successMessage.style.display = 'block';
+
+        /* redirect if negative mood */
+        const negative = ['sad', 'anxious', 'angry', 'disappointed'];
+        if (negative.includes(selectedEmotion)) {
+            setTimeout(() => {
+                window.location.href = 'mood-support.php';
+            }, 1200);
+        }
+
+        /* reset */
+        moodNote.value = '';
+        peerMessage.value = '';
+        sendAnonymousMsg.checked = false;
+        messageTextWrapper.style.display = 'none';
+        messageOption.style.display = 'none';
+        emotionButtons.forEach(b => b.classList.remove('selected'));
+        selectedEmotion = null;
+
+        setTimeout(() => {
+            successMessage.style.display = 'none';
+        }, 3000);
+
+        loadReceivedMessages();
+
+    } catch (err) {
+        console.error(err);
+        showToast(err.message, 'error');
+    }
+
+    submitFeelingButton.disabled = false;
+    submitFeelingButton.textContent = 'Submit';
+});
+
+/* =========================
+   LOAD RECEIVED MESSAGES
+========================= */
+
+async function loadReceivedMessages() {
+    try {
+        const res = await fetch('Backend/get_received_messages.php');
+        const data = await res.json();
+
+        if (data.status !== 'success') {
+            throw new Error();
+        }
+
+        const messages = data.messages || [];
+
+        if (messages.length === 0) {
+            return;
+        }
+
+        receivedMessagesContainer.innerHTML = messages.map(m => `
+            <div class="card" style="margin-bottom:1rem;">
+                <div style="font-size:0.9rem; color:#6b7280; margin-bottom:0.5rem;">
+                    ${escapeHtml(m.created_at)}
+                </div>
+                <div style="font-weight:500; margin-bottom:0.5rem;">
+                    Mood: ${escapeHtml(m.mood)}
+                </div>
+                <div>
+                    ${escapeHtml(m.message_text)}
+                </div>
+            </div>
+        `).join('');
+
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+/* =========================
+   DAILY PROMPT
+========================= */
+
+function openPrompt() {
+    dailyPromptModal.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+}
+
+function closePrompt() {
+    dailyPromptModal.style.display = 'none';
+    document.body.style.overflow = '';
+}
+
+closeDailyPromptModal.addEventListener('click', closePrompt);
+
+dailyPromptModal.addEventListener('click', (e) => {
+    if (e.target === dailyPromptModal) {
+        closePrompt();
+    }
+});
+
+/* Date */
+currentDateElement.textContent = new Date().toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric'
+});
+
+/* Load prompt */
+async function loadPrompt() {
+    try {
+        const data = await fetchJson('Backend/get_daily_prompt.php');
+
+        currentPromptId = data.prompt.prompt_id;
+        promptQuestionElement.textContent = data.prompt.prompt_text;
+
+        if (data.already_answered_today && data.today_answer) {
+            promptAnswerElement.value = data.today_answer.answer;
+            alreadyAnsweredToday = true;
+        }
+
+    } catch (e) {
+        promptQuestionElement.textContent = "Couldn't load prompt";
+    }
+}
+
+/* Weekly answers */
+async function loadWeekly() {
+    try {
+        const data = await fetchJson('Backend/get_weekly_prompt_answers.php');
+
+        const answers = data.answers || [];
+        completedCountElement.textContent = answers.length;
+
+        weeklyReflectionsElement.innerHTML = answers.map(a => `
+            <div class="diary-entry">
+                <div class="diary-date">${escapeHtml(a.date_string)}</div>
+                <div>${escapeHtml(a.answer)}</div>
+            </div>
+        `).join('');
+
+    } catch (e) {
+        console.error(e);
+    }
+}
+
+/* Submit prompt */
+submitPromptButton.addEventListener('click', async function () {
+
+    const answer = promptAnswerElement.value.trim();
+
+    if (!answer) {
+        showToast('Write something first', 'error');
+        return;
+    }
+
+    try {
+        const formData = new FormData();
+        formData.append('prompt_id', currentPromptId);
+        formData.append('answer', answer);
+
+        await fetchJson('Backend/save_daily_prompt_answer.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        showToast('Saved!');
+        loadWeekly();
+
+    } catch (e) {
+        showToast(e.message, 'error');
+    }
+});
+
+/* Skip */
+skipPromptButton.addEventListener('click', async function () {
+
+    if (!confirm("Skip today?")) return;
+
+    try {
+        const formData = new FormData();
+        formData.append('prompt_id', currentPromptId);
+
+        await fetchJson('Backend/skip_daily_prompt.php', {
+            method: 'POST',
+            body: formData
+        });
+
+        promptAnswerElement.value = '';
+        loadWeekly();
+
+    } catch (e) {
+        showToast(e.message, 'error');
+    }
+});
+
+/* =========================
+   INIT
+========================= */
+
+window.addEventListener('load', async function () {
+
+    loadReceivedMessages();
+    loadPrompt();
+    loadWeekly();
+
+    if (typeof SHOW_DAILY_PROMPT_ON_LOAD !== 'undefined' && SHOW_DAILY_PROMPT_ON_LOAD) {
+        setTimeout(openPrompt, 500);
+    }
+});

@@ -5,6 +5,12 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
+
+$showDailyPrompt = false;
+if (!empty($_SESSION['show_daily_prompt'])) {
+    $showDailyPrompt = true;
+    unset($_SESSION['show_daily_prompt']);
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -22,15 +28,17 @@ if (!isset($_SESSION['user_id'])) {
                 <span class="logo-icon">❤️</span>
                 <span class="logo-text">MoodHelper</span>
             </a>
+
             <ul class="nav-links">
                 <li><a href="dashboard.php" class="active">Dashboard</a></li>
                 <li><a href="diary.php">Diary</a></li>
-                <li><a href="daily-prompt.php">Prompts</a></li>
+                <li><a href="about.html">About</a></li>
                 <li><a href="reflection-board.php">Reflection Board</a></li>
                 <li><a href="groups.php">Groups</a></li>
                 <li><a href="mood-support.php">Support</a></li>
                 <li><a href="settings.php">Settings</a></li>
             </ul>
+
             <div class="nav-buttons">
                 <a href="account.php" class="btn btn-secondary">Account</a>
                 <a href="Backend/logout.php" class="btn btn-primary">Logout</a>
@@ -45,49 +53,44 @@ if (!isset($_SESSION['user_id'])) {
                 How are you feeling today?
             </h1>
             <p style="font-size: 1.125rem; color: var(--text-secondary);">
-                Check in with yourself and, if you want, send a kind anonymous message to someone who may need it.
+                Check in with yourself, save an optional note, and support someone who may be feeling the same way.
             </p>
         </div>
 
+        <!-- Mood Check-in Card -->
         <div class="card" style="margin-bottom: 2rem;">
-
-            <div class="form-group">
-                <label style="font-size: 1.125rem;" id="messageLabel">
-                    Optional anonymous message
-                </label>
-                <textarea
-                    class="form-control"
-                    id="feelingText"
-                    placeholder="Write a kind anonymous message for someone feeling the same emotion..."
-                    rows="4"
-                ></textarea>
-            </div>
 
             <div>
                 <label style="font-size: 1.125rem; display: block; margin-bottom: 1rem;">
-                    How are you feeling?
+                    Choose your mood <span style="color:#dc2626;">*</span>
                 </label>
+
                 <div class="emotion-grid">
                     <button class="emotion-btn" data-emotion="happy" type="button">
                         <span class="emotion-emoji">😊</span>
                         <span>Happy</span>
                     </button>
+
                     <button class="emotion-btn" data-emotion="sad" type="button">
                         <span class="emotion-emoji">😢</span>
                         <span>Sad</span>
                     </button>
+
                     <button class="emotion-btn" data-emotion="anxious" type="button">
                         <span class="emotion-emoji">😰</span>
                         <span>Anxious</span>
                     </button>
+
                     <button class="emotion-btn" data-emotion="angry" type="button">
                         <span class="emotion-emoji">😠</span>
                         <span>Angry</span>
                     </button>
+
                     <button class="emotion-btn" data-emotion="neutral" type="button">
                         <span class="emotion-emoji">😐</span>
                         <span>Neutral</span>
                     </button>
+
                     <button class="emotion-btn" data-emotion="disappointed" type="button">
                         <span class="emotion-emoji">😞</span>
                         <span>Disappointed</span>
@@ -105,21 +108,48 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
             </div>
 
+            <!-- Optional personal note -->
+            <div style="margin-top: 2rem;">
+                <label style="font-size: 1.05rem; margin-bottom: 0.75rem; display: block;">
+                    Optional note
+                </label>
+                <textarea
+                    class="form-control"
+                    id="moodNote"
+                    placeholder="Write an optional note about how you're feeling..."
+                    rows="4"
+                ></textarea>
+            </div>
+
+            <!-- Checkbox + peer message -->
             <div id="messageOption" style="display: none; margin-top: 2rem; padding: 1.5rem; background: rgba(124, 58, 237, 0.05); border-radius: 1rem;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
                     <input type="checkbox" id="sendAnonymousMsg" style="width: 20px; height: 20px; cursor: pointer;">
-                    <label for="sendAnonymousMsg" style="cursor: pointer; font-size: 1.125rem; margin: 0;">
-                        Send this message anonymously to someone feeling the same emotion
+                    <label for="sendAnonymousMsg" style="cursor: pointer; font-size: 1.05rem; margin: 0;">
+                        Send a supportive message to another user who may be feeling the same way
                     </label>
                 </div>
-                <p style="color: var(--text-secondary); font-size: 0.875rem; margin: 0;">
-                    Your message can brighten someone's day and help them feel less alone.
+
+                <div id="messageTextWrapper" style="display: none; margin-top: 1rem;">
+                    <label style="font-size: 1.05rem; margin-bottom: 0.75rem; display: block;">
+                        Your message
+                    </label>
+                    <textarea
+                        class="form-control"
+                        id="peerMessage"
+                        placeholder="Write a kind and supportive message..."
+                        rows="4"
+                    ></textarea>
+                </div>
+
+                <p style="color: var(--text-secondary); font-size: 0.875rem; margin-top: 1rem; margin-bottom: 0;">
+                    Your message will be shared anonymously.
                 </p>
             </div>
 
             <div style="margin-top: 2rem;">
-               <button type="button" class="btn btn-primary btn-large" id="submitFeeling" style="width: 100%;">
-                   Submit
+                <button type="button" class="btn btn-primary btn-large" id="submitFeeling" style="width: 100%;">
+                    Submit
                 </button>
             </div>
 
@@ -130,6 +160,7 @@ if (!isset($_SESSION['user_id'])) {
             </div>
         </div>
 
+        <!-- Received Messages -->
         <div class="card" style="margin-bottom: 2rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
                 <div>
@@ -137,9 +168,10 @@ if (!isset($_SESSION['user_id'])) {
                         Messages You’ve Received
                     </h2>
                     <p style="color: var(--text-secondary); margin: 0;">
-                        Anonymous support from people who shared your emotion.
+                        Support from people who shared your emotion.
                     </p>
                 </div>
+
                 <span style="background: rgba(124, 58, 237, 0.08); color: var(--primary-purple); padding: 0.45rem 0.85rem; border-radius: 999px; font-size: 0.9rem; font-weight: 500;">
                     Inbox
                 </span>
@@ -152,14 +184,16 @@ if (!isset($_SESSION['user_id'])) {
                         No messages yet.
                     </p>
                     <p style="margin-top: 0.5rem; font-size: 0.9rem;">
-                        When someone sends you anonymous support, it will appear here.
+                        When someone sends you support, it will appear here.
                     </p>
                 </div>
             </div>
         </div>
 
+        <!-- Quick Access -->
         <div>
             <h2 style="font-size: 1.75rem; margin-bottom: 1.5rem;">Quick Access</h2>
+
             <div class="features">
                 <a href="mood-tracking.php" class="feature-card" style="text-decoration: none; color: inherit;">
                     <div class="feature-icon" style="background: linear-gradient(135deg, #7c3aed, #a78bfa); color: white;">
@@ -204,6 +238,78 @@ if (!isset($_SESSION['user_id'])) {
         </div>
     </div>
 
-    <script src="js/dashboard.js?v=5"></script>
+    <!-- Daily Prompt Popup -->
+    <div id="dailyPromptModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; align-items:center; justify-content:center; padding:1.5rem;">
+        <div style="background:white; width:100%; max-width:800px; max-height:90vh; overflow-y:auto; border-radius:1.5rem; padding:2rem; position:relative; box-shadow:0 25px 50px rgba(0,0,0,0.18);">
+            <button id="closeDailyPromptModal" type="button" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.75rem; cursor:pointer; color:#6b7280;">&times;</button>
+
+            <div style="text-align: center; margin-bottom: 2rem;">
+                <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(139, 92, 246, 0.08); color: #8b5cf6; padding: 0.5rem 1rem; border-radius: 10px; font-size: 0.875rem; font-weight: 500; margin-bottom: 1.5rem;">
+                    <span>✨</span>
+                    <span>Daily Check-In</span>
+                </div>
+
+                <h1 style="font-size: 2rem; margin-bottom: 1rem; font-weight: 600;">
+                    Today's Question
+                </h1>
+
+                <p style="color: var(--text-secondary); font-size: 1.125rem;" id="currentDate"></p>
+            </div>
+
+            <div style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(59, 130, 246, 0.05)); padding: 2rem; border-radius: 1rem; margin-bottom: 2rem; text-align: center;">
+                <h2 style="font-size: 1.5rem; color: var(--primary-purple); margin-bottom: 1rem;" id="promptQuestion"></h2>
+                <p style="color: var(--text-secondary); font-size: 0.875rem;">
+                    Take your time. There’s no right or wrong answer.
+                </p>
+            </div>
+
+            <div class="form-group">
+                <label style="font-size: 1.05rem;">Your Answer</label>
+                <textarea 
+                    class="form-control" 
+                    id="promptAnswer"
+                    placeholder="Write your thoughts here..."
+                    rows="8"
+                ></textarea>
+            </div>
+
+            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                <button class="btn btn-primary" id="submitPrompt" style="flex: 1;">
+                    Save Answer
+                </button>
+                <button class="btn btn-secondary" id="skipPrompt" style="flex: 1;">
+                    Skip Today
+                </button>
+            </div>
+
+            <div id="promptSuccessMessage" style="display: none; margin-top: 2rem; padding: 1.5rem; background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: 8px;">
+                <p style="color: #065f46; font-weight: 500; margin: 0;">
+                    ✓ Your answer has been saved.
+                </p>
+            </div>
+
+            <div style="margin-top: 3rem;">
+                <h2 style="font-size: 1.65rem; margin-bottom: 1.5rem; font-weight: 600;">
+                    This Week's Answers
+                </h2>
+                <div id="weeklyReflections" class="diary-entries"></div>
+            </div>
+
+            <div style="margin-top: 3rem; text-align: center; padding: 2rem; background: linear-gradient(to right, #8b5cf6, #6366f1); border-radius: 14px; color: white;">
+                <h3 style="font-size: 1.4rem; margin-bottom: 1rem; font-weight: 600;">
+                    Keep Going! 🌟
+                </h3>
+                <p style="font-size: 1.05rem; opacity: 0.92;">
+                    You've answered <strong id="completedCount">0</strong> prompts this week.
+                    Each answer is a step toward better self-awareness.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const SHOW_DAILY_PROMPT_ON_LOAD = <?php echo $showDailyPrompt ? 'true' : 'false'; ?>;
+    </script>
+    <script src="js/dashboard.js?v=8"></script>
 </body>
 </html>

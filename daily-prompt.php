@@ -1,109 +1,11 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Daily Prompt - MoodHelper</title>
-    <link rel="stylesheet" href="css/styles.css">
-</head>
-<body>
-    
-    <nav class="navbar">
-    <div class="container">
-        <a href="dashboard.php" class="logo">
-            <span class="logo-icon">❤️</span>
-            <span class="logo-text">MoodHelper</span>
-        </a>
-        <ul class="nav-links">
-            <li><a href="dashboard.php" class="">Dashboard</a></li>
-            <li><a href="diary.php" class="">Diary</a></li>
-            <li><a href="daily-prompt.php" class="active">Prompts</a></li>
-            <li><a href="reflection-board.php" >Reflection Board</a></li>
-            <li><a href="groups.php" class="">Groups</a></li>
-            <li><a href="mood-support.php" class="">Support</a></li>
-            <li><a href="settings.html" class="">Settings</a></li>
-        </ul>
-        <div class="nav-buttons">
-            <a href="account.php" class="btn btn-secondary">Account</a>
-            <a href="Backend/logout.php" class="btn btn-primary">Logout</a>
-        </div>
-    </div>
-</nav>
+<?php
+session_start();
 
-   
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
 
-    <div class="container" style="padding: 3rem 2rem; max-width: 800px;">
-    
-        <div class="card fade-in">
-            <div style="text-align: center; margin-bottom: 2rem;">
-                <div style="display: inline-flex; align-items: center; gap: 0.5rem; background: rgba(139, 92, 246, 0.08); color: #8b5cf6; padding: 0.5rem 1rem; border-radius: 10px; font-size: 0.875rem; font-weight: 500; margin-bottom: 1.5rem;">
-                    <span>✨</span>
-                    <span>Daily Check-In</span>
-                </div>
-                <h1 style="font-size: 2rem; margin-bottom: 1rem; font-weight: 600;">
-                    Today's Question
-                </h1>
-                <p style="color: var(--text-secondary); font-size: 1.125rem;" id="currentDate">
-                    
-                </p>
-            </div>
-
-            <div style="background: linear-gradient(135deg, rgba(124, 58, 237, 0.05), rgba(59, 130, 246, 0.05)); padding: 2rem; border-radius: 1rem; margin-bottom: 2rem; text-align: center;">
-                <h2 style="font-size: 1.5rem; color: var(--primary-purple); margin-bottom: 1rem;" id="promptQuestion">
-                   
-                </h2>
-                <p style="color: var(--text-secondary); font-size: 0.875rem;">
-                    Take your time. There's no right or wrong answer.
-                </p>
-            </div>
-
-            <div class="form-group">
-                <label style="font-size: 1.05rem;">Your Answer</label>
-                <textarea 
-                    class="form-control" 
-                    id="promptAnswer"
-                    placeholder="Write your thoughts here..."
-                    rows="8"
-                ></textarea>
-            </div>
-
-            <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
-                <button class="btn btn-primary" id="submitPrompt" style="flex: 1;">
-                    Save Answer
-                </button>
-                <button class="btn btn-secondary" id="skipPrompt" style="flex: 1;">
-                    Skip Today
-                </button>
-            </div>
-
-          
-            <div id="successMessage" style="display: none; margin-top: 2rem; padding: 1.5rem; background: rgba(5, 150, 105, 0.08); border-left: 3px solid #059669; border-radius: 8px;">
-                <p style="color: #065f46; font-weight: 500; margin: 0;">
-                    ✓ Your answer has been saved! Check it out in your weekly summary below.
-                </p>
-            </div>
-        </div>
-
-        <div style="margin-top: 3rem;">
-            <h2 style="font-size: 1.65rem; margin-bottom: 1.5rem; font-weight: 600;">
-                This Week's Answers
-            </h2>
-            <div id="weeklyReflections" class="diary-entries">
-          
-            </div>
-        </div>
-
-        <div style="margin-top: 3rem; text-align: center; padding: 2rem; background: linear-gradient(to right, #8b5cf6, #6366f1); border-radius: 14px; color: white;">
-            <h3 style="font-size: 1.4rem; margin-bottom: 1rem; font-weight: 600;">
-                Keep Going! 🌟
-            </h3>
-            <p style="font-size: 1.05rem; opacity: 0.92;">
-                You've answered <strong id="completedCount">0</strong> prompts this week. 
-                Each answer is a step toward better self-awareness.
-            </p>
-        </div>
-    </div>
-
-    <script src="js/daily-prompt.js"></script>
-</body>
-</html>
+header("Location: dashboard.php");
+exit();
+?>

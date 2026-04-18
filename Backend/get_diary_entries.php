@@ -26,7 +26,7 @@ if ($filter === 'week') {
 }
 
 $query = "
-    SELECT entry_id, title, content, mood, entry_date, created_at
+    SELECT entry_id, title, content, entry_date, created_at
     FROM diaryentries
     $where_clause
     ORDER BY entry_date DESC, created_at DESC
@@ -53,8 +53,8 @@ while ($row = $result->fetch_assoc()) {
         'entry_id' => $row['entry_id'],
         'title' => decryptDiaryText($row['title']),
         'content' => decryptDiaryText($row['content']),
-        'mood' => $row['mood'],
         'entry_date' => date('F j, Y', strtotime($row['entry_date'])),
+        'entry_date_raw' => $row['entry_date'],
         'created_at' => $row['created_at']
     ];
 }

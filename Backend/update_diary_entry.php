@@ -21,12 +21,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
 }
 
 $user_id = (int) $_SESSION['user_id'];
-$entry_id = (int)($_POST['entry_id'] ?? 0);
+$entry_id = (int) ($_POST['entry_id'] ?? 0);
 $title = trim($_POST['title'] ?? '');
 $content = trim($_POST['content'] ?? '');
-$mood = trim($_POST['mood'] ?? '');
 
-$allowed_moods = ['happy', 'sad', 'anxious', 'calm', 'grateful', 'angry', 'neutral', 'disappointed'];
 if ($entry_id <= 0) {
     echo json_encode([
         'status' => 'error',
@@ -43,33 +41,8 @@ if ($content === '') {
     exit;
 }
 
-// if ($mood !== '' && !in_array($mood, $allowed_moods, true)) {
-//     echo json_encode([
-//         'status' => 'error',
-//         'message' => 'Invalid mood selected'
-//     ]);
-//     exit;
-// }
-
-if ($mood === '') {
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Mood is required'
-    ]);
-    exit;
-}
-
-if (!in_array($mood, $allowed_moods, true)) {
-    echo json_encode([
-        'status' => 'error',
-        'message' => 'Invalid mood selected'
-    ]);
-    exit;
-}
-
-/* Check ownership and old mood */
 $checkStmt = $conn->prepare("
-    SELECT mood
+    SELECT entry_id
     FROM diaryentries
     WHERE entry_id = ? AND user_id = ?
 ");
@@ -95,8 +68,6 @@ if ($checkResult->num_rows === 0) {
     exit;
 }
 
-$oldRow = $checkResult->fetch_assoc();
-$oldMood = $oldRow['mood'] ?? '';
 $checkStmt->close();
 
 try {
@@ -112,7 +83,7 @@ try {
 
 $stmt = $conn->prepare("
     UPDATE diaryentries
-    SET title = ?, content = ?, mood = ?
+    SET title = ?, content = ?
     WHERE entry_id = ? AND user_id = ?
 ");
 
@@ -124,7 +95,7 @@ if (!$stmt) {
     exit;
 }
 
-$stmt->bind_param("sssii", $encryptedTitle, $encryptedContent, $mood, $entry_id, $user_id);
+$stmt->bind_param("ssii", $encryptedTitle, $encryptedContent, $entry_id, $user_id);
 
 if (!$stmt->execute()) {
     echo json_encode([
@@ -137,21 +108,6 @@ if (!$stmt->execute()) {
 }
 
 $stmt->close();
-
-/* Mirror changed mood into moodentries */
-// if ($mood !== '' && $mood !== $oldMood) {
-//     $moodNotes = 'Diary entry mood update';
-//     $moodStmt = $conn->prepare("
-//         INSERT INTO moodentries (user_id, mood, notes, mood_date, created_at)
-//         VALUES (?, ?, ?, CURDATE(), NOW())
-//     ");
-
-//     if ($moodStmt) {
-//         $moodStmt->bind_param("iss", $user_id, $mood, $moodNotes);
-//         $moodStmt->execute();
-//         $moodStmt->close();
-//     }
-// }
 
 echo json_encode([
     'status' => 'success',
