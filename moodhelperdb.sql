@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 18, 2026 at 12:34 PM
+-- Generation Time: Apr 18, 2026 at 04:29 PM
 -- Server version: 8.4.7
 -- PHP Version: 8.3.28
 
@@ -291,7 +291,7 @@ CREATE TABLE IF NOT EXISTS `moodentries` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`mood_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `moodentries`
@@ -317,7 +317,9 @@ INSERT INTO `moodentries` (`mood_id`, `user_id`, `mood`, `notes`, `mood_date`, `
 (17, 7, 'angry', 'sddsd', '2026-04-18 00:00:00', '2026-04-18 11:46:18'),
 (18, 8, 'neutral', 'im fine i think?', '2026-04-18 00:00:00', '2026-04-18 11:49:30'),
 (19, 8, 'angry', 'im just feeling angry', '2026-04-18 00:00:00', '2026-04-18 11:51:12'),
-(20, 7, 'angry', '', '2026-04-18 00:00:00', '2026-04-18 11:53:01');
+(20, 7, 'angry', '', '2026-04-18 00:00:00', '2026-04-18 11:53:01'),
+(21, 7, 'grateful', 'loving life', '2026-04-18 00:00:00', '2026-04-18 16:17:11'),
+(22, 7, 'grateful', '', '2026-04-18 00:00:00', '2026-04-18 16:21:30');
 
 -- --------------------------------------------------------
 
@@ -432,7 +434,7 @@ INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `username`, `email`, 
 (2, '1234', '1234', '1234', '123@gmail.com', '$2y$10$t73nr4KhZ2dh9oJn5SBwmOg5bNPAbX8N/xgEtf0.Sd4o9mbY31w7m', '2026-04-01 19:22:47', '2026-04-01 20:00:47', 0),
 (6, 'Ranimmmm', 'ib', 'testerrr', 'ranimibrahim145@gmail.com', '$2y$10$O7G..cyW7yRB9AHQwde5VuLK7AlB8lkhm3B38nw.We8e05JUf/C/e', '2026-04-11 20:23:07', '2026-04-11 20:23:25', 1),
 (5, 'Ranim', 'Ibrahim', 'rm_ib', 'ranimibrahiim145@gmail.com', '$2y$10$ZUpS3TBd04cSSfrV.wbgje8uwJSwNKxZc.uQPyibn2o093bY9hIf6', '2026-04-10 13:16:07', '2026-04-17 07:40:22', 3),
-(7, 'Antonio', 'Karam', 'antoniokaram06', 'antoniokaram06@gmail.com', '$2y$10$n/KWI.hCvtFM7F1v/oog9OfDRBjlvygOhsgUvhRAt3LgjIquM261u', '2026-04-17 16:05:51', '2026-04-18 12:25:45', 1),
+(7, 'Antonio', 'Karam', 'antoniokaram06', 'antoniokaram06@gmail.com', '$2y$10$n/KWI.hCvtFM7F1v/oog9OfDRBjlvygOhsgUvhRAt3LgjIquM261u', '2026-04-17 16:05:51', '2026-04-18 16:14:23', 1),
 (8, 'Antonio', 'Karam', 'antoniokaram07', 'antoniokaram07@gmail.com', '$2y$10$RZokDMEymAxc8JGpXFPsd.M9bKVFoPmfBKV0JixU3yh/KkChcz4CS', '2026-04-18 11:49:11', '2026-04-18 11:49:23', 1);
 
 -- --------------------------------------------------------
