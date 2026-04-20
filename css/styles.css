@@ -372,10 +372,10 @@ textarea.form-control {
     display: flex;
     gap: 0.75rem;
     margin: 2rem 0;
-    flex-wrap: nowrap;
-    overflow-x: auto;
-    padding-bottom: 0.4rem;
-    scrollbar-width: thin;
+
+    flex-wrap: wrap;        /* allows wrapping instead of scrolling */
+    overflow-x: hidden; 
+    overflow: hidden !important;    /* no horizontal scroll */
 }
 
 .emotion-btn {
@@ -384,8 +384,8 @@ textarea.form-control {
     align-items: center;
     justify-content: center;
     gap: 0.45rem;
-    min-width: 115px;
-    flex: 0 0 auto;
+    min-width: 0;
+    flex: 1 1 120px;
     padding: 1rem 0.8rem;
     border: 2px solid var(--border-light);
     border-radius: 1rem;
@@ -420,15 +420,17 @@ textarea.form-control {
     box-shadow: var(--shadow-lg);
     max-width: 800px;
     margin: 0 auto;
+    position: relative;
 }
 
 .chat-messages {
     height: 400px;
     overflow-y: auto;
+    overflow-x: hidden; 
     padding: 1rem;
     margin-bottom: 1.5rem;
     background: #f9fafb;
-    border-radius: 1rem;
+    border-radius: 1.2rem;
 }
 
 .message {
@@ -441,18 +443,41 @@ textarea.form-control {
 .message.ai {
     background: linear-gradient(135deg, rgba(124, 58, 237, 0.1), rgba(59, 130, 246, 0.1));
     margin-right: auto;
+    width: fit-content;
 }
 
 .message.user {
     background: var(--primary-purple);
     color: var(--white);
     margin-left: auto;
+    width: fit-content;
+    font-size: 0.9rem;   /* 👈 add this */
+    padding: 0.6rem 0.9rem; 
+
 }
 
+#userMessage {
+    white-space: normal;
+    word-wrap: break-word;
+    max-width: 100%;
+    overflow-x: hidden;
+}
 .message-header {
     font-weight: 600;
     margin-bottom: 0.5rem;
     font-size: 0.875rem;
+    width: fit-content;
+
+}
+#expandChatBtn {
+    color: #9ca3af;   /* soft gray */
+    font-weight: 400; /* not bold */
+    display: block !important;
+    visibility: visible !important;
+}
+
+#expandChatBtn:hover {
+    color: #6b7280;
 }
 
 /* Diary Entries */

@@ -269,7 +269,11 @@ async function loadPrompt() {
         if (data.already_answered_today && data.today_answer) {
             promptAnswerElement.value = data.today_answer.answer;
             alreadyAnsweredToday = true;
-        }
+        
+                submitPromptButton.textContent = 'Update Answer';
+        } else {
+                submitPromptButton.textContent = 'Save Answer';
+            }
 
     } catch (e) {
         promptQuestionElement.textContent = "Couldn't load prompt";
@@ -311,13 +315,26 @@ submitPromptButton.addEventListener('click', async function () {
         formData.append('prompt_id', currentPromptId);
         formData.append('answer', answer);
 
-        await fetchJson('Backend/save_daily_prompt_answer.php', {
-            method: 'POST',
-            body: formData
-        });
+       const data = await fetchJson('Backend/save_daily_prompt_answer.php', {
+    method: 'POST',
+    body: formData
+});
 
-        showToast('Saved!');
-        loadWeekly();
+alreadyAnsweredToday = true;
+
+// 🔥 change button dynamically
+submitPromptButton.textContent = 'Update Answer';
+
+// ✅ show correct message (saved OR updated)
+showToast(data.message || 'Saved!');
+
+// reload weekly
+await loadWeekly();
+
+// ✅ auto close after short delay
+setTimeout(() => {
+    closePrompt();
+}, 1200);
 
     } catch (e) {
         showToast(e.message, 'error');
@@ -327,19 +344,28 @@ submitPromptButton.addEventListener('click', async function () {
 /* Skip */
 skipPromptButton.addEventListener('click', async function () {
 
-    if (!confirm("Skip today?")) return;
+    //if (!confirm("Skip today?")) return;
 
     try {
         const formData = new FormData();
         formData.append('prompt_id', currentPromptId);
 
-        await fetchJson('Backend/skip_daily_prompt.php', {
+            const data = await fetchJson('Backend/skip_daily_prompt.php', {
             method: 'POST',
             body: formData
         });
 
         promptAnswerElement.value = '';
-        loadWeekly();
+        alreadyAnsweredToday = false;
+        submitPromptButton.textContent = 'Save Answer';
+
+        showToast(data.message || 'Removed!');
+
+        await loadWeekly();
+
+        setTimeout(() => {
+            closePrompt();
+        }, 1200);
 
     } catch (e) {
         showToast(e.message, 'error');

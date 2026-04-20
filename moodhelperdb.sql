@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Apr 18, 2026 at 05:07 PM
+-- Generation Time: Apr 20, 2026 at 11:18 AM
 -- Server version: 8.4.7
 -- PHP Version: 8.3.28
 
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `anonymous_messages` (
   `is_read` tinyint(1) DEFAULT '0',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`message_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `anonymous_messages`
@@ -45,7 +45,35 @@ CREATE TABLE IF NOT EXISTS `anonymous_messages` (
 
 INSERT INTO `anonymous_messages` (`message_id`, `sender_id`, `receiver_id`, `mood`, `message_text`, `is_read`, `created_at`) VALUES
 (1, 6, 5, 'anxious', 'you are doing okayy', 1, '2026-04-11 23:23:48'),
-(2, 8, 7, 'angry', 'i hope you feel better', 1, '2026-04-18 14:51:12');
+(2, 8, 7, 'angry', 'i hope you feel better', 1, '2026-04-18 14:51:12'),
+(3, 5, 7, 'happy', 'yayy', 0, '2026-04-20 07:48:09'),
+(4, 5, 7, 'happy', 'hiii', 0, '2026-04-20 14:07:06');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `badges`
+--
+
+DROP TABLE IF EXISTS `badges`;
+CREATE TABLE IF NOT EXISTS `badges` (
+  `badge_id` bigint UNSIGNED NOT NULL AUTO_INCREMENT,
+  `name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `required_streak` int NOT NULL,
+  PRIMARY KEY (`badge_id`),
+  UNIQUE KEY `badge_id` (`badge_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `badges`
+--
+
+INSERT INTO `badges` (`badge_id`, `name`, `description`, `required_streak`) VALUES
+(1, '7-day streak', 'Logged in 7 consecutive days', 7),
+(2, '1-month streak', 'Logged in 30 consecutive days', 30),
+(3, '6-month streak', 'Logged in 180 consecutive days', 180),
+(4, '1-year streak', 'Logged in 365 consecutive days', 365);
 
 -- --------------------------------------------------------
 
@@ -61,7 +89,7 @@ CREATE TABLE IF NOT EXISTS `chat_messages` (
   `message` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci,
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=65 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `chat_messages`
@@ -99,7 +127,39 @@ INSERT INTO `chat_messages` (`id`, `user_id`, `role`, `message`, `created_at`) V
 (29, 8, 'user', 'iryuQqvgDEWG+VmQc6H7zGtRY/GKBVd2swWoZD4LI64=', '2026-04-18 11:51:22'),
 (30, 8, 'assistant', 'AwvxyhVCV+NaoNw0581Mv/e3eEBZBkvwV2wBCu/Rd079sVKEIYOB8z7FM+KPDjH7+sKJSzaKq1UhD5890L2RsffJW4WEn9as/sxrBpMlyim79nl50iRwrp/i/pfLYA1R', '2026-04-18 11:51:22'),
 (31, 8, 'user', 'C0q0qhbNj1yAlFJAC04q+hrZCf2aooMj+uWIw5g3HKQ=', '2026-04-18 11:52:08'),
-(32, 8, 'assistant', '+7i7lgd7ucjOjH1o0KPpcgLQO1OnE923HT/eG7cYFt5bPJ9fxXkbhKI9GIvjrZuqM80T9rWavCdeh9VK0Cltp9+SdTogiwryua1yaECBCHcKSOLuHoqXVUBUATG0VBlKAmlZp63zVAVJ1ZzmC7UFqyGK8ymOPX1VMgVzZJ8tKulT5+27RjYdhpjWyYdcCwMkj+wQjKZGwO9anakf5V5UesE+FB16+P3f8lpLYdc/OUB6waOQ/CiE7S3PMdyGAqmTfk5QGn63yyMwLF/miN7/lw==', '2026-04-18 11:52:08');
+(32, 8, 'assistant', '+7i7lgd7ucjOjH1o0KPpcgLQO1OnE923HT/eG7cYFt5bPJ9fxXkbhKI9GIvjrZuqM80T9rWavCdeh9VK0Cltp9+SdTogiwryua1yaECBCHcKSOLuHoqXVUBUATG0VBlKAmlZp63zVAVJ1ZzmC7UFqyGK8ymOPX1VMgVzZJ8tKulT5+27RjYdhpjWyYdcCwMkj+wQjKZGwO9anakf5V5UesE+FB16+P3f8lpLYdc/OUB6waOQ/CiE7S3PMdyGAqmTfk5QGn63yyMwLF/miN7/lw==', '2026-04-18 11:52:08'),
+(33, 5, 'user', 'n+D7mLzea9VmNgp/uf9WLw==', '2026-04-20 04:51:46'),
+(34, 5, 'assistant', 't4jocVgyvgp0/rKgjkdeOiJ9fe4DUplHmQ7B7gLdRNe7/hHcCv3NwkQ52pHl2ROjCWR33awS+jQ4nMMYrDgYycPYfugIzrV/v7D8+T1b4RZWh2iixFi+Ju1b7JwA4j+pySjvem4Vu3SqD8CnFohisLDELY1kXCnCguKaT5EZedw=', '2026-04-20 04:51:46'),
+(35, 5, 'user', 'F3pCizFuTyPVY3Qk4lO1cA==', '2026-04-20 04:54:12'),
+(36, 5, 'assistant', '880zgcRdFSOdeyx85tlhA3SSG6A6GdJfQSfHxuay0ZGCBMjV55J5zqjWK2nHCcv6GbNn4CzMXZTWlf67/QQ+XXeH+KgUZ63ibOdG44/MPEE=', '2026-04-20 04:54:12'),
+(37, 5, 'user', 'F3pCizFuTyPVY3Qk4lO1cA==', '2026-04-20 08:32:33'),
+(38, 5, 'assistant', 'pz/e04ZTVits9vwh+4qG3+Yrp6nRwZow9yyQWnmCiKg/+yksOXUcfxkRTuDAfrz3zmZK+N5SISUMM8f0o7gk7o/9GXEk0s2tEcdmtVAKD8A=', '2026-04-20 08:32:33'),
+(39, 5, 'user', 'F3pCizFuTyPVY3Qk4lO1cA==', '2026-04-20 08:33:13'),
+(40, 5, 'assistant', 'v4Aqbf3K625XmaViarYUGCuq3DcFHlNtxuTzw5tzlg4ZSWMbfjqIWBgN6DPBkiBm7IHxaVc40jqqNAVaVpOu/sLICs7+9phxF4UzHWrBpiBg9t2dWWoV/SfhFiRdOjlKbd15AFh2amVxTSaxHntS1M6tysN3a0liHs/KxBI2TGBFsodPYkseZrdEvmzqVl52xch1WJxY9AFLT+dUIbXc7AlIHTjtnAS0hozuronjFDQ=', '2026-04-20 08:33:13'),
+(41, 5, 'user', 'F3pCizFuTyPVY3Qk4lO1cA==', '2026-04-20 08:46:46'),
+(42, 5, 'assistant', 'kiCmNDXR2zN6ffuvWwTBiChVCOy1U3U7R0VUyqooNRCG1bU5xkZOCyBwRnygxgIk6MOkoWAPikmH7fFB8M0igluMUMN/NP9awqr7+BKs69DJq6RowUye1g24Hx96IIoHy/vM5TGaYthfD7zOeD7h2Euiewh5/2ISDtrfhH/wkeyLWoWXlSn49daCfxuS93m+', '2026-04-20 08:46:46'),
+(43, 5, 'user', 'nkdJENQom1M9VtpWHyFX6w==', '2026-04-20 09:00:33'),
+(44, 5, 'assistant', 'zQhGMvWpVwxm8UehuaBC87zt+8bFd4deO40uRYDJ+jPuvbo+HBs1C8t6y+rV3R1yCBcGPA0FOLF+l6YIgzB11hPNeTyxpy/faNASqtYmlGlM5MyKjY6tSwpcn0XxDXO+N+e9Chgd3yf7HYkax8y5RA==', '2026-04-20 09:00:33'),
+(45, 5, 'user', 'zQhGMvWpVwxm8UehuaBC87zt+8bFd4deO40uRYDJ+jPuvbo+HBs1C8t6y+rV3R1yCBcGPA0FOLF+l6YIgzB11hPNeTyxpy/faNASqtYmlGlM5MyKjY6tSwpcn0XxDXO+3SpsrcKletwlfnv9VYrKHh6hAT87ZY+yYA5YLY06tycL1dp6WyOdGxOL6MS/UzKVvbhmICXK0Y811Vml7nMZsFxWot+DHd+6jQlYmG4x0abyWD+t2kTbqouwZsirL/4BM+lKyghJETnaeoxatmhL/w==', '2026-04-20 09:26:47'),
+(46, 5, 'assistant', 'iboFVHPpp2ZLHBCw3ITjTu23IIRBm8ib4Q3IYKkAeepEJk/qJDyxFMEs9itb2XvLQzk7B03oyGK7dFVEFHwLU9m237pSp5/uw7PD4e9S4Fth17i6CD1hzuZLX48SqaX0oqrrRAOLVN4MxkKRXmmGHlVJVcbFvno6EVmEZoAdFXTmCkyAHzNUORWpHiAJZ56nXsE2UnL6qg2VujiulSRN/uGWUaU+C63ROYFwq9PQ1MiFhd9xtO/5kDLi5OGg8+1L', '2026-04-20 09:26:47'),
+(47, 5, 'user', 'z9IjJSyphSaS9y6Fp5g0/Pj0h2t4WnwCC6YptygaYfR8nVQDTWIB6zwCxQIqe1el7PhcrVex//6fN/okAvihoL1ZFBiCY+kF2ei6cWSKong/KYZ4+CA0S8P/9t3D5grwIkdbHZnZAkXSHAKDwEbGBQowbZODUC1v8uvM4xAAhkmLDSffht7eD7kVF8lx+0gwCwXnztffPMx5/3TLBd00LjbkAX396p0AssqrsqQf81FTIym1hbJNboTlJh59qNfdjlA4IEi2cmc/vnJfR9i1GrPvJxkc9EuUqC8aX28/pTTVhnk/KOopHRMi7oBpgr/IVckgsj+Nv0M90OJUecjHvA==', '2026-04-20 09:50:49'),
+(48, 5, 'assistant', 'lDbZCTAlFbUW19ohvjnrbHcRzor1TqQJkZ4+TY5zP98TzKiVOHiBFEEqNNL9GOlkWx4DpDtUDVUHrGU2KLYJYzPLnyFYodKGNV3WyO7xFJMqyUG7LOpfztqA5V59Z0CL4Ozj78nk3iWV7N5XYZGbnJXGmQMSEvz9m7hYSt75v7xzvnpD7cQkdX4JVRDWXuDoHN+ksVhglrI42aQaJab7cTLXZX3o8XJuhYcqUCdrX7uZ+Zaz/IAmOCJCsJldUjyh7PcpOAI/4WJ4ezmOc4dEUqkYqnG/+a2O8L2Odj4ADok=', '2026-04-20 09:50:49'),
+(49, 5, 'user', 'XEjxrntv71+G5yrsVXxXp2mNnehHgpX04XxG/1sv0qiZvsQ9/KTeGgIJCQtEWgZ4dN0/mrqMgUngcqmJscEZnqq59W7K0KH79QzL+MS8I/X6zZc3Y1nootCzlqPiQEs4r7DH2U+/MF5GfOWRq/sfBUyZUmNebHtC6eBZIczGNqfkOfr2jPDGmi6Azb65QVsEYNa6F6BTmntLpf75gejxY2zP56MPtJthH32TWP6LQT/P7EV9YYTCyv1QOgRGPgvq76U9O+MrBMQDiRR78ufy3C4iJAfVx+S3phjmBP7osoA=', '2026-04-20 10:31:55'),
+(50, 5, 'assistant', '90jOpwcOEV9EIGZYxvJtdr/Rd1RTz9PaYxQSHn70Ruuw42ImCI/2kYlRNNtmRSU6s1Zyb/WOzJ/kwvz40lF59zaYWQB5+TLUL6SpF/j/fk6D5Jm2YofwvfI4yBbrtb0aiBo2qo6uXpi9tBl+QIVIm2ZZl9k6A+YXWu9fHzfpWZU3jaLVu20LzA2uiKvbwCmBMhRBlX5bpvfHSwt9pjRDvFgXrfGbhUhNVEUHWg9rElhJW12qIfBZTQN312g52U9MN/RcQ6hxfw5M3go2mntJFg==', '2026-04-20 10:31:55'),
+(51, 5, 'user', 'Za1ui5vZTaePASKe8bTSFQ==', '2026-04-20 10:32:29'),
+(52, 5, 'assistant', 'FTFxIcIYcS68GO45AuPD6eb+rWEhmUUghrNSG8proZQeqdOkHGDiLCS8vl0wQOMp6TeF8D2rO6AutUeZm/IrMsq4JuTfcHXFIJ4VwAueUiMSPlegkVv6BJxB0y9rdKbFgPkYSNpAP4T5qE5zgJsktp4mkPW9x1O7rukjVre7wpQB2JyoyFySF469cgzl3eD9iBRNHNEBrOHiSI+U54mWt4Bd5sE9mVzYQQMmcm3iqns=', '2026-04-20 10:32:29'),
+(53, 5, 'user', 'XEjxrntv71+G5yrsVXxXp2mNnehHgpX04XxG/1sv0qiZvsQ9/KTeGgIJCQtEWgZ4dN0/mrqMgUngcqmJscEZnqq59W7K0KH79QzL+MS8I/X6zZc3Y1nootCzlqPiQEs4r7DH2U+/MF5GfOWRq/sfBUyZUmNebHtC6eBZIczGNqfkOfr2jPDGmi6Azb65QVsEYNa6F6BTmntLpf75gejxY2zP56MPtJthH32TWP6LQT/P7EV9YYTCyv1QOgRGPgvq76U9O+MrBMQDiRR78ufy3C4iJAfVx+S3phjmBP7osoA=', '2026-04-20 10:32:39'),
+(54, 5, 'assistant', '90jOpwcOEV9EIGZYxvJtdix5Fy8AMKlG2KW+RsYEPBeNHvwXsUUmHPiC+KEvLhjkh/7HQOkh/bDco7odneGD8QXlzVR705jZDxFzH9jUSzDIzuGPAd3kximrw2yjScdi7WK1S5mO0rsCRccCwu0b2Yd8umbpABwJzL9teQUdfUfe8UNskKxf0BUAx0OkbX+dLZWJ/6CQ6MIEHzo1XKs93uAExEe6owY/d0O0UT9DsHgR2fvuLtMoMIni0w3EHwANwVJShFu/WWT84X2IRHKDxQ==', '2026-04-20 10:32:39'),
+(55, 5, 'user', '90jOpwcOEV9EIGZYxvJtdix5Fy8AMKlG2KW+RsYEPBeNHvwXsUUmHPiC+KEvLhjkh/7HQOkh/bDco7odneGD8QXlzVR705jZDxFzH9jUSzDIzuGPAd3kximrw2yjScdi7WK1S5mO0rsCRccCwu0b2Yd8umbpABwJzL9teQUdfUfe8UNskKxf0BUAx0OkbX+dLZWJ/6CQ6MIEHzo1XKs93uAExEe6owY/d0O0UT9DsHgR2fvuLtMoMIni0w3EHwAN8p9USCr9K2GBhfTYR/eSmGDtnozjRei1UgWPKk4Xx+0=', '2026-04-20 10:39:45'),
+(56, 5, 'assistant', 'KgiB+02Uz668TedKY6dI2zxS6H8UNiy8E/JZo/ITKWZXVdO03ZFAaOEB8J7bsjd/P8dQAQ4Ga3TJ1Z8T6+RHB9sDOCtzwNZUqK+oyFFBCbwNt2WOE2WFQE53LoAh0E8oS/PyXkkGEQt/W3mtVDk+TWF5VmeLze2j5scoxo4Few6jmPHr08a+i9np5Yb7YkmAZnQVj7oGJ7/UZtGEWs98q31QS3w7UywObvz2zfbsSJ51vnle0iYH+abb22gxYBnCPrtM2i5jfCJZObDnBwQAGqP8qmfFzDeHnt+HHq3aIrGMD9sG73nxy69G+4MgDgJc8cjyJ+cRf2ax4/w5JW3cTpPHFAvqkZqg5gAbAY968ELZ11dtGDsNqNCsQNt7KG4i', '2026-04-20 10:39:45'),
+(57, 5, 'user', 'FpBXRps8/lcNklYe0Ivj0w==', '2026-04-20 10:39:58'),
+(58, 5, 'assistant', 'qydIb+kEEr74oMGDq8uLW6dN0/6YlhE8h5lOPQRFgS49PN9oJ7+6psaNrZS2BXMOviONwgRwpUxKO6Kk60JlqNbPl6ssGgh6rz7+drPn801PPfO0ENNvM0+FrwwjCLdiVEJKsZN4MGuRhgmCNXbNeQ==', '2026-04-20 10:39:58'),
+(59, 5, 'user', 'HOtyeEei83sqVOh54esziUKq8sgPl9ZVKAYD+ITuyKw=', '2026-04-20 10:41:04'),
+(60, 5, 'assistant', 's08L2z7yMY3H7K+7Wff3ZO1RsP1L3VmloIg96k1cYyl1ovTDUpkqga24eVZCXV4Pt6MPqbjcZk0O2mjgvD3FqF1yEPEgxCnGKFdXWZ64Jld5o/x1TSprCGxVyOoJeSO40OhQzaJeZyKb82W2UVxocSwzQzr83G72gtaDJrGwzpaUyDThDmCHwnZY9KYsk/8hrSOyljd4K/0fbJ232lLCXMr/2ogvobIZXt66QrJASVfNk/C3NCUnVd6V4MXMz5wR4ypMgu1OmdxC3nysEPtGMQ==', '2026-04-20 10:41:04'),
+(61, 5, 'user', 'cD8GEntgziK6bqVxxue+7OZQJbDOyr5xEHw4uqTW0ADj8yOedT2j3iYWc+k6DQri', '2026-04-20 10:41:20'),
+(62, 5, 'assistant', 'ddxX3YOFbnd+mbew3//MHt+sEu1XcWAhUQpdw8Rkfdv69arMfmft0ADLEr9+dDbHXKIqyVNkd/bWMwaBnzDLE4IKedaAOukvOozMtJLn+OZMfXfFUfh4WpyeDzUpUKlmofESYvbUcKo2Xe8vhzZ2fweB7OAgpG7+CAhxVmGhtOY/6gERnafXveLfxpybsQ0Jg2veCRU8HNm2kpakUzs50jyY+e7EDnz/rHQsyouU3kd8zcOdsM7h2u8DUQtw1T90x4qXRljhcsiQOHwPbA4IsswtJxqAzxegQsU9WfTHQYbJ8VS9Qu6dmW2rnVaUA82HaI6WBdInl/8Y2K+AzfoK/g==', '2026-04-20 10:41:20'),
+(63, 5, 'user', 'XMtUIqRPd/QEMfZULILVMg==', '2026-04-20 11:09:37'),
+(64, 5, 'assistant', '9A7lbdevkKHfCBhic5u3hHCWSXIRoS20uWII/kpJrzWjcy/jYrgP1AQLmKDKoH8NFwKiQGJcjU3vklUEYrAtbTIv9FMiEAvEB8Mr7zYdc7cqbDqfS9PJ6lwezysHzoFvCM9yyC7/OujRukBWWw7qaxWtSiHIfnoJv6Vy2o9nuangnrvidaAMOAMbP+mAfDAF', '2026-04-20 11:09:37');
 
 -- --------------------------------------------------------
 
@@ -117,7 +177,7 @@ CREATE TABLE IF NOT EXISTS `dailypromptanswers` (
   PRIMARY KEY (`answer_id`),
   KEY `user_id` (`user_id`),
   KEY `prompt_id` (`prompt_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `dailypromptanswers`
@@ -127,7 +187,8 @@ INSERT INTO `dailypromptanswers` (`answer_id`, `user_id`, `prompt_id`, `answer`,
 (8, 5, 5, 'i took a long shower to relax my nerves', '2026-04-11 22:42:16'),
 (5, 5, 4, 'my health', '2026-04-10 16:39:39'),
 (9, 7, 11, 's', '2026-04-17 19:06:49'),
-(10, 7, 12, 'fine', '2026-04-18 15:14:52');
+(10, 7, 12, 'fine', '2026-04-18 15:14:52'),
+(18, 5, 14, 'abkxabd', '2026-04-20 14:06:26');
 
 -- --------------------------------------------------------
 
@@ -181,7 +242,7 @@ CREATE TABLE IF NOT EXISTS `diaryentries` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`entry_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `diaryentries`
@@ -193,7 +254,9 @@ INSERT INTO `diaryentries` (`entry_id`, `user_id`, `title`, `content`, `entry_da
 (3, 5, '1O7zil6kE4WfLbKa0t2R8Aq/nom53jZG87dwOAyNXWA=', 'gI5LpDHnAOLT6NRB6aNb5v/TY6Am80F0Kc4BLPtyDTo=', '2026-04-12 00:00:00', '2026-04-12 13:56:47'),
 (6, 5, '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', '2026-04-12 00:00:00', '2026-04-12 14:00:43'),
 (7, 7, 'Hjc4s2sDhDbF0mvJZGEM6Z4CRsvSwWaATuFcTNil5EhQWYyFDayufB1ucLi+yZpL', 'fqidxXAvBFIXEIBdpizNG/s3GLb3SZ8OqEmB1E3hJ04=', '2026-04-18 00:00:00', '2026-04-18 11:54:18'),
-(8, 7, '1UcWk1ZviKSL+dbVHThmvcyzxtBacWo8jGth5b+0oIY=', 'uh0P8KMwAVbZdCtg8VS3vT/HypOPgL+GJZWE9i3e8rc=', '2026-04-18 00:00:00', '2026-04-18 11:54:27');
+(8, 7, '1UcWk1ZviKSL+dbVHThmvcyzxtBacWo8jGth5b+0oIY=', 'uh0P8KMwAVbZdCtg8VS3vT/HypOPgL+GJZWE9i3e8rc=', '2026-04-18 00:00:00', '2026-04-18 11:54:27'),
+(9, 5, 'RKrOci/72EYnCR7EZ8FJjivyb9JQueDGKBcS52tc0H8=', 'lZ4U1KipWIbSev9WfGvG4lpqyVDKLOzzm9zvHXJVycY=', '2026-04-20 00:00:00', '2026-04-20 08:03:37'),
+(10, 5, 'Q2RmTGCDNbvNZ9Ojy+Apm9Mcyv688VLSaeM0GNNp0hg=', 'OJKtccNuENwhGkyoIqeQQ1r17uTw36XgMj8QwfPBljM=', '2026-04-20 00:00:00', '2026-04-20 08:04:54');
 
 -- --------------------------------------------------------
 
@@ -213,7 +276,15 @@ CREATE TABLE IF NOT EXISTS `group_posts` (
   `replies_count` int DEFAULT '0',
   PRIMARY KEY (`post_id`),
   KEY `group_id` (`group_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `group_posts`
+--
+
+INSERT INTO `group_posts` (`post_id`, `group_id`, `user_id`, `title`, `content`, `created_at`, `hearts_count`, `replies_count`) VALUES
+(9, 1, 5, '', 'hello', '2026-04-20 07:50:11', 0, 0),
+(10, 2, 5, '', 'hi', '2026-04-20 14:09:18', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -265,7 +336,7 @@ CREATE TABLE IF NOT EXISTS `moodentries` (
   `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`mood_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=42 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `moodentries`
@@ -312,7 +383,10 @@ INSERT INTO `moodentries` (`mood_id`, `user_id`, `mood`, `notes`, `mood_date`, `
 (38, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:45:02'),
 (39, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:45:03'),
 (40, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:45:05'),
-(41, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:45:07');
+(41, 7, 'happy', '', '2026-04-18 00:00:00', '2026-04-18 16:45:07'),
+(42, 5, 'happy', '', '2026-04-20 00:00:00', '2026-04-20 04:48:09'),
+(43, 5, 'sad', '', '2026-04-20 00:00:00', '2026-04-20 05:41:34'),
+(44, 5, 'happy', '', '2026-04-20 00:00:00', '2026-04-20 11:07:06');
 
 -- --------------------------------------------------------
 
@@ -330,7 +404,14 @@ CREATE TABLE IF NOT EXISTS `posts` (
   `is_anonymous` tinyint(1) DEFAULT '1',
   PRIMARY KEY (`post_id`),
   UNIQUE KEY `post_id` (`post_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `posts`
+--
+
+INSERT INTO `posts` (`post_id`, `user_id`, `page`, `content`, `created_at`, `is_anonymous`) VALUES
+(14, 5, 'reflection-board', 'hii', '2026-04-20 04:48:56', 1);
 
 -- --------------------------------------------------------
 
@@ -347,7 +428,7 @@ CREATE TABLE IF NOT EXISTS `post_hearts` (
   PRIMARY KEY (`heart_id`),
   UNIQUE KEY `unique_heart` (`post_id`,`user_id`),
   KEY `post_id` (`post_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=24 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -365,7 +446,16 @@ CREATE TABLE IF NOT EXISTS `post_replies` (
   PRIMARY KEY (`reply_id`),
   KEY `post_id` (`post_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `post_replies`
+--
+
+INSERT INTO `post_replies` (`reply_id`, `post_id`, `user_id`, `content`, `created_at`) VALUES
+(27, 14, 5, 'um', '2026-04-20 04:49:10'),
+(28, 14, 5, 'heyyy', '2026-04-20 04:49:18'),
+(29, 14, 5, 'kdnxkjb', '2026-04-20 04:49:44');
 
 -- --------------------------------------------------------
 
@@ -380,6 +470,20 @@ CREATE TABLE IF NOT EXISTS `reply_hearts` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`heart_id`),
   KEY `reply_id` (`reply_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `userbadges`
+--
+
+DROP TABLE IF EXISTS `userbadges`;
+CREATE TABLE IF NOT EXISTS `userbadges` (
+  `user_id` int NOT NULL,
+  `badge_id` int NOT NULL,
+  `unlocked_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`user_id`,`badge_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
@@ -412,7 +516,7 @@ CREATE TABLE IF NOT EXISTS `users` (
 INSERT INTO `users` (`user_id`, `first_name`, `last_name`, `username`, `email`, `password_hash`, `created_at`, `last_login`, `login_streak`) VALUES
 (2, '1234', '1234', '1234', '123@gmail.com', '$2y$10$t73nr4KhZ2dh9oJn5SBwmOg5bNPAbX8N/xgEtf0.Sd4o9mbY31w7m', '2026-04-01 19:22:47', '2026-04-01 20:00:47', 0),
 (6, 'Ranimmmm', 'ib', 'testerrr', 'ranimibrahim145@gmail.com', '$2y$10$O7G..cyW7yRB9AHQwde5VuLK7AlB8lkhm3B38nw.We8e05JUf/C/e', '2026-04-11 20:23:07', '2026-04-11 20:23:25', 1),
-(5, 'Ranim', 'Ibrahim', 'rm_ib', 'ranimibrahiim145@gmail.com', '$2y$10$ZUpS3TBd04cSSfrV.wbgje8uwJSwNKxZc.uQPyibn2o093bY9hIf6', '2026-04-10 13:16:07', '2026-04-17 07:40:22', 3),
+(5, 'Ranim', 'Ibrahim', 'rm_ib', 'ranimibrahiim145@gmail.com', '$2y$10$ZUpS3TBd04cSSfrV.wbgje8uwJSwNKxZc.uQPyibn2o093bY9hIf6', '2026-04-10 13:16:07', '2026-04-20 11:06:15', 1),
 (7, 'Antonio', 'Karam', 'antoniokaram06', 'antoniokaram06@gmail.com', '$2y$10$n/KWI.hCvtFM7F1v/oog9OfDRBjlvygOhsgUvhRAt3LgjIquM261u', '2026-04-17 16:05:51', '2026-04-18 17:01:25', 1),
 (8, 'Antonio', 'Karam', 'antoniokaram07', 'antoniokaram07@gmail.com', '$2y$10$RZokDMEymAxc8JGpXFPsd.M9bKVFoPmfBKV0JixU3yh/KkChcz4CS', '2026-04-18 11:49:11', '2026-04-18 11:49:23', 1);
 

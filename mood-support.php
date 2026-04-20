@@ -13,6 +13,7 @@ if (!isset($_SESSION['user_id'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Support Chat - MoodHelper</title>
     <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
  
@@ -47,7 +48,21 @@ if (!isset($_SESSION['user_id'])) {
             </p>
         </div>
 
-        <div class="chat-container">
+            <div class="chat-container" style="position: relative;">
+            
+            <button id="expandChatBtn" style="
+                position:absolute;
+                top:10px;
+                right:10px;
+                background:none;
+                border:none;
+                font-size:1.1rem;
+                cursor:pointer;
+                color:#9ca3af;
+                z-index:100000;
+            ">
+            </button>
+
             <div class="chat-messages" id="chatMessages">
                 <div class="message ai fade-in">
                     <div class="message-header">MoodHelper Support</div>
@@ -55,14 +70,19 @@ if (!isset($_SESSION['user_id'])) {
                 </div>
             </div>
 
-            <div style="display: flex; gap: 1rem;">
-                <input 
-                    type="text" 
-                    class="form-control" 
-                    id="userMessage"
-                    placeholder="Type your message..."
-                    style="flex: 1;"
-                >
+            <div style="display: flex; gap: 1rem; align-items: flex-end;">
+               <textarea 
+    class="form-control" 
+    id="userMessage"
+    rows="1"
+    style="
+        flex:1;
+        resize:none;
+        overflow:hidden;
+        min-height:40px;
+        max-height:120px;
+    "
+></textarea>
                 <button class="btn btn-primary" id="sendMessage" type="button">
                     Send
                 </button>
@@ -92,14 +112,7 @@ if (!isset($_SESSION['user_id'])) {
                     </button>
                 </div>
 
-                <div class="recommendation-card">
-                    <div class="recommendation-icon">💭</div>
-                    <h3>Daily Prompt</h3>
-                    <p>Use a guided question to reflect more clearly.</p>
-                    <button class="btn btn-primary btn-small" onclick="goToPrompt()">
-                        Open Prompt
-                    </button>
-                </div>
+                
 
                 <div class="recommendation-card">
                     <div class="recommendation-icon">💌</div>

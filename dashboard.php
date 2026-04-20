@@ -231,7 +231,7 @@ if (!empty($_SESSION['show_daily_prompt'])) {
 
     <!-- Daily Prompt Popup -->
     <div id="dailyPromptModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; align-items:center; justify-content:center; padding:1.5rem;">
-        <div style="background:white; width:100%; max-width:800px; max-height:90vh; overflow-y:auto; border-radius:1.5rem; padding:2rem; position:relative; box-shadow:0 25px 50px rgba(0,0,0,0.18);">
+        <div style="background:white; width:100%; max-width:550px; max-height:80vh; overflow-y:auto; border-radius:1.5rem; padding:1.5rem; position:relative; box-shadow:0 25px 50px rgba(0,0,0,0.18);">
             <button id="closeDailyPromptModal" type="button" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.75rem; cursor:pointer; color:#6b7280;">&times;</button>
 
             <div style="text-align: center; margin-bottom: 2rem;">

@@ -18,10 +18,13 @@ $filter = $_GET['filter'] ?? 'all';
 $where_clause = "WHERE user_id = ?";
 $params = [$user_id];
 $types = "i";
-
 if ($filter === 'week') {
-    $where_clause .= " AND entry_date >= DATE_SUB(CURDATE(), INTERVAL 7 DAY)";
-} elseif ($filter === 'month') {
+    $where_clause .= "
+        AND DATE(entry_date) >= DATE_SUB(CURDATE(), INTERVAL WEEKDAY(CURDATE()) DAY)
+        AND DATE(entry_date) <= CURDATE()
+    ";
+}
+ elseif ($filter === 'month') {
     $where_clause .= " AND MONTH(entry_date) = MONTH(CURDATE()) AND YEAR(entry_date) = YEAR(CURDATE())";
 }
 
