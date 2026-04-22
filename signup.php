@@ -118,7 +118,7 @@ $conn->close();
 
             <div class="text-center mt-4">
                 <p class="mb-1">Already have an account?</p>
-                <a href="Login.html" style="color: var(--primary-purple); font-weight:600;">
+                <a href="login.php" style="color: var(--primary-purple); font-weight:600;">
                     Log In
                 </a>
             </div>
