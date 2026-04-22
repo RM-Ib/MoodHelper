@@ -133,12 +133,6 @@ $conn->close();
                            required>
                 </div>
 
-                <div class="text-center mb-3">
-                    <a href="ForgotPassword.html" 
-                       style="font-size: 0.9rem; color: var(--primary-purple);">
-                        Forgot Password?
-                    </a>
-                </div>
 
                 <button type="submit" class="btn btn-primary btn-large" style="width:100%;">
                     Log In
