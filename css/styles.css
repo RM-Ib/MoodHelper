@@ -334,9 +334,12 @@ body.calm-theme .btn-primary {
     box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
 }
 
-textarea.form-control {
-    resize: vertical;
-    min-height: 120px;
+#userMessage {
+    height: 45px;          /* fixed height */
+    min-height: 45px;
+    max-height: 45px;
+    resize: none;          /* disable manual resize */
+    overflow-y: auto;      /* scroll if text is long */
 }
 
 /* Cards */
@@ -451,7 +454,7 @@ textarea.form-control {
     color: var(--white);
     margin-left: auto;
     width: fit-content;
-    font-size: 0.9rem;   /* 👈 add this */
+      /* 👈 add this */
     padding: 0.6rem 0.9rem; 
 
 }

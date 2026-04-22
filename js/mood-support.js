@@ -233,7 +233,8 @@ async function sendMessage() {
 
     addMessage(message, true);
     userMessageInput.value = '';
-    userMessageInput.style.height = 'auto';
+
+
 
     const mood = detectMood(message);
 
@@ -287,7 +288,7 @@ async function sendMessage() {
 
                     
             userMessageInput.focus();
-            userMessageInput.style.height = '40px';
+        
 
             if (typeof restoreExpandButton === 'function') {
                 restoreExpandButton();
@@ -297,7 +298,7 @@ async function sendMessage() {
     } catch (error) {
     chatMessages.removeChild(loadingMsg);
     addMessage("⚠️ Error connecting to AI.");
-    userMessageInput.style.height = '40px';
+    
 
     if (typeof restoreExpandButton === 'function') {
         restoreExpandButton();
@@ -315,10 +316,12 @@ sendMessageBtn.addEventListener('click', sendMessage);
 
 userMessageInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault();
-        sendMessage();
+        e.preventDefault(); // 🚫 stop new line
+        sendMessage();      // ✅ send message
     }
 });
+
+
 
 // =============================
 // INIT
