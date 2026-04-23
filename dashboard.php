@@ -55,7 +55,6 @@ if (!empty($_SESSION['show_daily_prompt'])) {
             </p>
         </div>
 
-        <!-- Mood Check-in Card -->
         <div class="card" style="margin-bottom: 2rem;">
 
             <div>
@@ -106,7 +105,6 @@ if (!empty($_SESSION['show_daily_prompt'])) {
                 </div>
             </div>
 
-            <!-- Optional personal note -->
             <div style="margin-top: 2rem;">
                 <label style="font-size: 1.05rem; margin-bottom: 0.75rem; display: block;">
                     Optional note
@@ -119,7 +117,6 @@ if (!empty($_SESSION['show_daily_prompt'])) {
                 ></textarea>
             </div>
 
-            <!-- Checkbox + peer message -->
             <div id="messageOption" style="display: none; margin-top: 2rem; padding: 1.5rem; background: rgba(124, 58, 237, 0.05); border-radius: 1rem;">
                 <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 1rem;">
                     <input type="checkbox" id="sendAnonymousMsg" style="width: 20px; height: 20px; cursor: pointer;">
@@ -158,7 +155,6 @@ if (!empty($_SESSION['show_daily_prompt'])) {
             </div>
         </div>
 
-        <!-- Received Messages -->
         <div class="card" style="margin-bottom: 2rem;">
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
                 <div>
@@ -188,7 +184,6 @@ if (!empty($_SESSION['show_daily_prompt'])) {
             </div>
         </div>
 
-        <!-- Quick Access -->
         <div>
             <h2 style="font-size: 1.75rem; margin-bottom: 1.5rem;">Quick Access</h2>
 
@@ -229,7 +224,6 @@ if (!empty($_SESSION['show_daily_prompt'])) {
         </div>
     </div>
 
-    <!-- Daily Prompt Popup -->
     <div id="dailyPromptModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.45); z-index:9999; align-items:center; justify-content:center; padding:1.5rem;">
         <div style="background:white; width:100%; max-width:550px; max-height:80vh; overflow-y:auto; border-radius:1.5rem; padding:1.5rem; position:relative; box-shadow:0 25px 50px rgba(0,0,0,0.18);">
             <button id="closeDailyPromptModal" type="button" style="position:absolute; top:1rem; right:1rem; background:none; border:none; font-size:1.75rem; cursor:pointer; color:#6b7280;">&times;</button>

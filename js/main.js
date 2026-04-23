@@ -1,12 +1,9 @@
-// Main JavaScript file for MoodHelper
 
-// Theme toggle for calm mode
 function toggleCalmTheme() {
     document.body.classList.toggle('calm-theme');
     localStorage.setItem('calmTheme', document.body.classList.contains('calm-theme'));
 }
 
-// Check for saved theme preference
 document.addEventListener('DOMContentLoaded', function() {
     const savedTheme = localStorage.getItem('calmTheme');
     if (savedTheme === 'true') {
@@ -14,7 +11,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Smooth scroll for anchor links
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     anchor.addEventListener('click', function (e) {
         e.preventDefault();
@@ -28,7 +24,6 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
-// Add fade-in animation to elements on scroll
 const observerOptions = {
     threshold: 0.1,
     rootMargin: '0px 0px -50px 0px'
@@ -43,12 +38,10 @@ const observer = new IntersectionObserver(function(entries) {
     });
 }, observerOptions);
 
-// Observe all feature cards and sections
 document.querySelectorAll('.feature-card, .card, .cta-section').forEach(el => {
     observer.observe(el);
 });
 
-// Simple form validation helper
 function validateForm(formId) {
     const form = document.getElementById(formId);
     if (!form) return false;
@@ -68,7 +61,6 @@ function validateForm(formId) {
     return isValid;
 }
 
-// Toast notification helper
 function showToast(message, type = 'success') {
     const toast = document.createElement('div');
     toast.className = 'toast';
@@ -94,7 +86,6 @@ function showToast(message, type = 'success') {
     }, 3000);
 }
 
-// Add slide animations
 const style = document.createElement('style');
 style.textContent = `
     @keyframes slideIn {

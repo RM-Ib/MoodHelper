@@ -1,4 +1,3 @@
-/* Global Styles */
 * {
     margin: 0;
     padding: 0;
@@ -6,7 +5,6 @@
 }
 
 :root {
-    /* Light Theme Colors */
     --primary-purple: #7c3aed;
     --primary-blue: #3b82f6;
     --secondary-purple: #a78bfa;
@@ -22,7 +20,6 @@
     --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
     --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
     
-    /* Calming Theme Colors (for distressed state) */
     --calm-bg: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 50%, #dbeafe 100%);
     --calm-primary: #10b981;
     --calm-secondary: #6ee7b7;
@@ -37,7 +34,6 @@ body {
     min-height: 100vh;
 }
 
-/* Calming Theme Override */
 body.calm-theme {
     background: var(--calm-bg);
 }
@@ -50,7 +46,6 @@ body.calm-theme .btn-primary {
     background: linear-gradient(135deg, var(--calm-primary), var(--calm-secondary)) !important;
 }
 
-/* Navigation */
 .navbar {
     background: var(--white);
     box-shadow: var(--shadow-sm);
@@ -117,7 +112,6 @@ body.calm-theme .btn-primary {
     gap: 1rem;
 }
 
-/* Buttons */
 .btn {
     padding: 0.75rem 1.5rem;
     border: none;
@@ -156,14 +150,12 @@ body.calm-theme .btn-primary {
     font-size: 1.125rem;
 }
 
-/* Container */
 .container {
     max-width: 1200px;
     margin: 0 auto;
     padding: 0 2rem;
 }
 
-/* Hero Section */
 .hero {
     text-align: center;
     padding: 5rem 0;
@@ -210,7 +202,6 @@ body.calm-theme .btn-primary {
     flex-wrap: wrap;
 }
 
-/* Feature Cards */
 .features {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -252,7 +243,6 @@ body.calm-theme .btn-primary {
     line-height: 1.7;
 }
 
-/* CTA Section */
 .cta-section {
     background: linear-gradient(135deg, var(--primary-purple), var(--primary-blue));
     border-radius: 2rem;
@@ -284,7 +274,6 @@ body.calm-theme .btn-primary {
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
 }
 
-/* Footer */
 .footer {
     background: #111827;
     color: #9ca3af;
@@ -306,7 +295,6 @@ body.calm-theme .btn-primary {
     -webkit-text-fill-color: white;
 }
 
-/* Form Elements */
 .form-group {
     margin-bottom: 1.5rem;
 }
@@ -335,14 +323,13 @@ body.calm-theme .btn-primary {
 }
 
 #userMessage {
-    height: 45px;          /* fixed height */
+    height: 45px;         
     min-height: 45px;
     max-height: 45px;
-    resize: none;          /* disable manual resize */
-    overflow-y: auto;      /* scroll if text is long */
+    resize: none;          
+    overflow-y: auto;     
 }
 
-/* Cards */
 .card {
     background: var(--white);
     border-radius: 1.5rem;
@@ -370,15 +357,13 @@ body.calm-theme .btn-primary {
 .card h2 {
     font-size: 1.75rem;
 }
-/* Emotion Buttons */
 .emotion-grid {
     display: flex;
     gap: 0.75rem;
     margin: 2rem 0;
-
-    flex-wrap: wrap;        /* allows wrapping instead of scrolling */
+    flex-wrap: wrap;       
     overflow-x: hidden; 
-    overflow: hidden !important;    /* no horizontal scroll */
+    overflow: hidden !important;   
 }
 
 .emotion-btn {
@@ -415,7 +400,6 @@ body.calm-theme .btn-primary {
     line-height: 1;
 }
 
-/* Chat Container */
 .chat-container {
     background: var(--white);
     border-radius: 1.5rem;
@@ -454,7 +438,6 @@ body.calm-theme .btn-primary {
     color: var(--white);
     margin-left: auto;
     width: fit-content;
-      /* 👈 add this */
     padding: 0.6rem 0.9rem; 
 
 }
@@ -473,8 +456,8 @@ body.calm-theme .btn-primary {
 
 }
 #expandChatBtn {
-    color: #9ca3af;   /* soft gray */
-    font-weight: 400; /* not bold */
+    color: #9ca3af;   
+    font-weight: 400; 
     display: block !important;
     visibility: visible !important;
 }
@@ -483,7 +466,6 @@ body.calm-theme .btn-primary {
     color: #6b7280;
 }
 
-/* Diary Entries */
 .diary-entries {
     display: flex;
     flex-direction: column;
@@ -525,7 +507,6 @@ body.calm-theme .btn-primary {
     font-size: 0.875rem;
 }
 
-/* Recommendations */
 .recommendations {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
@@ -563,7 +544,6 @@ body.calm-theme .btn-primary {
     margin-bottom: 1rem;
 }
 
-/* Utility Classes */
 .text-center {
     text-align: center;
 }
@@ -582,7 +562,6 @@ body.calm-theme .btn-primary {
     padding: 2rem;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .hero h1 {
         font-size: 2.5rem;
@@ -609,7 +588,6 @@ body.calm-theme .btn-primary {
     }
 }
 
-/* Animations */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -625,7 +603,6 @@ body.calm-theme .btn-primary {
     animation: fadeIn 0.6s ease-out;
 }
 
-/* Loading State */
 .loading {
     display: inline-block;
     width: 20px;
@@ -665,7 +642,6 @@ body.calm-theme .btn-primary {
     margin-top: 10px;
 }
 
-/* Make profile page inputs look like login/signup */
 .profile-form input {
     width: 100%;
     padding: 14px 16px;
@@ -677,7 +653,7 @@ body.calm-theme .btn-primary {
 }
 
 .profile-form input:focus {
-    border-color: var(--primary-purple); /* same as sign up/login focus */
+    border-color: var(--primary-purple); 
     outline: none;
     box-shadow: 0 0 0 3px rgba(129, 199, 132, 0.2);
 }
@@ -687,7 +663,6 @@ body.calm-theme .btn-primary {
     cursor: not-allowed;
 }
 
-/* Badge Section */
 
 .badge-section{
     margin-top:40px;
@@ -737,7 +712,6 @@ body.calm-theme .btn-primary {
 }
 
 
-/* Typing indicator dots */
 .typing-dots {
     display: flex;
     gap: 5px;

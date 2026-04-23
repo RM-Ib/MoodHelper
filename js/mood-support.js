@@ -1,15 +1,11 @@
-// =============================
-// CHAT + MEMORY + MOOD
-// =============================
+
 
 const chatMessages = document.getElementById('chatMessages');
 const userMessageInput = document.getElementById('userMessage');
 const sendMessageBtn = document.getElementById('sendMessage');
 
 let chatHistory = [];
-// =============================
-// EXPAND CHAT
-// =============================
+
 
 const chatContainer = document.querySelector('.chat-container');
 const expandBtn = document.getElementById('expandChatBtn');
@@ -111,9 +107,7 @@ userMessageInput.addEventListener('input', function () {
     this.style.height = 'auto';
     this.style.height = this.scrollHeight + 'px';
 });
-// =============================
-// NAVIGATION
-// =============================
+
 
 function goToDiary() {
     window.location.href = 'diary.php';
@@ -123,9 +117,6 @@ function goToDashboard() {
     window.location.href = 'dashboard.php';
 }
 
-// =============================
-// BREATHING EXERCISE
-// =============================
 
 let breathingInterval;
 
@@ -157,9 +148,7 @@ function closeBreathingExercise() {
     clearInterval(breathingInterval);
 }
 
-// =============================
-// ADD MESSAGE TO UI
-// =============================
+
 
 function addMessage(content, isUser = false) {
     const messageDiv = document.createElement('div');
@@ -179,9 +168,7 @@ function addMessage(content, isUser = false) {
     chatMessages.appendChild(messageDiv);
 }
 
-// =============================
-// LOAD MESSAGES FROM DB
-// =============================
+
 
 async function loadMessages() {
     try {
@@ -194,7 +181,6 @@ async function loadMessages() {
             addMessage(msg.content, msg.role === "user");
         });
 
-        // scroll to bottom on load
         setTimeout(() => {
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }, 50);
@@ -204,9 +190,7 @@ async function loadMessages() {
     }
 }
 
-// =============================
-// MOOD DETECTION
-// =============================
+
 
 function detectMood(msg) {
     msg = msg.toLowerCase();
@@ -223,9 +207,7 @@ function detectMood(msg) {
     return "normal";
 }
 
-// =============================
-// SEND MESSAGE
-// =============================
+
 
 async function sendMessage() {
     const message = userMessageInput.value.trim();
@@ -243,7 +225,6 @@ async function sendMessage() {
         content: message
     });
 
-    // typing indicator
     const loadingMsg = document.createElement('div');
     loadingMsg.className = 'message ai fade-in';
     loadingMsg.innerHTML = `
@@ -252,7 +233,6 @@ async function sendMessage() {
     `;
     chatMessages.appendChild(loadingMsg);
 
-    // scroll immediately after user message
     chatMessages.scrollTop = chatMessages.scrollHeight;
 
     try {
@@ -279,7 +259,6 @@ async function sendMessage() {
             content: reply
         });
 
-        // ✅ smooth scroll AFTER AI reply
         setTimeout(() => {
             chatMessages.scrollTo({
                 top: chatMessages.scrollHeight,
@@ -308,23 +287,17 @@ async function sendMessage() {
 }
 }
 
-// =============================
-// EVENTS
-// =============================
+
 
 sendMessageBtn.addEventListener('click', sendMessage);
 
 userMessageInput.addEventListener('keydown', function (e) {
     if (e.key === 'Enter' && !e.shiftKey) {
-        e.preventDefault(); // 🚫 stop new line
-        sendMessage();      // ✅ send message
+        e.preventDefault(); 
+        sendMessage();      
     }
 });
 
 
-
-// =============================
-// INIT
-// =============================
 
 window.onload = loadMessages;

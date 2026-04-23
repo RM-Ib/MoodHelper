@@ -1,4 +1,3 @@
-// Daily Prompt backend integration
 
 const currentDateElement = document.getElementById('currentDate');
 const promptQuestionElement = document.getElementById('promptQuestion');

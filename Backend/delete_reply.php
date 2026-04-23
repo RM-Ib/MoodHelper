@@ -14,7 +14,6 @@ if ($reply_id <= 0) {
     exit();
 }
 
-// Only allow deletion if the reply belongs to the logged-in user
 $stmt = $conn->prepare("DELETE FROM post_replies WHERE reply_id = ? AND user_id = ?");
 $stmt->bind_param("ii", $reply_id, $user_id);
 $stmt->execute();

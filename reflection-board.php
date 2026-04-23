@@ -8,7 +8,6 @@ include 'Backend/db_connect.php';
 
 $user_id = $_SESSION['user_id'];
 
-// Handle new reflection submission
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reflection'])) {
     $reflection = trim($_POST['reflection']);
     if (!empty($reflection)) {
@@ -21,7 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['reflection'])) {
     }
 }
 
-// Fetch posts with heart and reply counts
 $posts = [];
 $sql = "SELECT p.post_id, p.user_id, p.content, p.created_at,
                (SELECT COUNT(*) FROM post_hearts ph WHERE ph.post_id = p.post_id) AS hearts_count,
@@ -36,7 +34,6 @@ while ($row = $result->fetch_assoc()) {
     $post_ids[] = $row['post_id'];
 }
 
-// Fetch all replies for the displayed posts in a single query
 $all_replies = [];
 if (!empty($post_ids)) {
     $placeholders = implode(',', array_fill(0, count($post_ids), '?'));
@@ -53,17 +50,14 @@ if (!empty($post_ids)) {
     }
 }
 
-// For each post, build anonymous numbering map
 $anon_maps = []; // post_id => [user_id => number]
 foreach ($posts as $post) {
     $post_id = $post['post_id'];
     $map = [];
     $counter = 1;
     
-    // Post author
     $map[$post['user_id']] = $counter++;
     
-    // Replies in order
     if (isset($all_replies[$post_id])) {
         foreach ($all_replies[$post_id] as $reply) {
             if (!isset($map[$reply['user_id']])) {
@@ -110,14 +104,12 @@ $conn->close();
 
 <div class="container" style="padding:3rem 2rem; max-width:900px;">
 
-<!-- Header Card -->
 <div class="card" style="margin-bottom:2rem; text-align:center; background: linear-gradient(135deg, rgba(236, 72, 153, 0.03), rgba(236, 72, 153, 0.08));">
     <div style="font-size:3rem; margin-bottom:1rem;">📝</div>
     <h1 style="font-size:2rem; margin-bottom:0.5rem;">Reflection Board</h1>
     <p style="color:var(--text-secondary); font-size:1.125rem;">Share your thoughts and reflections. Posts are anonymous.</p>
 </div>
 
-<!-- New Reflection Form -->
 <div class="card" style="margin-bottom:2rem;">
     <form method="POST" id="reflectionForm">
         <textarea id="reflectionContent" name="reflection" rows="4" maxlength="300" placeholder="Write something..." required style="width:100%; padding:0.75rem; font-size:1rem; border-radius:0.5rem; border:1px solid var(--border-light);"></textarea>
@@ -172,7 +164,6 @@ $conn->close();
                 </button>
             </div>
 
-            <!-- Replies Container -->
             <div class="repliesContainer" style="display:none; margin-top:1rem;"></div>
             <div class="replyFormContainer" style="display:none; margin-top:0.5rem;">
                 <textarea class="replyInput" rows="2" placeholder="Write a reply..." style="width:100%; padding:0.5rem; font-size:0.9rem; border-radius:0.5rem; border:1px solid var(--border-light); margin-bottom:0.5rem;"></textarea>
@@ -193,18 +184,15 @@ $conn->close();
 </div>
 
 <script>
-// Store current user ID and anon maps for JS
 const currentUserId = <?= json_encode($user_id) ?>;
 const anonMaps = <?= json_encode($anon_maps) ?>;
 
-// Character count
 const textarea = document.getElementById("reflectionContent");
 const charCount = document.getElementById("charCount");
 textarea.addEventListener("input", () => {
     charCount.textContent = textarea.value.length + " / 300";
 });
 
-// Heart Like/Unlike
 document.querySelectorAll(".heartBtn").forEach(btn => {
     btn.addEventListener("click", () => {
         const card = btn.closest(".card");
@@ -222,7 +210,6 @@ document.querySelectorAll(".heartBtn").forEach(btn => {
     });
 });
 
-// Delete post
 document.querySelectorAll(".deleteBtn").forEach(btn=>{
     btn.addEventListener("click", ()=>{
         const card = btn.closest(".card");
@@ -241,7 +228,6 @@ document.querySelectorAll(".deleteBtn").forEach(btn=>{
     });
 });
 
-// Function to render replies with anonymous numbers
 function renderReplies(card, replies){
     const postId = card.dataset.postid;
     const map = anonMaps[postId] || {};
@@ -249,7 +235,6 @@ function renderReplies(card, replies){
     const toggleBtn = card.querySelector(".replyToggleBtn");
     repliesContainer.innerHTML = "";
 
-    // Update reply count
     if(replies.length === 0) toggleBtn.querySelector("span:last-child").innerText = "Reply";
     else if(replies.length === 1) toggleBtn.querySelector("span:last-child").innerText = "1 reply";
     else toggleBtn.querySelector("span:last-child").innerText = replies.length + " replies";
@@ -270,7 +255,6 @@ function renderReplies(card, replies){
         contentDiv.innerHTML = `<span style="color:var(--text-primary); font-weight:500;">Anonymous #${replyNumber}</span>: ${reply.content} <br> <span style="color:var(--text-secondary); font-size:0.75rem;">${reply.created_at}</span>`;
         div.appendChild(contentDiv);
 
-        // Delete button if user owns reply
         if(reply.user_id == currentUserId){
             const delBtn = document.createElement("button");
             delBtn.innerText = "Delete";
@@ -305,7 +289,6 @@ function renderReplies(card, replies){
     repliesContainer.style.display = "block";
 }
 
-// Reply toggle
 document.querySelectorAll(".replyToggleBtn").forEach(btn=>{
     btn.addEventListener("click", ()=>{
         const card = btn.closest(".card");
@@ -328,7 +311,6 @@ document.querySelectorAll(".replyToggleBtn").forEach(btn=>{
     });
 });
 
-// Post reply
 document.querySelectorAll(".replyBtn").forEach(btn=>{
     btn.addEventListener("click",(e)=>{
         const card = btn.closest(".card");
@@ -350,11 +332,7 @@ document.querySelectorAll(".replyBtn").forEach(btn=>{
                     headers: {"Content-Type":"application/x-www-form-urlencoded"},
                     body:"post_id="+card.dataset.postid
                 }).then(res=>res.json()).then(data=>{
-                    // Refresh map from server (in a real app you'd update map, but here we'll refetch)
-                    // For simplicity, we can reload the page or fetch updated map; but we'll just re-render.
-                    // To keep numbers consistent, we'd need to update anonMaps, but for now reload is safest.
-                    // However, to avoid full reload, we can just re-fetch posts? 
-                    // Let's keep it simple: reload page after successful reply.
+                    
                     location.reload();
                 });
             }

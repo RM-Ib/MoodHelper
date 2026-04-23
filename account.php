@@ -1,13 +1,12 @@
 <?php
 session_start();
 
-// Protect page
 if (!isset($_SESSION['user_id'])) {
     header("Location: login.php");
     exit();
 }
 
-// DB connection
+
 $host = "localhost";
 $user = "root";
 $pass = "";
@@ -21,7 +20,6 @@ if ($conn->connect_error) {
 
 $user_id = $_SESSION['user_id'];
 
-// Handle form submission (UPDATE)
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $fname = trim($_POST['Fname']);
@@ -46,7 +44,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
 }
 
-// Fetch user data
 $stmt = $conn->prepare("SELECT first_name, last_name, username, email FROM users WHERE user_id=?");
 $stmt->bind_param("i", $user_id);
 $stmt->execute();
@@ -67,7 +64,6 @@ $conn->close();
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;600;700&display=swap" rel="stylesheet">
 
-    <!-- External CSS -->
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
@@ -135,7 +131,7 @@ $conn->close();
             </button>
 
         </form>
-        <!-- The "Your Streak Badges" section has been removed as requested -->
+      
     </div>
 </main>
 

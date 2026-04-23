@@ -46,14 +46,12 @@ function detectRiskLevel(string $message): string
 }
 
 
-// 🚨 HIGH RISK RESPONSE
 function getHighRiskResponse(): string
 {
     return "Hey… I’m really glad you said something. You don’t have to carry this alone. If things feel intense right now, please reach out to someone you trust or a local support service — it can really make a difference. If you want, tell me where you are and I’ll help you find support near you.";
 }
 
 
-// 🟡 MEDIUM RISK RESPONSE
 function getMediumRiskPrompt(): string
 {
     return "The user seems emotionally vulnerable. Be more supportive, gentle, and attentive. Ask thoughtful follow-up questions.";

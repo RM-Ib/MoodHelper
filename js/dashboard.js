@@ -1,14 +1,7 @@
-/* =========================
-   GLOBAL STATE
-========================= */
 
 let selectedEmotion = null;
 let currentPromptId = null;
 let alreadyAnsweredToday = false;
-
-/* =========================
-   ELEMENTS
-========================= */
 
 const emotionButtons = document.querySelectorAll('.emotion-btn');
 
@@ -25,7 +18,6 @@ const successMessage = document.getElementById('successMessage');
 
 const receivedMessagesContainer = document.getElementById('receivedMessages');
 
-/* Daily Prompt */
 const dailyPromptModal = document.getElementById('dailyPromptModal');
 const closeDailyPromptModal = document.getElementById('closeDailyPromptModal');
 
@@ -40,9 +32,6 @@ const promptSuccessMessageElement = document.getElementById('promptSuccessMessag
 const weeklyReflectionsElement = document.getElementById('weeklyReflections');
 const completedCountElement = document.getElementById('completedCount');
 
-/* =========================
-   HELPERS
-========================= */
 
 function escapeHtml(value) {
     const div = document.createElement('div');
@@ -92,9 +81,6 @@ async function fetchJson(url, options = {}) {
     return data;
 }
 
-/* =========================
-   MOOD SELECTION
-========================= */
 
 emotionButtons.forEach(btn => {
     btn.addEventListener('click', function () {
@@ -107,9 +93,7 @@ emotionButtons.forEach(btn => {
     });
 });
 
-/* =========================
-   CHECKBOX → SHOW MESSAGE
-========================= */
+
 
 sendAnonymousMsg.addEventListener('change', function () {
     if (this.checked) {
@@ -120,9 +104,6 @@ sendAnonymousMsg.addEventListener('change', function () {
     }
 });
 
-/* =========================
-   SUBMIT CHECK-IN
-========================= */
 
 submitFeelingButton.addEventListener('click', async function () {
 
@@ -159,7 +140,6 @@ submitFeelingButton.addEventListener('click', async function () {
 
         successMessage.style.display = 'block';
 
-        /* redirect if negative mood */
         const negative = ['sad', 'anxious', 'angry', 'disappointed'];
         if (negative.includes(selectedEmotion)) {
             setTimeout(() => {
@@ -167,7 +147,6 @@ submitFeelingButton.addEventListener('click', async function () {
             }, 1200);
         }
 
-        /* reset */
         moodNote.value = '';
         peerMessage.value = '';
         sendAnonymousMsg.checked = false;
@@ -191,9 +170,6 @@ submitFeelingButton.addEventListener('click', async function () {
     submitFeelingButton.textContent = 'Submit';
 });
 
-/* =========================
-   LOAD RECEIVED MESSAGES
-========================= */
 
 async function loadReceivedMessages() {
     try {
@@ -229,9 +205,6 @@ async function loadReceivedMessages() {
     }
 }
 
-/* =========================
-   DAILY PROMPT
-========================= */
 
 function openPrompt() {
     dailyPromptModal.style.display = 'flex';
@@ -251,14 +224,12 @@ dailyPromptModal.addEventListener('click', (e) => {
     }
 });
 
-/* Date */
 currentDateElement.textContent = new Date().toLocaleDateString('en-US', {
     weekday: 'long',
     month: 'long',
     day: 'numeric'
 });
 
-/* Load prompt */
 async function loadPrompt() {
     try {
         const data = await fetchJson('Backend/get_daily_prompt.php');
@@ -280,7 +251,6 @@ async function loadPrompt() {
     }
 }
 
-/* Weekly answers */
 async function loadWeekly() {
     try {
         const data = await fetchJson('Backend/get_weekly_prompt_answers.php');
@@ -300,7 +270,6 @@ async function loadWeekly() {
     }
 }
 
-/* Submit prompt */
 submitPromptButton.addEventListener('click', async function () {
 
     const answer = promptAnswerElement.value.trim();
@@ -322,16 +291,14 @@ submitPromptButton.addEventListener('click', async function () {
 
 alreadyAnsweredToday = true;
 
-// 🔥 change button dynamically
 submitPromptButton.textContent = 'Update Answer';
 
-// ✅ show correct message (saved OR updated)
 showToast(data.message || 'Saved!');
 
-// reload weekly
+
 await loadWeekly();
 
-// ✅ auto close after short delay
+
 setTimeout(() => {
     closePrompt();
 }, 1200);
@@ -341,10 +308,10 @@ setTimeout(() => {
     }
 });
 
-/* Skip */
+
 skipPromptButton.addEventListener('click', async function () {
 
-    //if (!confirm("Skip today?")) return;
+  
 
     try {
         const formData = new FormData();
@@ -372,9 +339,7 @@ skipPromptButton.addEventListener('click', async function () {
     }
 });
 
-/* =========================
-   INIT
-========================= */
+
 
 window.addEventListener('load', async function () {
 

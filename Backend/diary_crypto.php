@@ -4,7 +4,7 @@ function getDiaryEncryptionKey(): string
 {
     $key = getenv('APP_SECRET_KEY');
 
-    // Replace this fallback with your own long random secret if you are not using environment variables.
+   
     if (!$key) {
         $key = 'CHANGE_THIS_TO_A_LONG_RANDOM_SECRET_KEY_32+_CHARS';
     }

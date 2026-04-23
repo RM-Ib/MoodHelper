@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// DB connection
 $conn = new mysqli("localhost", "root", "", "moodhelperdb");
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -13,14 +12,12 @@ if (!isset($_SESSION['user_id'])) {
 
 $user_id = $_SESSION['user_id'];
 
-// Fetch ALL mood entries for the user (for summary cards & recent history)
 $sqlAll = "SELECT mood, notes, mood_date, created_at FROM moodentries WHERE user_id = ? ORDER BY created_at DESC";
 $stmtAll = $conn->prepare($sqlAll);
 $stmtAll->bind_param("i", $user_id);
 $stmtAll->execute();
 $resultAll = $stmtAll->get_result();
 
-// Initialize counters for all-time (summary cards)
 $allTimeCounts = [
     'happy' => 0,
     'neutral' => 0,
@@ -47,10 +44,8 @@ while ($row = $resultAll->fetch_assoc()) {
 }
 $stmtAll->close();
 
-// Recent entries for table (first 10)
 $recentMoods = array_slice($allMoods, 0, 10);
 
-// --- Chart data: last 30 days only ---
 $sqlChart = "SELECT mood FROM moodentries 
              WHERE user_id = ? 
              AND created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY)
@@ -83,7 +78,6 @@ while ($row = $resultChart->fetch_assoc()) {
 }
 $stmtChart->close();
 
-// Prepare chart data
 $chartLabels = [];
 $chartData = [];
 foreach ($chartCounts as $mood => $count) {
@@ -91,7 +85,6 @@ foreach ($chartCounts as $mood => $count) {
     $chartData[] = $count;
 }
 
-// Emoji mapping
 $emojiMap = [
     'happy' => '😊',
     'neutral' => '😐',
@@ -103,7 +96,6 @@ $emojiMap = [
     'grateful' => '🙏'
 ];
 
-// Summary card counts (all-time)
 $positiveCount = $allTimeCounts['happy'] + $allTimeCounts['calm'] + $allTimeCounts['grateful'];
 $neutralCount = $allTimeCounts['neutral'];
 $lowCount = $allTimeCounts['sad'] + $allTimeCounts['anxious'] + $allTimeCounts['angry'] + $allTimeCounts['disappointed'];
@@ -156,7 +148,6 @@ Track your emotions over time and understand your patterns
 </p>
 </div>
 
-<!-- Bar Chart Card (Last 30 Days) -->
 <div class="card" style="margin-bottom:2rem;">
 <h2 style="margin-bottom:0.5rem;">Mood Distribution</h2>
 <p style="color:var(--text-secondary); margin-bottom:1.5rem; font-size:0.95rem;">
@@ -170,12 +161,10 @@ Track your emotions over time and understand your patterns
 <?php endif; ?>
 </div>
 
-<!-- Mood Overview Cards (All-Time) -->
 <div class="card" style="margin-bottom:2rem;">
 <h2 style="margin-bottom:1rem;">Quick Summary <span style="font-size:0.9rem; font-weight:normal; color:var(--text-secondary); margin-left:0.5rem;">(all time)</span></h2>
 <div class="features">
 
-<!-- Positive Moods Card -->
 <div class="feature-card">
 <div class="feature-icon" style="background:linear-gradient(135deg,#10b981,#34d399); color:white;">🌟</div>
 <h3>Positive Moods</h3>
@@ -183,14 +172,12 @@ Track your emotions over time and understand your patterns
 <p style="font-size:0.8rem; color:var(--text-secondary); margin-top:0.25rem;">😊 😌 🙏</p>
 </div>
 
-<!-- Neutral Card -->
 <div class="feature-card">
 <div class="feature-icon" style="background:linear-gradient(135deg,#3b82f6,#60a5fa); color:white;">😐</div>
 <h3>Neutral</h3>
 <p><?php echo $neutralCount; ?> time<?php echo $neutralCount != 1 ? 's' : ''; ?></p>
 </div>
 
-<!-- Low Mood Card -->
 <div class="feature-card">
 <div class="feature-icon" style="background:linear-gradient(135deg,#ef4444,#f87171); color:white;">😢</div>
 <h3>Low Mood</h3>
@@ -201,7 +188,6 @@ Track your emotions over time and understand your patterns
 </div>
 </div>
 
-<!-- Mood History Table -->
 <div class="card" style="margin-bottom:2rem;">
 <h2 style="margin-bottom:1.5rem;">Recent Mood History</h2>
 <table style="width:100%; border-collapse:collapse;">
@@ -239,11 +225,9 @@ Track your emotions over time and understand your patterns
 </table>
 </div>
 
-<!-- Insights (All-Time) -->
 <div class="card">
 <h2 style="margin-bottom:1.5rem;">Insights</h2>
 <?php
-// Determine most frequent mood (all-time)
 $mostFrequent = array_search(max($allTimeCounts), $allTimeCounts);
 $mostFreqCount = $allTimeCounts[$mostFrequent];
 $mostFreqEmoji = $emojiMap[$mostFrequent] ?? '😐';

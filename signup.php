@@ -1,5 +1,4 @@
 <?php
-// Database connection
 $host = "localhost";
 $user = "root";
 $pass = "";
@@ -7,30 +6,24 @@ $db = "moodhelperdb";
 
 $conn = new mysqli($host, $user, $pass, $db);
 
-// Check connection
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Handle form submission
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    // Get and sanitize input
     $fname = trim($_POST['Fname']);
     $lname = trim($_POST['Lname']);
     $username = trim($_POST['username']);
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
-    // Validate (basic)
     if (empty($fname) || empty($lname) || empty($username) || empty($email) || empty($password)) {
         die("All fields are required.");
     }
 
-    // Hash password
     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-    // Check if username or email already exists
     $check = $conn->prepare("SELECT user_id FROM users WHERE username = ? OR email = ?");
     $check->bind_param("ss", $username, $email);
     $check->execute();
@@ -41,7 +34,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     }
     $check->close();
 
-    // Insert user
     $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, username, email, password_hash) VALUES (?, ?, ?, ?, ?)");
     $stmt->bind_param("sssss", $fname, $lname, $username, $email, $passwordHash);
 
@@ -80,7 +72,6 @@ $conn->close();
                 </p>
             </div>
 
-            <!-- No backend for now -->
             <form method="POST" action="signup.php" onsubmit="return validateForm()">
 
                 <div class="form-group">

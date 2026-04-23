@@ -1,19 +1,14 @@
-// js/group-page.js
-// Support Group Page Functionality (posts + replies + like on posts & comments)
-// Works with group-sa.html structure (postsContainer, emptyState, sortPosts, submitPost, postTitle, postContent)
+
 
 (function () {
   "use strict";
 
-  // ---------- Helpers: IDs / storage ----------
   function getGroupIdFromURL() {
     const file = (window.location.pathname.split("/").pop() || "").toLowerCase();
 
-    // Supports naming like: group-sa.html
     const m = file.match(/^group-(.+)\.html$/);
     if (m) return m[1];
 
-    // Fallbacks if you ever rename pages later
     if (file.includes("sa")) return "sa";
     return "unknown";
   }
@@ -37,7 +32,6 @@
       const parsed = JSON.parse(stored);
       return Array.isArray(parsed) ? parsed : [];
     } catch {
-      // corrupted storage -> reset to seed
       const seed = getSeedPosts(groupId);
       localStorage.setItem(key, JSON.stringify(seed));
       return seed;
@@ -49,12 +43,10 @@
     localStorage.setItem(storageKey(groupId), JSON.stringify(posts));
   }
 
-  // ---------- Seed posts ----------
   function getSeedPosts(groupId) {
     const now = Date.now();
     const isoHoursAgo = (h) => new Date(now - h * 3600_000).toISOString();
 
-    // Only seed SA group for now (matches your project)
     if (groupId === "sa") {
       return [
         {
@@ -104,7 +96,6 @@
     return [];
   }
 
-  // ---------- Avatar helpers ----------
   function getRandomAvatarColor() {
     const colors = [
       "linear-gradient(135deg, #ec4899, #be185d)",
@@ -122,7 +113,6 @@
     return letters[Math.floor(Math.random() * letters.length)];
   }
 
-  // ---------- Time formatting ----------
   function getTimeAgo(timestamp) {
     const now = new Date();
     const posted = new Date(timestamp);
@@ -138,7 +128,6 @@
     return `${diffDays} day${diffDays > 1 ? "s" : ""} ago`;
   }
 
-  // ---------- Rendering ----------
   function escapeHTML(s) {
     return String(s)
       .replaceAll("&", "&amp;")
@@ -332,7 +321,6 @@
     `;
   }
 
-  // ---------- Page actions ----------
   function displayPosts(sortBy = "recent") {
     const container = document.getElementById("postsContainer");
     const emptyState = document.getElementById("emptyState");
@@ -360,7 +348,6 @@
   }
 
   function attachEventListeners() {
-    // Toggle replies
     document.querySelectorAll(".toggle-replies").forEach((btn) => {
       btn.addEventListener("click", () => {
         const postId = btn.getAttribute("data-post-id");
@@ -370,7 +357,6 @@
       });
     });
 
-    // Heart post
     document.querySelectorAll(".heart-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         const postId = btn.getAttribute("data-post-id");
@@ -388,14 +374,12 @@
       });
     });
 
-    // Send support
     document.querySelectorAll(".support-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         showToast("Support sent! 🫂 They'll feel your kindness.");
       });
     });
 
-    // Submit reply to post
     document.querySelectorAll(".submit-reply").forEach((btn) => {
       btn.addEventListener("click", () => {
         const postId = btn.getAttribute("data-post-id");
@@ -428,7 +412,6 @@
       });
     });
 
-    // Like a comment
     document.querySelectorAll(".reply-heart-btn").forEach((btn) => {
       btn.addEventListener("click", () => {
         const postId = btn.getAttribute("data-post-id");
@@ -451,7 +434,6 @@
       });
     });
 
-    // Toggle nested reply thread under a comment
     document.querySelectorAll(".toggle-reply-thread").forEach((btn) => {
       btn.addEventListener("click", () => {
         const postId = btn.getAttribute("data-post-id");
@@ -466,7 +448,6 @@
       });
     });
 
-    // Submit nested reply to a comment
     document.querySelectorAll(".submit-reply-to-reply").forEach((btn) => {
       btn.addEventListener("click", () => {
         const postId = btn.getAttribute("data-post-id");
@@ -505,7 +486,6 @@
     });
   }
 
-  // ---------- New post ----------
   function wireNewPost() {
     const submit = document.getElementById("submitPost");
     if (!submit) return;
@@ -550,14 +530,12 @@
     });
   }
 
-  // ---------- Sorting ----------
   function wireSort() {
     const sort = document.getElementById("sortPosts");
     if (!sort) return;
     sort.addEventListener("change", () => displayPosts(sort.value));
   }
 
-  // ---------- Toast ----------
   function showToast(message, type = "success") {
     const toast = document.createElement("div");
     toast.style.cssText = `
@@ -584,7 +562,6 @@
     }, 2500);
   }
 
-  // ---------- Hover polish ----------
   function injectHoverCSS() {
     const style = document.createElement("style");
     style.textContent = `
@@ -597,9 +574,7 @@
     document.head.appendChild(style);
   }
 
-  // ---------- Init ----------
   document.addEventListener("DOMContentLoaded", () => {
-    // Only run on pages that actually have a posts container
     if (!document.getElementById("postsContainer")) return;
 
     injectHoverCSS();
