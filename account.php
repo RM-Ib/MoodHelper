@@ -90,7 +90,7 @@ $conn->close();
             <li><a href="mood-support.php" class="">Support</a></li>
         </ul>
         <div class="nav-buttons">
-            <a href="index.html" class="btn btn-primary">Logout</a>
+            <a href="Backend/logout.php" class="btn btn-primary">Logout</a>
         </div>
     </div>
 </nav>

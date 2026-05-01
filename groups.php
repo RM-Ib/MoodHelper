@@ -47,7 +47,7 @@ $result = $conn->query("SELECT * FROM user_groups");
 
 <div class="nav-buttons">
 <a href="account.php" class="btn btn-secondary">Account</a>
-<a href="index.html" class="btn btn-primary">Logout</a>
+<a href="Backend/logout.php" class="btn btn-primary">Logout</a>
 </div>
 </div>
 </nav>
