@@ -75,15 +75,22 @@ $conn->close();
             <span class="logo-icon">❤️</span>
             <span class="logo-text">MoodHelper</span>
         </a>
+        <input type="checkbox" id="nav-menu-toggle" class="nav-menu-toggle">
+
+<label for="nav-menu-toggle" class="hamburger" aria-label="Open navigation menu">
+    <span></span>
+    <span></span>
+    <span></span>
+</label>
         <ul class="nav-links">
             <li><a href="dashboard.php">Dashboard</a></li>
-            <li><a href="diary.php" class="">Diary</a></li>
-            <li><a href="daily-prompt.php" class="">Prompts</a></li>
+            <li><a href="diary.php">Diary</a></li>
+            <li><a href="reflection-board.php">Reflection Board</a></li>
             <li><a href="groups.php" class="">Groups</a></li>
             <li><a href="mood-support.php" class="">Support</a></li>
         </ul>
         <div class="nav-buttons">
-            <a href="Backend/logout.php" class="btn btn-primary">Logout</a>
+            <a href="index.html" class="btn btn-primary">Logout</a>
         </div>
     </div>
 </nav>

@@ -15,6 +15,14 @@
                 <span class="logo-text">MoodHelper</span>
             </a>
 
+            <input type="checkbox" id="nav-menu-toggle" class="nav-menu-toggle">
+
+            <label for="nav-menu-toggle" class="hamburger" aria-label="Open navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+
             <ul class="nav-links">
                 <li><a href="index.html" class="active">Home</a></li>
                 <li><a href="about.html">About</a></li>
@@ -30,7 +38,7 @@
     <section class="hero">
         <div class="container" style="max-width: 900px;">
             <div class="hero-badge">
-                <span>✨</span>
+                
                 <span>A simple space to check in with yourself</span>
             </div>
 
@@ -60,35 +68,29 @@
                 </p>
             </div>
 
-            <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;">
-                <div class="feature-card" style="text-align: left; margin: 0;">
+            <div class="index-feature-grid">
+                    <div class="feature-card">
                     <div class="feature-icon" style="background: rgba(124, 58, 237, 0.1); color: #7c3aed;">
                         😊
                     </div>
                     <h3>Check in</h3>
-                    <p>
-                        Pick how you feel and keep track of your mood over time.
-                    </p>
+                    <p>Pick how you feel and keep track of your mood over time.</p>
                 </div>
 
-                <div class="feature-card" style="text-align: left; margin: 0;">
+                <div class="feature-card">
                     <div class="feature-icon" style="background: rgba(59, 130, 246, 0.1); color: #3b82f6;">
                         ✍️
                     </div>
                     <h3>Reflect</h3>
-                    <p>
-                        Use the diary and daily prompts to write privately when you need to.
-                    </p>
+                    <p>Use the diary and daily prompts to write privately when you need to.</p>
                 </div>
 
-                <div class="feature-card" style="text-align: left; margin: 0;">
+                <div class="feature-card">
                     <div class="feature-icon" style="background: rgba(99, 102, 241, 0.1); color: #6366f1;">
                         💌
                     </div>
                     <h3>Support</h3>
-                    <p>
-                        Send and receive anonymous messages from people feeling something similar.
-                    </p>
+                    <p>Send and receive anonymous messages from people feeling something similar.</p>
                 </div>
             </div>
         </div>
@@ -183,15 +185,9 @@
 
                 previewResponseText.textContent = this.getAttribute('data-message');
                 previewResponse.style.display = 'block';
-
-                setTimeout(() => {
-                    previewResponse.scrollIntoView({
-                        behavior: 'smooth',
-                        block: 'nearest'
-                    });
-                }, 100);
             });
         });
     </script>
+
 </body>
 </html>

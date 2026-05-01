@@ -23,17 +23,26 @@ if (!isset($_SESSION['user_id'])) {
                 <span class="logo-icon">❤️</span>
                 <span class="logo-text">MoodHelper</span>
             </a>
+
+            <input type="checkbox" id="nav-menu-toggle" class="nav-menu-toggle">
+
+            <label for="nav-menu-toggle" class="hamburger" aria-label="Open navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
             
- <ul class="nav-links">
-<li><a href="dashboard.php">Dashboard</a></li>
-<li><a href="diary.php">Diary</a></li>
-<li><a href="reflection-board.php">Reflection Board</a></li>
-<li><a href="groups.php">Groups</a></li>
-<li><a href="mood-support.php" class="active">Support</a></li>
-</ul>
+            <ul class="nav-links">
+                <li><a href="dashboard.php">Dashboard</a></li>
+                <li><a href="diary.php">Diary</a></li>
+                <li><a href="reflection-board.php">Reflection Board</a></li>
+                <li><a href="groups.php">Groups</a></li>
+                <li><a href="mood-support.php" class="active">Support</a></li>
+            </ul>
+
             <div class="nav-buttons">
                 <a href="account.php" class="btn btn-secondary">Account</a>
-                <a href="Backend/logout.php" class="btn btn-primary">Logout</a>
+                <a href="index.html" class="btn btn-primary">Logout</a>
             </div>
         </div>
     </nav>
@@ -48,7 +57,7 @@ if (!isset($_SESSION['user_id'])) {
             </p>
         </div>
 
-            <div class="chat-container" style="position: relative;">
+        <div class="chat-container" style="position: relative;">
             
             <button id="expandChatBtn" style="
                 position:absolute;
@@ -71,18 +80,19 @@ if (!isset($_SESSION['user_id'])) {
             </div>
 
             <div style="display: flex; gap: 1rem; align-items: flex-end;">
-               <textarea 
-    class="form-control" 
-    id="userMessage"
-    rows="1"
-    style="
-        flex:1;
-        resize:none;
-        overflow:hidden;
-        min-height:40px;
-        max-height:120px;
-    "
-></textarea>
+                <textarea 
+                    class="form-control" 
+                    id="userMessage"
+                    rows="1"
+                    style="
+                        flex:1;
+                        resize:none;
+                        overflow:hidden;
+                        min-height:40px;
+                        max-height:120px;
+                    "
+                ></textarea>
+
                 <button class="btn btn-primary" id="sendMessage" type="button">
                     Send
                 </button>
@@ -93,6 +103,7 @@ if (!isset($_SESSION['user_id'])) {
             <h2 style="font-size: 1.75rem; margin-bottom: 1.5rem; text-align: center;">
                 Helpful Tools
             </h2>
+
             <div class="recommendations" id="recommendations">
                 <div class="recommendation-card">
                     <div class="recommendation-icon">🧘</div>
@@ -112,8 +123,6 @@ if (!isset($_SESSION['user_id'])) {
                     </button>
                 </div>
 
-                
-
                 <div class="recommendation-card">
                     <div class="recommendation-icon">💌</div>
                     <h3>Anonymous Support</h3>
@@ -128,9 +137,14 @@ if (!isset($_SESSION['user_id'])) {
         <div id="breathingModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 9999; align-items: center; justify-content: center;">
             <div style="background: white; padding: 3rem; border-radius: 2rem; text-align: center; max-width: 500px; margin: 2rem;">
                 <h2 style="margin-bottom: 2rem;">Breathing Exercise</h2>
+
                 <div id="breathingCircle" style="width: 200px; height: 200px; margin: 2rem auto; border-radius: 50%; background: linear-gradient(135deg, #7c3aed, #3b82f6); transition: transform 4s ease-in-out;"></div>
+
                 <p id="breathingText" style="font-size: 1.5rem; margin-bottom: 2rem;">Breathe in...</p>
-                <button class="btn btn-secondary" onclick="closeBreathingExercise()">Close</button>
+
+                <button class="btn btn-secondary" onclick="closeBreathingExercise()">
+                    Close
+                </button>
             </div>
         </div>
     </div>

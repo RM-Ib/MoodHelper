@@ -28,6 +28,13 @@ $result = $conn->query("SELECT * FROM user_groups");
 <span class="logo-icon">❤️</span>
 <span class="logo-text">MoodHelper</span>
 </a>
+<input type="checkbox" id="nav-menu-toggle" class="nav-menu-toggle">
+
+<label for="nav-menu-toggle" class="hamburger" aria-label="Open navigation menu">
+    <span></span>
+    <span></span>
+    <span></span>
+</label>
 
 
  <ul class="nav-links">

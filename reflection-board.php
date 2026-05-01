@@ -86,6 +86,13 @@ $conn->close();
             <span class="logo-icon">❤️</span>
             <span class="logo-text">MoodHelper</span>
         </a>
+        <input type="checkbox" id="nav-menu-toggle" class="nav-menu-toggle">
+
+        <label for="nav-menu-toggle" class="hamburger" aria-label="Open navigation menu">
+            <span></span>
+            <span></span>
+            <span></span>
+        </label>
 
         <ul class="nav-links">
             <li><a href="dashboard.php">Dashboard</a></li>
@@ -97,7 +104,7 @@ $conn->close();
 
         <div class="nav-buttons">
             <a href="account.php" class="btn btn-secondary">Account</a>
-            <a href="Backend/logout.php" class="btn btn-primary">Logout</a>
+            <a href="index.html" class="btn btn-primary">Logout</a>
         </div>
     </div>
 </nav>

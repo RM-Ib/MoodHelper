@@ -22,16 +22,26 @@ if (!isset($_SESSION['user_id'])) {
                 <span class="logo-icon">❤️</span>
                 <span class="logo-text">MoodHelper</span>
             </a>
-             <ul class="nav-links">
+
+            <input type="checkbox" id="nav-menu-toggle" class="nav-menu-toggle">
+
+            <label for="nav-menu-toggle" class="hamburger" aria-label="Open navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+
+            <ul class="nav-links">
                 <li><a href="dashboard.php">Dashboard</a></li>
                 <li><a href="diary.php" class="active">Diary</a></li>
                 <li><a href="reflection-board.php">Reflection Board</a></li>
                 <li><a href="groups.php">Groups</a></li>
                 <li><a href="mood-support.php">Support</a></li>
             </ul>
+
             <div class="nav-buttons">
                 <a href="account.php" class="btn btn-secondary">Account</a>
-                <a href="Backend/logout.php" class="btn btn-primary">Logout</a>
+                <a href="index.html" class="btn btn-primary">Logout</a>
             </div>
         </div>
     </nav>

@@ -29,6 +29,14 @@ if (!empty($_SESSION['show_daily_prompt'])) {
                 <span class="logo-text">MoodHelper</span>
             </a>
 
+            <input type="checkbox" id="nav-menu-toggle" class="nav-menu-toggle">
+
+            <label for="nav-menu-toggle" class="hamburger" aria-label="Open navigation menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </label>
+
             <ul class="nav-links">
                 <li><a href="dashboard.php" class="active">Dashboard</a></li>
                 <li><a href="diary.php">Diary</a></li>
@@ -39,7 +47,7 @@ if (!empty($_SESSION['show_daily_prompt'])) {
 
             <div class="nav-buttons">
                 <a href="account.php" class="btn btn-secondary">Account</a>
-                <a href="Backend/logout.php" class="btn btn-primary">Logout</a>
+                <a href="index.html" class="btn btn-primary">Logout</a>
             </div>
         </div>
     </nav>
@@ -219,7 +227,6 @@ if (!empty($_SESSION['show_daily_prompt'])) {
                     <h3>Support Groups</h3>
                     <p>Find your community</p>
                 </a>
-
             </div>
         </div>
     </div>
