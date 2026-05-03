@@ -259,11 +259,18 @@ async function loadWeekly() {
         completedCountElement.textContent = answers.length;
 
         weeklyReflectionsElement.innerHTML = answers.map(a => `
-            <div class="diary-entry">
-                <div class="diary-date">${escapeHtml(a.date_string)}</div>
-                <div>${escapeHtml(a.answer)}</div>
-            </div>
-        `).join('');
+    <div class="diary-entry">
+        <div class="diary-date">${escapeHtml(a.date_string)}</div>
+
+        <h4 style="color: var(--primary-purple); margin-bottom: 0.5rem; font-size: 1rem;">
+            ${escapeHtml(a.prompt_text)}
+        </h4>
+
+        <div>
+            ${escapeHtml(a.answer).replace(/\n/g, '<br>')}
+        </div>
+    </div>
+`).join('');
 
     } catch (e) {
         console.error(e);
