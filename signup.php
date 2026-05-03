@@ -10,6 +10,8 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
+$error = ''; // Will hold any error message
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $fname = trim($_POST['Fname']);
@@ -18,33 +20,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $email = trim($_POST['email']);
     $password = $_POST['password'];
 
+    // Basic server-side validation
     if (empty($fname) || empty($lname) || empty($username) || empty($email) || empty($password)) {
-        die("All fields are required.");
+        $error = "All fields are required.";
     }
 
-    $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+    // Only check for duplicates if no error yet
+    if (empty($error)) {
+        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
 
-    $check = $conn->prepare("SELECT user_id FROM users WHERE username = ? OR email = ?");
-    $check->bind_param("ss", $username, $email);
-    $check->execute();
-    $check->store_result();
+        $check = $conn->prepare("SELECT user_id FROM users WHERE username = ? OR email = ?");
+        $check->bind_param("ss", $username, $email);
+        $check->execute();
+        $check->store_result();
 
-    if ($check->num_rows > 0) {
-        die("Username or email already taken.");
-    }
-    $check->close();
-
-    $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, username, email, password_hash) VALUES (?, ?, ?, ?, ?)");
-    $stmt->bind_param("sssss", $fname, $lname, $username, $email, $passwordHash);
-
-    if ($stmt->execute()) {
-    header("Location: login.php");
-    exit();
-    } else {
-        echo "Error: " . $stmt->error;
+        if ($check->num_rows > 0) {
+            $error = "Username or email already taken.";
+        }
+        $check->close();
     }
 
-    $stmt->close();
+    // Insert only if still no error
+    if (empty($error)) {
+        $stmt = $conn->prepare("INSERT INTO users (first_name, last_name, username, email, password_hash) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("sssss", $fname, $lname, $username, $email, $passwordHash);
+
+        if ($stmt->execute()) {
+            // Success – redirect to login page
+            header("Location: login.php");
+            exit();
+        } else {
+            $error = "An error occurred: " . $stmt->error;
+        }
+        $stmt->close();
+    }
 }
 
 $conn->close();
@@ -73,6 +82,11 @@ $conn->close();
             </div>
 
             <form method="POST" action="signup.php" onsubmit="return validateForm()">
+
+                <!-- Unified error display (server-side + client-side) -->
+                <div id="error-message" style="display: <?php echo !empty($error) ? 'block' : 'none'; ?>; background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 6px; margin-bottom: 15px;">
+                    <?php if (!empty($error)) echo htmlspecialchars($error); ?>
+                </div>
 
                 <div class="form-group">
                     <label for="Fname">First Name</label>
@@ -120,36 +134,44 @@ $conn->close();
 
     <script>
         function validateForm() {
+            const errorDiv = document.getElementById('error-message');
+            // Clear any previous errors
+            errorDiv.style.display = 'none';
+            errorDiv.innerHTML = '';
+
             const fname = document.getElementById("Fname").value.trim();
             const lname = document.getElementById("Lname").value.trim();
             const email = document.getElementById("email").value.trim();
             const username = document.getElementById("username").value.trim();
             const password = document.getElementById("password").value;
 
+            const errors = [];
+
             if (!fname || !lname || !username || !email || !password) {
-                alert("All required fields must be filled.");
-                return false;
+                errors.push("All required fields must be filled.");
             }
 
             const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-            if (!emailPattern.test(email)) {
-                alert("Please enter a valid email address.");
-                return false;
+            if (email && !emailPattern.test(email)) {
+                errors.push("Please enter a valid email address.");
             }
 
             const usernamePattern = /^[a-zA-Z0-9_]{3,20}$/;
-
-            if (!usernamePattern.test(username)) {
-                alert("Username must be 3-20 characters and contain only letters, numbers, or underscores.");
-                return false;
+            if (username && !usernamePattern.test(username)) {
+                errors.push("Username must be 3-20 characters and contain only letters, numbers, or underscores.");
             }
 
             if (password.length < 6) {
-                alert("Password must be at least 6 characters.");
+                errors.push("Password must be at least 6 characters.");
+            }
+
+            if (errors.length > 0) {
+                errorDiv.innerHTML = errors.join('<br>');
+                errorDiv.style.display = 'block';
                 return false;
             }
 
-            return true; 
+            return true;
         }
     </script>
 
