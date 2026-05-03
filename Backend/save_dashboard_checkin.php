@@ -42,7 +42,6 @@ if ($send_message === 1 && $peer_message === '') {
     exit;
 }
 
-/* Save mood entry with optional personal note */
 $stmt = $conn->prepare("
     INSERT INTO moodentries (user_id, mood, notes, mood_date, created_at)
     VALUES (?, ?, ?, CURDATE(), NOW())
@@ -70,7 +69,6 @@ $stmt->close();
 
 $message_delivery_status = 'not_requested';
 
-/* Send supportive message only if checkbox checked */
 if ($send_message === 1 && $peer_message !== '') {
     $receiver_query = $conn->prepare("
         SELECT me.user_id

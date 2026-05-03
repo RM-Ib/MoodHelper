@@ -37,7 +37,22 @@ if (!empty($history)) {
 $risk = detectRiskLevel($lastUserMessage);
 
 if ($risk === "high") {
-    echo json_encode(["reply" => getHighRiskResponse()]);
+
+    $safeMessage = "Hey… I’m really sorry you’re feeling this way. It sounds like things might be really heavy right now. You don’t have to handle this alone — there are people who genuinely care and want to help. If you can, please consider reaching out to someone you trust or a support service. I’m here to listen too — what’s been on your mind?";
+
+    $encUser = encryptMessage($lastUserMessage);
+    $stmt = $conn->prepare("INSERT INTO chat_messages (user_id, role, message) VALUES (?, 'user', ?)");
+    $stmt->bind_param("is", $user_id, $encUser);
+    $stmt->execute();
+    $stmt->close();
+
+    $encAI = encryptMessage($safeMessage);
+    $stmt = $conn->prepare("INSERT INTO chat_messages (user_id, role, message) VALUES (?, 'assistant', ?)");
+    $stmt->bind_param("is", $user_id, $encAI);
+    $stmt->execute();
+    $stmt->close();
+
+    echo json_encode(["reply" => $safeMessage]);
     exit;
 }
 

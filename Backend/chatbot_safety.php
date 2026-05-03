@@ -1,25 +1,38 @@
+
 <?php
 
-function detectRiskLevel(string $message): string
-{
-    $text = mb_strtolower($message);
-    $text = preg_replace('/[^\w\s]/u', '', $text);
+function normalizeText($text) {
+    $text = strtolower($text);
+
+    $text = str_replace(['1', '!', '@'], ['i', 'i', 'a'], $text);
+
+
+    $text = preg_replace('/[^a-z\s]/', '', $text);
+
     $text = preg_replace('/\s+/', ' ', $text);
 
-    $highRisk = [
-        'kill myself',
-        'suicide',
-        'end my life',
-        'want to die',
-        'wanna die',
-        'wish i was dead',
-        'better off dead',
-        'overdose',
-        'take all my pills',
-        'nothing to live for',
-        'cant go on'
-    ];
+    return trim($text);
+}
 
+function detectRiskLevel($message)
+{
+   $text = normalizeText($message);
+   $highRisk = [
+    'kill myself',
+    'suicide',
+    'end my life',
+    'want to die',
+    'wanna die',
+    'wish i was dead',
+    'better off dead',
+    'overdose',
+    'take all my pills',
+    'nothing to live for',
+    'cant go on',
+    'kms',
+    'harm myself'
+    
+];
     $mediumRisk = [
         'i feel empty',
         'i feel worthless',
@@ -44,11 +57,9 @@ function detectRiskLevel(string $message): string
 
     return "low";
 }
-
-
 function getHighRiskResponse(): string
 {
-    return "Hey… I’m really glad you said something. You don’t have to carry this alone. If things feel intense right now, please reach out to someone you trust or a local support service — it can really make a difference. If you want, tell me where you are and I’ll help you find support near you.";
+    return "Hey… I’m really sorry you’re feeling this way. It sounds like things might be really heavy right now. You don’t have to handle this alone — there are people who genuinely care and want to help. If you can, please consider reaching out to someone you trust or a support service. I’m here to listen too — what’s been on your mind?";
 }
 
 
