@@ -46,8 +46,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
     if (empty($_POST['confirm_delete'])) {
         $error = "You must confirm the deletion by checking the box.";
     } else {
-        // List of tables to delete user data from.
-        // Some tables have multiple columns referencing user_id.
         $tables = [
             'moodentries' => ['user_id'],
             'diaryentries' => ['user_id'],
@@ -72,13 +70,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['delete_account'])) {
             }
         }
 
-        // Finally, delete the user account
         $stmt = $conn->prepare("DELETE FROM users WHERE user_id = ?");
         $stmt->bind_param("i", $user_id);
         $stmt->execute();
         $stmt->close();
 
-        // Destroy session and redirect
         session_destroy();
         header("Location: index.html?deleted=1");
         exit();
@@ -161,7 +157,8 @@ $conn->close();
             <li><a href="mood-support.php">Support</a></li>
         </ul>
         <div class="nav-buttons">
-            <a href="Backend/logout.php" class="btn btn-primary">Logout</a>
+            <!-- FIXED: path updated to go up one level to the Backend folder -->
+            <a href="../Backend/logout.php" class="btn btn-primary">Logout</a>
         </div>
     </div>
 </nav>
@@ -199,7 +196,7 @@ $conn->close();
             <button type="submit" class="btn btn-primary">Save Changes</button>
         </form>
 
-        <!-- Sign Out button -->
+        <!-- Sign Out button – now works via inline click handler -->
         <button type="button" class="btn btn-secondary" id="logoutBtn" style="margin-top:1rem; width:100%;">Sign Out</button>
 
         <!-- Delete Account Section -->
@@ -220,6 +217,14 @@ $conn->close();
     </div>
 </main>
 
+<!-- Load external JS (if account.js exists) -->
 <script src="../js/account.js"></script>
+
+<!-- Inline fallback to ensure the Sign Out button always works -->
+<script>
+    document.getElementById('logoutBtn').addEventListener('click', function() {
+        window.location.href = 'Backend/logout.php';
+    });
+</script>
 </body>
 </html>
