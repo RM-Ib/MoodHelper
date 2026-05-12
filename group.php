@@ -208,7 +208,7 @@ foreach ($posts as $post) {
         $map = $anon_maps[$post_id];
         $author_number = $map[$post['user_id']];
     ?>
-    <div class="card" style="margin-bottom:1.5rem;">
+    <div class="card group-post-card" data-postid="<?php echo $post_id; ?>" style="margin-bottom:1.5rem;">
         <div style="display:flex;gap:1rem;">
             <div style="width:40px;height:40px;background:linear-gradient(135deg,#ec4899,#be185d);border-radius:50%;display:flex;align-items:center;justify-content:center;color:white;font-weight:600;">
                 <?= $author_number ?>
@@ -219,6 +219,10 @@ foreach ($posts as $post) {
                     <span style="color:var(--text-secondary);font-size:0.875rem;">
                         <?php echo htmlspecialchars($post['created_at']); ?>
                     </span>
+                    <!-- DELETE BUTTON FOR POST (only if owner) -->
+                    <?php if ($post['user_id'] == $user_id): ?>
+                    <button class="delete-post-btn" style="margin-left:auto; background:none; border:none; color:red; cursor:pointer; font-size:0.875rem;">Delete</button>
+                    <?php endif; ?>
                 </div>
 
                 <?php if (!empty($post['title'])): ?>
@@ -246,25 +250,31 @@ foreach ($posts as $post) {
                     </button>
 
                     <button type="button"
-                        onclick="toggleReplies(<?php echo $post_id; ?>)"
+                        class="toggle-replies-btn"
+                        data-post-id="<?php echo $post_id; ?>"
                         style="background:none;border:none;color:var(--text-secondary);cursor:pointer;">
-                        💬 <?php echo $post['replies_count']; ?> Replies
+                        💬 <span class="reply-count-text"><?php echo $post['replies_count']; ?></span> Replies
                     </button>
                 </div>
 
                 <!-- REPLIES SECTION -->
-                <div id="replies-<?php echo $post_id; ?>" style="display:none;margin-top:1rem;">
+                <div class="replies-container" id="replies-<?php echo $post_id; ?>" style="display:none;margin-top:1rem;">
                     <?php
                     if (isset($all_replies[$post_id])) {
                         foreach ($all_replies[$post_id] as $r):
                             $reply_number = $map[$r['user_id']];
                     ?>
-                        <div style="margin-bottom:1rem; background:#f9f9f9; padding:0.5rem; border-radius:0.5rem;">
-                            <strong>Anonymous #<?= $reply_number ?></strong>
-                            <p style="color:var(--text-secondary); margin-top:0.25rem;">
-                                <?php echo htmlspecialchars($r['content']); ?>
-                            </p>
-                            <small style="color:var(--text-secondary);"><?= $r['created_at'] ?></small>
+                        <div class="single-reply" data-replyid="<?php echo $r['reply_id']; ?>" style="margin-bottom:1rem; background:#f9f9f9; padding:0.5rem; border-radius:0.5rem; display:flex; justify-content:space-between; align-items:flex-start;">
+                            <div>
+                                <strong>Anonymous #<?= $reply_number ?></strong>
+                                <p style="color:var(--text-secondary); margin-top:0.25rem;">
+                                    <?php echo htmlspecialchars($r['content']); ?>
+                                </p>
+                                <small style="color:var(--text-secondary);"><?= $r['created_at'] ?></small>
+                            </div>
+                            <?php if ($r['user_id'] == $user_id): ?>
+                            <button class="delete-reply-btn" style="background:none; border:none; color:red; cursor:pointer; font-size:0.75rem;">Delete</button>
+                            <?php endif; ?>
                         </div>
                     <?php 
                         endforeach;
@@ -287,14 +297,81 @@ foreach ($posts as $post) {
 </div>
 
 <script>
-function toggleReplies(id) {
-    const el = document.getElementById("replies-" + id);
-    if (el) {
-        el.style.display = (el.style.display === "none") ? "block" : "none";
-    }
-}
-
+// ---------- DELETE FUNCTIONALITY (AJAX, same style as reflection board) ----------
 document.addEventListener('DOMContentLoaded', function() {
+
+    // Delete a POST
+    document.querySelectorAll('.delete-post-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const card = this.closest('.group-post-card');
+            const postId = card.dataset.postid;
+            if (!confirm('Delete this post?')) return;
+            
+            fetch('Backend/delete_group_post.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'post_id=' + encodeURIComponent(postId)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    card.remove();
+                } else {
+                    alert('Error deleting post: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Something went wrong.');
+            });
+        });
+    });
+
+    // Delete a REPLY
+    document.querySelectorAll('.delete-reply-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const replyDiv = this.closest('.single-reply');
+            const replyId = replyDiv.dataset.replyid;
+            if (!confirm('Delete this reply?')) return;
+            
+            const card = this.closest('.group-post-card');
+            const postId = card.dataset.postid;
+
+            fetch('Backend/delete_group_reply.php', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+                body: 'reply_id=' + encodeURIComponent(replyId)
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    replyDiv.remove();
+                    // Update reply count shown on the toggle button
+                    const repliesContainer = document.getElementById('replies-' + postId);
+                    // Count remaining reply divs (excluding the form)
+                    const remainingReplies = repliesContainer.querySelectorAll('.single-reply').length;
+                    const countSpan = card.querySelector('.reply-count-text');
+                    if (countSpan) {
+                        countSpan.textContent = remainingReplies;
+                    }
+                    // If no replies left, hide the section (optional) and update button text
+                    const toggleBtn = card.querySelector('.toggle-replies-btn');
+                    if (toggleBtn) {
+                        const btnText = toggleBtn.querySelector('.reply-count-text');
+                        if (btnText) btnText.textContent = remainingReplies;
+                    }
+                } else {
+                    alert('Error deleting reply: ' + (data.message || 'Unknown error'));
+                }
+            })
+            .catch(err => {
+                console.error(err);
+                alert('Something went wrong.');
+            });
+        });
+    });
+
+    // ---------- HEART FUNCTIONALITY (unchanged) ----------
     document.querySelectorAll('.heart-btn').forEach(btn => {
         btn.addEventListener('click', async function (e) {
             e.preventDefault();
@@ -335,6 +412,17 @@ document.addEventListener('DOMContentLoaded', function() {
             } catch (error) {
                 console.error('Error:', error);
                 alert('An error occurred. Check console for details.');
+            }
+        });
+    });
+
+    // Toggle replies (unchanged)
+    document.querySelectorAll('.toggle-replies-btn').forEach(btn => {
+        btn.addEventListener('click', function() {
+            const postId = this.dataset.postId;
+            const repliesDiv = document.getElementById('replies-' + postId);
+            if (repliesDiv) {
+                repliesDiv.style.display = (repliesDiv.style.display === 'none' || repliesDiv.style.display === '') ? 'block' : 'none';
             }
         });
     });
